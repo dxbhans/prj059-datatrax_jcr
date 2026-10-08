@@ -1,0 +1,19 @@
+.env
+.env.*
+.venv/
+!.env.example
+
+# Local Quarto build products
+phases/*.pptx
+phases/*.html
+phases/*_files/
+
+# Local data and caches
+data/
+*.duckdb
+*.parquet
+
+# Python cache
+__pycache__/
+*.py[cod]
+.quarto/

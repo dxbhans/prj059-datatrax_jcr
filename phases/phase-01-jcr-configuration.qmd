@@ -1,0 +1,327 @@
+---
+title: "JCR GoingStick Analysis"
+subtitle: "Phase 1 — Course, Map and Spatial Configuration"
+author: "TurfTrax"
+date: last-modified
+format:
+  pptx:
+    reference-doc: ../resources/tt_brand/TurfTrax_Master Template v2.pptx
+    slide-number: true
+execute:
+  echo: false
+  warning: false
+  error: true
+---
+
+
+# Phase 1 — Configuration
+
+## Purpose
+
+Build and validate the JCR configuration needed by every later phase. The configuration is the controlled description of:
+
+- the 14 Jockey Club racecourses;
+- each course's maps and disciplines;
+- the waypoints on each map;
+- the sections and zones associated with those waypoints;
+- available KML geometry and its quality;
+- the identifiers needed to join Hub data, GoingStick data, weather stations and reports.
+
+This phase is complete only when later analysis can use configuration identifiers rather than course-name or map-name guesses.
+
+## Working status
+
+| Item | Current status |
+|---|---|
+| Phase | Phase 1 |
+| Overall status | Not started — configuration inventory to be populated from the Hub |
+| Scope | Jockey Club racecourses; Cheltenham is the first detailed course |
+| Analysis period | 2021–2025 initially; 2026 may be added as a partial year |
+| Primary output | Versioned JCR configuration and validation report |
+
+## Principles
+
+1. A course may have one or more maps.
+2. A map is the analytical unit for GoingStick spatial interpretation.
+3. A waypoint belongs to a map and is not assumed to be globally unique.
+4. Sections and zones are separate entities.
+5. Zone membership is many-to-many: zones may overlap and a waypoint may belong to multiple zones.
+6. Flat and jumps are map disciplines, not assumptions derived only from the racecourse name.
+7. KML is supporting spatial evidence; its absence must not prevent non-spatial analysis.
+8. Every imported identifier and every manually resolved mapping must retain provenance.
+
+# Phase steps
+
+## 1. Define the JCR course scope
+
+Create the controlled course register from the current Jockey Club scope:
+
+| Course | Hub course ID | Canonical name | Aliases | Included |
+|---|---:|---|---|---|
+| Aintree | pending | Aintree | pending | yes |
+| Carlisle | pending | Carlisle | pending | yes |
+| Cheltenham | pending | Cheltenham | pending | yes |
+| Exeter | pending | Exeter | pending | yes |
+| Epsom Downs | pending | Epsom Downs | pending | yes |
+| Haydock Park | pending | Haydock Park | pending | yes |
+| Huntingdon | pending | Huntingdon | pending | yes |
+| Kempton Park | pending | Kempton Park | pending | yes |
+| Market Rasen | pending | Market Rasen | pending | yes |
+| Newmarket | pending | Newmarket | pending | yes |
+| Nottingham | pending | Nottingham | pending | yes |
+| Sandown Park | pending | Sandown Park | pending | yes |
+| Warwick | pending | Warwick | pending | yes |
+| Wincanton | pending | Wincanton | pending | yes |
+
+Tasks:
+
+- retrieve Hub course IDs and canonical names;
+- record alternative names and historical names;
+- record country and race discipline where available;
+- flag courses with no maps or ambiguous identity;
+- nominate Cheltenham as the first detailed-course test case.
+
+Deliverable: `data/config/jcr_courses.parquet` and a source/provenance table.
+
+## 2. Inventory maps and map identity
+
+For every JCR course, inventory all maps from the Hub map and track tables.
+
+| Field | Required meaning |
+|---|---|
+| `course_id` | Stable Hub course identifier |
+| `map_id` | Stable Hub map identifier |
+| `map_label` | Human-readable map name |
+| `map_type` | Flat, jumps, all-weather or unknown |
+| `track_id` | Track identifier where present |
+| `active` | Whether the map is currently usable |
+| `valid_from`, `valid_to` | Known map validity interval |
+| `source` | Hub table, report, KML or manual review |
+
+Tasks:
+
+- identify every map, including maps with generic labels such as `Default`;
+- distinguish active, archived and superseded maps;
+- identify multiple maps for one course;
+- identify maps that represent different track layouts rather than duplicate records;
+- determine whether the map is flat or jumps from Hub metadata, track metadata and report usage;
+- retain `unknown` when the evidence is insufficient.
+
+Deliverable: `data/config/jcr_maps.parquet`.
+
+## 3. Inventory waypoints
+
+Waypoints are map-specific. The configuration must not assume that waypoint 1 on one map is equivalent to waypoint 1 on another map.
+
+| Field | Required meaning |
+|---|---|
+| `map_id` | Parent map |
+| `waypoint_id` | Hub waypoint identifier, if available |
+| `waypoint_number` | Number shown in the report or map |
+| `waypoint_svg_id` | SVG identifier, if available |
+| `label` | Human-readable label |
+| `sequence` | Course order where known |
+| `geometry_status` | KML, SVG, inferred or unavailable |
+| `source` | Source table/file and review status |
+
+Tasks:
+
+- count configured waypoints per map;
+- compare configured waypoints with observed GoingStick readings;
+- detect duplicate waypoint numbers within a map;
+- detect readings for unconfigured waypoints;
+- record missing or unexpected waypoints without silently dropping them;
+- keep waypoint numbers and Hub IDs as separate fields.
+
+Deliverable: `data/config/jcr_waypoints.parquet` and a waypoint-compliance check table.
+
+## 4. Model sections and overlapping zones
+
+Sections and zones must be represented independently.
+
+Recommended relationships:
+
+```text
+course 1 ───< map 1 ───< waypoint
+                         ├──< waypoint_section >── section
+                         └──< waypoint_zone >───── zone
+```
+
+The `waypoint_zone` table must allow multiple rows for the same waypoint and multiple zones to overlap. A zone should never be represented as a single exclusive category.
+
+Required tables:
+
+```text
+sections(
+  section_id, map_id, label, sequence, description, source
+)
+
+zones(
+  zone_id, map_id, label, zone_type, description, source
+)
+
+waypoint_sections(
+  map_id, waypoint_id, section_id, membership_source, confidence
+)
+
+waypoint_zones(
+  map_id, waypoint_id, zone_id, membership_source, confidence
+)
+```
+
+Tasks:
+
+- extract Hub section and zone records;
+- identify whether membership is explicit or inferred;
+- preserve overlapping memberships;
+- check for zones with no waypoints;
+- check for waypoints with no section or zone;
+- distinguish spatial zones from operational or reporting groups;
+- record confidence and review notes for manual assignments.
+
+Deliverable: four versioned configuration tables plus an overlap report.
+
+## 5. Inventory and validate KML files
+
+KML files provide spatial evidence for waypoint location, but availability and quality may vary by course and map.
+
+For every candidate KML file:
+
+- record the file path, checksum and date inspected;
+- identify the course and map claimed by the file;
+- extract waypoint names and longitude/latitude;
+- normalise waypoint numbers;
+- check for duplicate placemarks;
+- check for missing configured waypoints;
+- check for KML waypoints absent from the Hub configuration;
+- record coordinate plausibility and geometry validity;
+- link KML waypoints to Hub waypoints using explicit identifiers first.
+
+KML status values:
+
+```text
+available_and_matched
+available_partial_match
+available_but_ambiguous
+available_but_invalid
+not_available
+```
+
+Do not spatially place a waypoint using nearest-neighbour matching without recording that it was inferred. Any inferred match requires a review flag.
+
+Deliverable: `data/config/jcr_kml_inventory.parquet`, extracted KML waypoint tables and a KML validation report.
+
+## 6. Resolve map discipline and layout
+
+Map discipline and layout determine which observations may be compared.
+
+For each map, record:
+
+```text
+discipline = flat | jumps | all_weather | unknown
+layout_label
+map_role = primary | secondary | historical | unknown
+comparison_group
+evidence
+confidence
+```
+
+For Cheltenham, explicitly investigate separate layouts such as Old Course and New Course, and retain hurdle/chase distinctions where the map metadata or Going Reports support them.
+
+Acceptance rule: no cross-map comparison is allowed until the maps have either been assigned to a common comparison group or explicitly marked incomparable.
+
+## 7. Create the configuration package
+
+Create a versioned configuration package containing:
+
+```text
+config/
+  jcr_courses.parquet
+  jcr_maps.parquet
+  jcr_waypoints.parquet
+  jcr_sections.parquet
+  jcr_zones.parquet
+  jcr_waypoint_sections.parquet
+  jcr_waypoint_zones.parquet
+  jcr_kml_inventory.parquet
+  jcr_map_aliases.yml
+  jcr_config_metadata.yml
+```
+
+`jcr_config_metadata.yml` should record:
+
+- configuration version;
+- extraction timestamp;
+- database/schema version;
+- source files and checksums;
+- manual decisions;
+- unresolved issues;
+- reviewer and review date.
+
+## 8. Run Phase 1 validation
+
+The phase validation report must show:
+
+| Check | Pass condition |
+|---|---|
+| Course scope | All 14 JCR courses identified or explicitly unresolved |
+| Course IDs | No duplicate canonical course IDs |
+| Maps | Every included course has at least one identified map or an exception |
+| Map identity | No duplicate map IDs; archived maps flagged |
+| Map discipline | Flat/jumps/unknown assigned with evidence |
+| Waypoints | No silent loss of configured or observed waypoints |
+| Sections | Section membership is map-specific |
+| Zones | Overlapping zone membership is preserved |
+| KML | Every file has a match status and checksum |
+| Cheltenham | Maps, waypoints, sections, zones and KML status reviewed first |
+| Provenance | Every manual decision has a source and confidence |
+
+Phase 1 status should be `complete` only when all failed checks are either resolved or documented as accepted exceptions.
+
+# Outputs and monitoring
+
+## Required outputs
+
+- configuration Parquet tables;
+- YAML configuration and aliases;
+- KML inventory and extracted coordinates;
+- map/waypoint/zone/section validation report;
+- Cheltenham configuration review;
+- unresolved-issues register;
+- this Quarto document rendered using the TurfTrax master template.
+
+## Monitoring measures
+
+The rendered document should report, by course and map:
+
+- map count;
+- active map count;
+- waypoint count;
+- section count;
+- zone count;
+- maximum zones per waypoint;
+- percentage of waypoints with KML coordinates;
+- percentage of observed waypoints configured;
+- number of unresolved aliases;
+- number of manual decisions;
+- number of validation failures.
+
+These measures become the baseline for later phases and should be rerun whenever the Hub schema, maps or KML resources change.
+
+# Phase 1 acceptance decision
+
+The phase review should end with one of three decisions:
+
+```text
+approved
+approved_with_exceptions
+not_approved
+```
+
+The approval record must name the exceptions that later phases may proceed with and those that block spatial analysis.
+
+The next phase may begin only after the course and map identifiers are stable, the Cheltenham map hierarchy has been reviewed, and the configuration package has been versioned.
+
+# Branding note
+
+This document uses the TurfTrax PowerPoint master at `resources/tt_brand/TurfTrax_Master Template v2.pptx` and follows the brand guidance: Poppins for headings, Roboto for body text, and the approved TurfTrax blue, light blue, yellow, orange, black and white palette.
