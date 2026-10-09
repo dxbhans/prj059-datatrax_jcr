@@ -4,15 +4,16 @@ subtitle: "Phase 1 — Course, Map and Spatial Configuration"
 author: "TurfTrax"
 date: last-modified
 format:
-  pptx:
-    reference-doc: ../resources/tt_brand/TurfTrax_Master Template v2.pptx
-    slide-number: true
+  html:
+    css: ../resources/tt_brand/turftrax.css
+    toc: true
+    code-fold: true
+    self-contained: true
 execute:
   echo: false
   warning: false
   error: true
 ---
-
 
 # Phase 1 — Configuration
 
@@ -29,12 +30,28 @@ Build and validate the JCR configuration needed by every later phase. The config
 
 This phase is complete only when later analysis can use configuration identifiers rather than course-name or map-name guesses.
 
+## Prerequisite: import the Going Reports
+
+The map SVGs required for waypoint and zone matching are associated with Going Reports. SVG handling must therefore follow a complete Going Report import rather than relying on the planned fixture calendar alone.
+
+Before the configuration inventory is run:
+
+- import all available Going Reports for the selected analysis period from TT Hub;
+- retain report identifiers, map identifiers, report dates and source provenance;
+- retain report SVG references for waypoints and zones where available;
+- record report import status, errors and duplicate or superseded reports;
+- make the imported reports available to the SVG discovery step below.
+
+The import is read-only against TT Hub and should write a local, versioned cache. A missing Going Report must be recorded as an exception; it must not be silently treated as a missing map or missing SVG.
+
+Deliverable: imported Going Report cache and an import-status report, including the number of reports available per course, map and year.
+
 ## Working status
 
 | Item | Current status |
 |---|---|
 | Phase | Phase 1 |
-| Overall status | Not started — configuration inventory to be populated from the Hub |
+| Overall status | Step 1 complete; Phase 1 configuration in progress |
 | Scope | Jockey Club racecourses; Cheltenham is the first detailed course |
 | Analysis period | 2021–2025 initially; 2026 may be added as a partial year |
 | Primary output | Versioned JCR configuration and validation report |
@@ -56,22 +73,22 @@ This phase is complete only when later analysis can use configuration identifier
 
 Create the controlled course register from the current Jockey Club scope:
 
-| Course | Hub course ID | Canonical name | Aliases | Included |
-|---|---:|---|---|---|
-| Aintree | pending | Aintree | pending | yes |
-| Carlisle | pending | Carlisle | pending | yes |
-| Cheltenham | pending | Cheltenham | pending | yes |
-| Exeter | pending | Exeter | pending | yes |
-| Epsom Downs | pending | Epsom Downs | pending | yes |
-| Haydock Park | pending | Haydock Park | pending | yes |
-| Huntingdon | pending | Huntingdon | pending | yes |
-| Kempton Park | pending | Kempton Park | pending | yes |
-| Market Rasen | pending | Market Rasen | pending | yes |
-| Newmarket | pending | Newmarket | pending | yes |
-| Nottingham | pending | Nottingham | pending | yes |
-| Sandown Park | pending | Sandown Park | pending | yes |
-| Warwick | pending | Warwick | pending | yes |
-| Wincanton | pending | Wincanton | pending | yes |
+| Course | Hub ID | Canonical name | Alias | Maps | Waypoints | Included |
+|---|---:|---|---|---:|---:|---|
+| Aintree | 1 | Aintree | — | 3 | 324 | yes |
+| Carlisle | 9 | Carlisle | — | 3 | 105 | yes |
+| Cheltenham | 12 | Cheltenham | — | 20 | 1,113 | yes |
+| Exeter | 17 | Exeter | — | 1 | 60 | yes |
+| Epsom Downs | 16 | Epsom Downs | — | 8 | 487 | yes |
+| Haydock Park | 23 | Haydock Park | — | 7 | 349 | yes |
+| Huntingdon | 26 | Huntingdon | — | 2 | 72 | yes |
+| Kempton Park | 28 | Kempton Park | — | 2 | 140 | yes |
+| Market Rasen | 32 | Market Rasen | Mkt Rasen* | 1 | 32 | yes |
+| Newmarket | 36 | Newmarket | — | 18 | 1,612 | yes |
+| Nottingham | 38 | Nottingham | — | 1 | 32 | yes |
+| Sandown Park | 45 | Sandown Park | — | 7 | 589 | yes |
+| Warwick | 53 | Warwick | — | 2 | 66 | yes |
+| Wincanton | 55 | Wincanton | — | 1 | 30 | yes |
 
 Tasks:
 
@@ -82,6 +99,19 @@ Tasks:
 - nominate Cheltenham as the first detailed-course test case.
 
 Deliverable: `data/config/jcr_courses.parquet` and a source/provenance table.
+
+### Step 1 result
+
+Step 1 was run on 8 October 2026 against the read-only TT Hub connection. The [Jockey Club racecourse register](https://www.thejockeyclub.co.uk/about-us/our-present/racecourses/) and TT Hub matched all 14 courses by canonical name. The extract contains 14 courses, 76 maps and 5,011 configured waypoints. All courses are recorded as England in TT Hub. Market Rasen has the Hub alias `Mkt Rasen*`.
+
+The Hub `no_maps` flag is set for nine courses even though map records are present. This is retained as a configuration warning for Step 2 rather than being interpreted as evidence that the courses have no maps.
+
+Generated outputs:
+
+- `data/config/jcr_courses.parquet`
+- `data/config/jcr_course_provenance.parquet`
+- `data/config/jcr_course_scope_report.json`
+
 
 ## 2. Inventory maps and map identity
 
@@ -211,7 +241,42 @@ Do not spatially place a waypoint using nearest-neighbour matching without recor
 
 Deliverable: `data/config/jcr_kml_inventory.parquet`, extracted KML waypoint tables and a KML validation report.
 
-## 6. Resolve map discipline and layout
+## 6. Import and validate SVG map assets
+
+SVG assets are discovered from the imported Going Reports and their associated maps. Both waypoint and zone SVGs must be retained because they may contain different feature identifiers and visual information.
+
+For every discovered SVG:
+
+- record the source Going Report, map, course and document role;
+- retain the original SVG text and a local copy where appropriate;
+- calculate a SHA256 checksum and avoid re-downloading unchanged assets;
+- parse elements with an `id`, preserving element name, class, style and labels;
+- link SVG IDs to Hub waypoints, zones and sections where possible;
+- record duplicate IDs, unmatched IDs, missing assets and parse errors;
+- keep the original document even when parsing fails.
+
+Recommended local datasets:
+
+```text
+svg_source_documents
+svg_documents
+svg_elements
+```
+
+SVG status values:
+
+```text
+retrieved_and_parsed
+retrieved_parse_failed
+not_available
+source_report_not_imported
+```
+
+No SVG-dependent configuration check can pass while the relevant Going Reports remain unimported.
+
+Deliverable: retained SVG assets, parsed SVG element tables and an SVG validation report.
+
+## 7. Resolve map discipline and layout
 
 Map discipline and layout determine which observations may be compared.
 
@@ -230,7 +295,7 @@ For Cheltenham, explicitly investigate separate layouts such as Old Course and N
 
 Acceptance rule: no cross-map comparison is allowed until the maps have either been assigned to a common comparison group or explicitly marked incomparable.
 
-## 7. Create the configuration package
+## 8. Create the configuration package
 
 Create a versioned configuration package containing:
 
@@ -244,6 +309,9 @@ config/
   jcr_waypoint_sections.parquet
   jcr_waypoint_zones.parquet
   jcr_kml_inventory.parquet
+  jcr_svg_source_documents.parquet
+  jcr_svg_documents.parquet
+  jcr_svg_elements.parquet
   jcr_map_aliases.yml
   jcr_config_metadata.yml
 ```
@@ -258,7 +326,7 @@ config/
 - unresolved issues;
 - reviewer and review date.
 
-## 8. Run Phase 1 validation
+## 9. Run Phase 1 validation
 
 The phase validation report must show:
 
@@ -273,6 +341,9 @@ The phase validation report must show:
 | Sections | Section membership is map-specific |
 | Zones | Overlapping zone membership is preserved |
 | KML | Every file has a match status and checksum |
+| Going Reports | All available reports imported or explicitly excepted |
+| SVG | Every discovered asset has a retrieval and parse status |
+| SVG matching | Waypoint, zone and section matches are quantified |
 | Cheltenham | Maps, waypoints, sections, zones and KML status reviewed first |
 | Provenance | Every manual decision has a source and confidence |
 
@@ -285,6 +356,7 @@ Phase 1 status should be `complete` only when all failed checks are either resol
 - configuration Parquet tables;
 - YAML configuration and aliases;
 - KML inventory and extracted coordinates;
+- retained SVG assets and parsed SVG element tables;
 - map/waypoint/zone/section validation report;
 - Cheltenham configuration review;
 - unresolved-issues register;
@@ -302,6 +374,8 @@ The rendered document should report, by course and map:
 - maximum zones per waypoint;
 - percentage of waypoints with KML coordinates;
 - percentage of observed waypoints configured;
+- percentage of imported reports with discoverable SVG assets;
+- percentage of SVG IDs matched to configured features;
 - number of unresolved aliases;
 - number of manual decisions;
 - number of validation failures.
@@ -322,6 +396,11 @@ The approval record must name the exceptions that later phases may proceed with 
 
 The next phase may begin only after the course and map identifiers are stable, the Cheltenham map hierarchy has been reviewed, and the configuration package has been versioned.
 
+<div class="tt-footer">
+  <span>DataTrax · JCR GoingStick Analysis</span>
+  <img src="../resources/tt_brand/LOGO/Master Logo/TurfTrax_Logo_White.png" alt="TurfTrax" />
+</div>
+
 # Branding note
 
-This document uses the TurfTrax PowerPoint master at `resources/tt_brand/TurfTrax_Master Template v2.pptx` and follows the brand guidance: Poppins for headings, Roboto for body text, and the approved TurfTrax blue, light blue, yellow, orange, black and white palette.
+This HTML document follows the TurfTrax web treatment: the DataTrax logo above the table of contents, TurfTrax primary blue `#20738b` and orange `#ed6c29`, and a blue footer with the white TurfTrax logo on the right. Headings use Poppins where available and body text uses Roboto.
