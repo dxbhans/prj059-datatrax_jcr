@@ -26,7 +26,14 @@ REQUIRED = [
     "jcr_waypoint_compliance.parquet", "jcr_waypoint_map_qa.parquet",
     "jcr_stick_readings.parquet", "jcr_actual_meetings_preliminary.parquet",
     "jcr_going_reports.parquet", "jcr_going_report_authorship.parquet",
-    "jcr_phase1_validation_report.json",
+    "jcr_map_review.xlsx", "jcr_map_review_import_report.json",
+    "jcr_map_discipline_layout_report.json", "jcr_phase1_validation_report.json",
+    "jcr_tt_maps_course_match.parquet", "jcr_tt_maps_calendar.parquet",
+    "jcr_meeting_status_reconciliation.parquet", "jcr_meeting_status_reconciliation_report.json",
+    "jcr_meeting_date_review.xlsx", "jcr_meeting_date_review_report.json",
+    "jcr_bha_fixture_calendar.parquet", "jcr_bha_calendar_comparison.parquet",
+    "jcr_bha_calendar_comparison_report.json",
+    "jcr_kempton_surface_classification.parquet", "jcr_kempton_surface_classification_report.json",
 ]
 
 
@@ -83,10 +90,11 @@ def main() -> None:
         "source_files": {name: {"sha256": sha256(ROOT / name), "bytes": (ROOT / name).stat().st_size} for name in REQUIRED},
         "manual_decisions": [],
         "unresolved_issues": [
-            "40 maps retain unknown discipline or generic layout status.",
-            "Cheltenham Old/New, X Country and All Maps layouts require operational review.",
+            "6 maps retain unknown discipline because they were not reviewed in the workbook.",
+            "Cheltenham detailed layout review remains open; the general workbook assignment is applied.",
             "SVG retention is representative: one report per map/date; full all-report backfill remains pending.",
-            "Meeting status is report-observed and not independently validated against BHA results.",
+            "56 planned calendar course/date rows have no Going Report and remain unresolved; no race results were used.",
+            "Kempton surface classification excludes 555 AWT reports from Going Stick analysis; 8 reports on four dates remain unresolved.",
         ],
         "reviewer": None,
         "review_date": None,

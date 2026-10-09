@@ -30,6 +30,9 @@ def main() -> None:
     stick = json.loads((OUT / "jcr_stick_reading_qa_report.json").read_text())
     svg_report = json.loads((OUT / "jcr_svg_validation_report.json").read_text())
     discipline = json.loads((OUT / "jcr_map_discipline_layout_report.json").read_text())
+    meeting = json.loads((OUT / "jcr_meeting_status_reconciliation_report.json").read_text())
+    bha = json.loads((OUT / "jcr_bha_calendar_comparison_report.json").read_text())
+    kempton = json.loads((OUT / "jcr_kempton_surface_classification_report.json").read_text())
 
     checks = [
         check("Course scope", len(courses) == 14, f"{len(courses)} JCR courses identified."),
@@ -42,6 +45,9 @@ def main() -> None:
         check("Zones", len(zones) > 0 and section_zone["overlap_preserved"], f"{len(zones)} zones retained; {section_zone['waypoints_in_multiple_zones']} overlapping waypoint memberships preserved."),
         check("KML", kml.sha256.notna().all() and kml.match_status.notna().all(), f"{len(kml)} KML files have checksums and match statuses; one JCR file is ambiguous." , "exception"),
         check("Going Reports", len(reports) == 21829, f"{len(reports)} reports imported; source coverage is complete for the extracted period."),
+        check("Meeting status", meeting["course_id_match_count"] == 14 and meeting["planned_without_going_report_count"] == 0, f"TT Maps and TT Hub course IDs match for {meeting['course_id_match_count']} of {meeting['course_count']} courses; {meeting['planned_without_going_report_count']} planned dates have no Going Report and remain unresolved.", "exception"),
+        check("BHA calendar", bha["bha_only_count"] == 0 and bha["tt_maps_only_count"] == 0, f"BHA/TT Maps comparison has {bha['bha_only_count']} BHA-only and {bha['tt_maps_only_count']} TT Maps-only dates; course IDs were mapped through the 14 confirmed Hub course identities.", "exception"),
+        check("Kempton surface classification", kempton["unresolved_report_rows"] == 0 and kempton["stick_readings_on_awt_reports"] == 0, f"{kempton['eligible_turf_jump_report_rows']} Turf/Jump reports retained for stick analysis, {kempton['awt_report_rows_excluded']} AWT reports excluded, and {kempton['unresolved_report_rows']} reports remain unresolved.", "exception"),
         check("SVG", svg.retrieval_status.notna().all() and svg.parse_status.notna().all(), f"{len(svg)} representative candidates have retrieval/parse status; full all-report retention remains pending." , "exception"),
         check("SVG matching", svg_report["element_count"] > 0, f"{svg_report['element_count']} SVG elements parsed; {svg_report['matched_waypoint_element_count']} waypoint matches quantified."),
         check("Cheltenham", len(discipline["cheltenham"]) == 20, "All Cheltenham map records included in the explicit review output."),
@@ -62,7 +68,7 @@ def main() -> None:
             "jcr_course_scope_report.json", "jcr_map_inventory_report.json",
             "jcr_stick_reading_qa_report.json", "jcr_section_zone_qa_report.json",
             "jcr_kml_validation_report.json", "jcr_svg_validation_report.json",
-            "jcr_map_discipline_layout_report.json",
+            "jcr_map_discipline_layout_report.json", "jcr_meeting_status_reconciliation_report.json", "jcr_bha_calendar_comparison_report.json", "jcr_kempton_surface_classification_report.json",
         ],
     }
     path = OUT / "jcr_phase1_validation_report.json"
