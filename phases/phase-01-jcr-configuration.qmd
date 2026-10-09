@@ -127,7 +127,7 @@ Deliverable: `data/config/jcr_maps.parquet`.
 
 ### Step 2 preliminary result
 
-**Preliminary status: complete as a Hub inventory; operational review outstanding.** Step 2 was run on 9 October 2026 against the read-only TT Hub connection. All 14 JCR courses have identified maps: 76 maps in total, of which 37 are active and 39 are archived. Fifty-six maps have child track records, 20 have no child track record, and two maps retain multiple child tracks. No duplicate map IDs were found.
+**Status: complete as a Hub inventory; operational assignment applied for 70 of 76 maps.** Step 2 was run on 9 October 2026 against the read-only TT Hub connection. All 14 JCR courses have identified maps: 76 maps in total, of which 37 are active and 39 are archived. Fifty-six maps have child track records, 20 have no child track record, and two maps retain multiple child tracks. No duplicate map IDs were found.
 
 | Measure | Result | Interpretation |
 |---|---:|---|
@@ -135,13 +135,13 @@ Deliverable: `data/config/jcr_maps.parquet`.
 | Map inventory | 76 maps | Stable Hub `map_id` values are retained. |
 | Lifecycle | 37 active; 39 archived | `deleted_at` is retained as `valid_to`; archived maps are not silently removed. |
 | Track linkage | 56 with tracks; 20 without | Maps without child tracks are recorded as exceptions for review. |
-| Proposed discipline | 20 flat; 16 jumps; 40 unknown | Assignments use explicit Hub labels and remain provisional. |
+| Operational discipline | 33 flat; 37 jumps; 6 unreviewed | 60 assignments confirmed and 10 changed in the returned workbook; 6 map rows remain unreviewed. |
 
-Map discipline was assigned conservatively from the map label, track name, going-group label and course all-weather flag. Labels containing `flat`, `rowley` or `july` were proposed as flat; labels containing `jump`, `chase`, `hurdle`, `national` or `mildmay` were proposed as jumps. Generic labels such as `OLD`, `NEW`, `X Country` and `All Maps` remain unknown where Hub metadata is insufficient. The evidence field is retained in the map output.
+Map discipline was initially assigned from Hub metadata and then updated from the returned operational workbook. The workbook records 60 `Confirmed` assignments and 10 `Changed` assignments: 33 maps are Flat and 37 are Jumps. Six rows remain `Not reviewed` (map IDs 158, 755, 641, 171, 637 and 640), so those maps remain unknown. The dedicated Cheltenham Review sheet remains unreviewed and is retained as a separate detailed-layout exception.
 
-Cheltenham has 20 maps: 11 active and 9 archived. The inventory preserves its Old, New, X Country, combined and Chase/Hurdle map records. Sixteen Cheltenham maps remain unknown or require operational confirmation; the explicit Chase/Hurdle maps are proposed as jumps.
+Cheltenham has 20 maps: 11 active and 9 archived. The general Map Review assignments now classify all 20 as Jumps, but the Old/New, X Country, combined and numbered layout hierarchy still requires detailed operational confirmation before cross-map comparison.
 
-Operational users have been given `data/config/jcr_map_review.xlsx` to confirm map discipline, aliases, lifecycle interpretation and unresolved map identity. This preliminary result should be updated after the workbook is returned. The Excel review does not block extraction of Going Report metadata because reports retain stable Hub `map_id` values.
+Generated review outputs include `data/config/jcr_map_review_import_report.json`. The workbook assignments are now applied to `data/config/jcr_maps.parquet`; stable Hub `map_id` values continue to support the Going Report and SVG joins.
 
 Generated outputs:
 
@@ -419,24 +419,65 @@ Generated outputs:
 
 ### Preliminary meeting-status workstream
 
-The live Hub does not contain the BHA fixture/result tables present in the historical database dump, so an independent results-based meeting status is not yet available. A preliminary status table was therefore created from the retained Going Reports, aggregated at course and race-date level.
+TT Maps provides a planned fixture calendar, and its course IDs can be checked directly against TT Hub. For all 14 JCR courses, TT Maps and TT Hub IDs and names match exactly. The calendar contains 1,652 rows representing 1,649 course/date groups in 2021–2025. Its `note` field includes explicit operational markers such as `Cancelled`, `Cancelled - Abandoned` and `Replaced`.
 
-| Preliminary status | Course/date rows |
+The reconciliation combines the planned calendar with Going Report evidence; race results are not required for this step.
+
+| Reconciled status | Course/date rows |
 |---|---:|
-| Reported as run | 1,578 |
-| Reported mixed | 85 |
+| Reported as run | 1,577 |
+| Reported mixed | 83 |
 | Reported as abandoned | 1 |
-| **Total report-observed dates** | **1,664** |
+| Cancelled or abandoned from calendar note | 2 |
+| Replaced or rescheduled from calendar note | 1 |
+| Planned but no Going Report | 56 |
+| **Reconciled course/date rows** | **1,720** |
 
-A date is `reported_as_run` when at least one non-abandoned Going Report exists and no abandoned report exists. It is `reported_mixed` when both abandoned and non-abandoned reports exist for the same course/date. It is `reported_as_abandoned` when only abandoned reports exist. All records retain report counts, map counts, published counts, archive/delete counts and authorship counts.
+A calendar row establishes that a meeting was planned. Explicit calendar notes provide cancellation/replacement evidence. A non-abandoned Going Report supports that operational activity occurred, but is not independent proof that racing took place. Planned dates with no report remain `planned_no_going_report`; they are not incorrectly classified as held. Mixed report dates remain exceptions because they contain both abandoned and non-abandoned reports.
 
-This is evidence that a Going Report was recorded, not independent proof that racing took place. It cannot identify planned fixtures with no report, rescheduled dates or partially run meetings. Those require the BHA fixture/results source or another actual-racing source. The table is therefore marked for external results validation before it is used as the BHAGI denominator.
+For the 83 mixed meetings, the latest report was selected by `updated_at`, with `report_id` as the tie-breaker:
+
+| Latest report | Meetings |
+|---|---:|
+| Abandoned, published/status 1 | 77 |
+| Abandoned, unpublished/status 0 | 4 |
+| Non-abandoned, published/status 1 | 2 |
+
+The two latest non-abandoned reports are Exeter on 8 December 2023 and Nottingham on 19 June 2023. The latest report was classified as `tt_auto_updater` for 60 meetings and `no_clerk_name` for 23 meetings. The latter is not evidence of clerk authorship; it means no free-text clerk name was recorded.
+
+The inverse comparison found 71 Going Report course/date pairs that do not appear in the TT Maps calendar: 68 reported as run, 2 reported mixed and 1 reported as abandoned. These are retained as `report_only` exceptions rather than being discarded. They may represent calendar omissions, date/course mismatches or operational reports outside the calendar extract and require review before using the calendar as the sole denominator.
+
+Meeting status is not part of the immutable course/map configuration itself. It is a configuration-supporting reconciliation table: it supplies the denominator and date-level eligibility for later analysis while retaining stable Hub course and map identifiers.
 
 Generated outputs:
 
-- `data/config/jcr_actual_meetings_preliminary.parquet`
-- `data/config/jcr_actual_meeting_status_report.json`
+- `data/config/jcr_tt_maps_course_match.parquet`
+- `data/config/jcr_tt_maps_calendar.parquet`
+- `data/config/jcr_meeting_status_reconciliation.parquet`
+- `data/config/jcr_meeting_status_reconciliation_report.json`
+- `data/config/jcr_meeting_date_review.xlsx` — Turf-focused operational review workbook; confirmed AWT rows are excluded, remaining calendar/report date exceptions retain BHA/TT Maps surface and racing type where available, and unresolved Kempton report-only rows expose surface-review fields
+- `data/config/jcr_meeting_date_review_report.json`
 
+The ARC BHA parser was applied to the five `BHA MASTER` workbooks for 2021–2025. The Excel files contain no stable course IDs, so course names were normalized to the already-validated TT Hub course IDs. The comparison found 1,640 shared course/date keys, 28 BHA-only dates, 9 TT Maps-only dates and 3 shared keys with multiple TT Maps rows. The 28 BHA-only dates are concentrated in 2021, including 22 Kempton AWT fixtures; the BHA `Surface` field confirms AWT for those fixtures. These discrepancies are retained for review rather than resolved by assumption.
+
+Generated BHA comparison outputs:
+
+- `data/config/jcr_bha_fixture_calendar.parquet`
+- `data/config/jcr_bha_calendar_comparison.parquet`
+- `data/config/jcr_bha_calendar_comparison_report.json`
+
+### Kempton surface classification
+
+Kempton map `29` is a shared venue/layout map and must not be treated as a universal Jumps map. A derived report-level classification was therefore applied with this priority: BHA fixture surface, TT Maps `race_type_code` fallback, then explicit operational review. The BHA match classified 765 reports as Turf/Jump and 555 as AWT/Flat. Eight reports on four dates remain unresolved because those dates are absent from both the BHA fixture extract and the TT Maps calendar: 12 March 2022, 19 December 2022, 10 April 2023 and 18 September 2025.
+
+The Kempton stick-reading extract contains 15,830 readings across 189 reports and 51 dates. All are associated with the classified Turf/Jump set; no AWT report has a stick reading. AWT reports are therefore excluded from Going Stick analysis, while unresolved reports remain quarantined until operational evidence is supplied.
+
+Generated outputs:
+
+- `data/config/jcr_kempton_surface_classification.parquet`
+- `data/config/jcr_kempton_surface_classification_report.json`
+
+This is a report/meeting-level surface classification and does not change the shared map identity.
 
 ## 6. Import and validate SVG map assets
 
@@ -466,18 +507,18 @@ Map discipline and layout were resolved as far as the current Hub, KML and repre
 
 | Result | Maps |
 |---|---:|
-| Flat | 20 |
-| Jumps | 16 |
-| Unknown discipline | 40 |
-| Resolved non-generic layouts | 36 |
+| Flat | 33 |
+| Jumps | 37 |
+| Unknown discipline | 6 |
+| Resolved non-generic layouts | 51 |
 | Ambiguous/generic layouts | 24 |
-| Discipline unresolved | 16 |
+| Discipline unresolved | 1 |
 | Active/primary maps | 37 |
 | Archived/historical maps | 39 |
 
 Evidence coverage includes 7 exact in-scope KML map matches and representative SVG evidence for 33 maps. The remaining maps rely on Hub metadata only or have no retrieved representative SVG.
 
-Cheltenham remains the principal unresolved area. The Hub clearly identifies maps 446, 513, 514, 515 and 516 as chase/hurdle layouts, while Old/New, X Country, All Maps and numbered maps remain conservatively unresolved because the available labels do not establish a safe comparison discipline. Map 256 and map 741 also require separate review; the Cheltenham KML is ambiguous between them.
+Cheltenham remains the principal layout-review area. The returned general workbook assigns all 20 Cheltenham maps to Jumps, but the dedicated Cheltenham Review sheet is still unreviewed. Old/New, X Country, All Maps and numbered layouts therefore remain operationally unresolved, and the Cheltenham KML remains ambiguous between active maps 256 and 741.
 
 Generated output:
 
@@ -488,7 +529,7 @@ Acceptance rule: no cross-map comparison is allowed until maps share a resolved 
 
 ## 8. Create the configuration package
 
-A versioned package was created as far as the current evidence allows. Package version is `phase-1-2026-10-09`; it contains 24 configuration/provenance members, SHA256 metadata, generated map aliases, an unresolved-issues register and a ZIP archive. The retained SVG binaries remain in `data/config/svg` and are referenced by the SVG tables rather than duplicated in the archive.
+A versioned package was created as far as the current evidence allows. Package version is `phase-1-2026-10-09`; it contains 38 configuration/provenance members, SHA256 metadata, generated map aliases, an unresolved-issues register and a ZIP archive. The retained SVG binaries remain in `data/config/svg` and are referenced by the SVG tables rather than duplicated in the archive.
 
 Package outputs:
 
@@ -498,7 +539,7 @@ Package outputs:
 - `data/config/jcr_configuration_package/jcr_config_metadata.yml`
 - `data/config/jcr_configuration_package/manifest.json`
 
-The package is not yet marked final because discipline/layout exceptions, Cheltenham review, independent meeting-status validation and full all-report SVG retention remain open.
+The package is not yet marked final because discipline/layout exceptions, Cheltenham review, unresolved calendar/report dates and full all-report SVG retention remain open.
 
 Create a versioned configuration package containing:
 
@@ -531,9 +572,9 @@ config/
 
 ## 9. Run Phase 1 validation
 
-A preliminary rules-based validation was executed against the acceptance table below. The result is `preliminary_with_documented_exceptions`: 9 checks pass and 5 remain documented exceptions. The exceptions are known configuration or source-coverage limitations, not silent failures.
+A preliminary rules-based validation was executed against the acceptance table below. The result is `preliminary_with_documented_exceptions`: 9 checks pass and 8 remain documented exceptions. The exceptions are known configuration or source-coverage limitations, not silent failures.
 
-The validation output is `data/config/jcr_phase1_validation_report.json`; the executable check is `src/datatrax_jcr/validate_phase1.py`. Phase 1 is not marked complete until the unresolved map layouts, waypoint exceptions, KML ambiguity, full SVG retention and independent meeting-status validation are resolved or formally accepted.
+The validation output is `data/config/jcr_phase1_validation_report.json`; the executable check is `src/datatrax_jcr/validate_phase1.py`. The validation now includes TT Maps/TT Hub course-ID matching, BHA calendar comparison, Kempton surface classification and meeting-status reconciliation. Phase 1 is not marked complete until the unresolved map layouts, waypoint exceptions, KML ambiguity, full SVG retention and planned dates without reports are resolved or formally accepted.
 
 The phase validation report must show:
 
@@ -603,11 +644,13 @@ not_approved
 
 The current exceptions are:
 
-- **Operational review pending:** the map-review workbook has not yet been returned, so aliases, lifecycle decisions and provisional disciplines remain unconfirmed.
-- **Spatial configuration pending:** 40 maps have unknown discipline or generic layout status; Cheltenham maps 256 and 741 remain ambiguous in the supplied KML evidence.
+- **Operational review partial:** 70 of 76 general map assignments have been applied; 6 rows remain unreviewed and the dedicated Cheltenham detail sheet is still open.
+- **Spatial configuration pending:** 6 maps remain unknown and 24 layouts retain generic/ambiguous labels; Cheltenham maps 256 and 741 remain ambiguous in the supplied KML evidence.
 - **Waypoint QA pending:** unexpected waypoint rows and report/map count excesses remain under investigation.
 - **Asset coverage partial:** representative SVGs were retrieved and parsed, but full all-report SVG retention and PDF/uploaded-map extraction have not been completed.
-- **Meeting reconciliation pending:** the report-observed meeting status has not been reconciled to an independent fixture/results source.
+- **Meeting reconciliation partial:** TT Maps and TT Hub course IDs match for all 14 courses; 56 planned dates have no Going Report and 71 Going Report dates are absent from the calendar. The 83 mixed report dates also remain exceptions.
+- **BHA calendar comparison pending:** 28 BHA-only and 9 TT Maps-only course/date keys require operational review; three shared keys contain multiple TT Maps rows.
+- **Kempton surface classification partial:** 765 reports are classified Turf/Jump, 555 are excluded as AWT, and 8 reports on four dates remain unresolved; no AWT stick readings were found.
 
 These exceptions may support continued configuration work, but they block final cross-map spatial comparison and a `complete` Phase 1 decision.
 
@@ -626,15 +669,16 @@ The next phase may begin only after the course and map identifiers are stable, t
 
 ### Partially complete
 
-- Apply the operational users’ returned map-review workbook when available.
+- Complete the 6 unreviewed general map rows and the dedicated Cheltenham detail review; the 70 returned assignments are already applied.
 - Extend SVG retention from one representative report per map/date to the full Going Report inventory if required for later analysis.
 - Extract and checksum PDF and uploaded-map assets; waypoint/zone SVG retrieval and parsing are already complete for the representative set.
 
 ### Blockers to final Phase 1 closure
 
-- Resolve the 40 unknown/generic map layouts, especially the Cheltenham hierarchy and the ambiguous KML match between maps 256 and 741.
+- Resolve the 6 unknown maps and 24 generic/ambiguous layouts, especially the Cheltenham hierarchy and the ambiguous KML match between maps 256 and 741.
 - Investigate unexpected waypoint readings, report/map count excesses and unconfigured section/zone references before accepting spatial comparisons.
-- Obtain and reconcile an independent fixture/results source for actual meeting status.
+- Resolve the 56 planned dates without Going Reports, the 71 report-only dates, the 28 BHA-only dates, the 9 TT Maps-only dates and the 83 mixed report dates using available operational status evidence; race results are not required for this reconciliation.
+- Confirm the four unresolved Kempton dates and retain AWT reports outside Going Stick analysis.
 - Re-run the preliminary validation and replace `approved_with_exceptions` with `approved` only after the exceptions are resolved or formally accepted.
 
 # Branding note
