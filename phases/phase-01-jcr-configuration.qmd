@@ -30,28 +30,12 @@ Build and validate the JCR configuration needed by every later phase. The config
 
 This phase is complete only when later analysis can use configuration identifiers rather than course-name or map-name guesses.
 
-## Prerequisite: import the Going Reports
-
-The map SVGs required for waypoint and zone matching are associated with Going Reports. SVG handling must therefore follow a complete Going Report import rather than relying on the planned fixture calendar alone.
-
-Before the configuration inventory is run:
-
-- import all available Going Reports for the selected analysis period from TT Hub;
-- retain report identifiers, map identifiers, report dates and source provenance;
-- retain report SVG references for waypoints and zones where available;
-- record report import status, errors and duplicate or superseded reports;
-- make the imported reports available to the SVG discovery step below.
-
-The import is read-only against TT Hub and should write a local, versioned cache. A missing Going Report must be recorded as an exception; it must not be silently treated as a missing map or missing SVG.
-
-Deliverable: imported Going Report cache and an import-status report, including the number of reports available per course, map and year.
-
 ## Working status
 
 | Item | Current status |
 |---|---|
 | Phase | Phase 1 |
-| Overall status | Step 1 complete; Phase 1 configuration in progress |
+| Overall status | Preliminary validation complete; Phase 1 approved with documented exceptions |
 | Scope | Jockey Club racecourses; Cheltenham is the first detailed course |
 | Analysis period | 2021–2025 initially; 2026 may be added as a partial year |
 | Primary output | Versioned JCR configuration and validation report |
@@ -68,6 +52,8 @@ Deliverable: imported Going Report cache and an import-status report, including 
 8. Every imported identifier and every manually resolved mapping must retain provenance.
 
 # Phase steps
+
+The formal configuration steps below remain the controlling Phase 1 sequence. Going Report extraction and meeting-status work are supporting data workstreams: they run in parallel and provide evidence for later SVG and validation tasks without changing the formal step numbering.
 
 ## 1. Define the JCR course scope
 
@@ -139,6 +125,30 @@ Tasks:
 
 Deliverable: `data/config/jcr_maps.parquet`.
 
+### Step 2 preliminary result
+
+**Preliminary status: complete as a Hub inventory; operational review outstanding.** Step 2 was run on 9 October 2026 against the read-only TT Hub connection. All 14 JCR courses have identified maps: 76 maps in total, of which 37 are active and 39 are archived. Fifty-six maps have child track records, 20 have no child track record, and two maps retain multiple child tracks. No duplicate map IDs were found.
+
+| Measure | Result | Interpretation |
+|---|---:|---|
+| Course coverage | 14 / 14 courses | No JCR course was missing from the map inventory. |
+| Map inventory | 76 maps | Stable Hub `map_id` values are retained. |
+| Lifecycle | 37 active; 39 archived | `deleted_at` is retained as `valid_to`; archived maps are not silently removed. |
+| Track linkage | 56 with tracks; 20 without | Maps without child tracks are recorded as exceptions for review. |
+| Proposed discipline | 20 flat; 16 jumps; 40 unknown | Assignments use explicit Hub labels and remain provisional. |
+
+Map discipline was assigned conservatively from the map label, track name, going-group label and course all-weather flag. Labels containing `flat`, `rowley` or `july` were proposed as flat; labels containing `jump`, `chase`, `hurdle`, `national` or `mildmay` were proposed as jumps. Generic labels such as `OLD`, `NEW`, `X Country` and `All Maps` remain unknown where Hub metadata is insufficient. The evidence field is retained in the map output.
+
+Cheltenham has 20 maps: 11 active and 9 archived. The inventory preserves its Old, New, X Country, combined and Chase/Hurdle map records. Sixteen Cheltenham maps remain unknown or require operational confirmation; the explicit Chase/Hurdle maps are proposed as jumps.
+
+Operational users have been given `data/config/jcr_map_review.xlsx` to confirm map discipline, aliases, lifecycle interpretation and unresolved map identity. This preliminary result should be updated after the workbook is returned. The Excel review does not block extraction of Going Report metadata because reports retain stable Hub `map_id` values.
+
+Generated outputs:
+
+- `data/config/jcr_maps.parquet`
+- `data/config/jcr_map_inventory_report.json`
+- `data/config/jcr_map_review.xlsx`
+
 ## 3. Inventory waypoints
 
 Waypoints are map-specific. The configuration must not assume that waypoint 1 on one map is equivalent to waypoint 1 on another map.
@@ -164,6 +174,45 @@ Tasks:
 - keep waypoint numbers and Hub IDs as separate fields.
 
 Deliverable: `data/config/jcr_waypoints.parquet` and a waypoint-compliance check table.
+
+### GoingStick reading QA rules
+
+After importing `stick_readings`, apply the following checks before calculating compliance or map summaries:
+
+- `index`, `penetrate` and `shear` are expected to be within the inclusive range 0–15; values below 0 or above 15 are out-of-range failures;
+- values exactly equal to 0 or 15 are valid boundary values but receive a separate review flag because they may indicate an instrument, transcription or data-quality issue;
+- missing, non-numeric and invalid readings are retained and flagged rather than dropped;
+- the number of distinct observed waypoint readings for a report/map must not exceed the number of configured waypoints for that map;
+- total reading rows and distinct waypoint counts are both reported, with duplicate report/waypoint keys checked explicitly;
+- all checks remain map-specific through `going_report_id` and `map_id`.
+
+A count excess is a QA failure, not evidence that extra waypoints belong to another map. Unexpected waypoint numbers must be retained in the exception table for investigation.
+
+### Step 3 preliminary result: GoingStick readings and waypoint compliance
+
+The initial read-only extract imported 5,011 configured waypoint rows across 73 maps and 57,141 stick-reading rows linked to 1,102 Going Reports. The three maps with no configured waypoint rows are retained as configuration exceptions. Of the 21,829 reports in the report cache, 20,727 had no linked stick readings in this extract.
+
+| QA check | Result |
+|---|---:|
+| Index outside 0–15 | 0 readings |
+| Penetration outside 0–15 | 0 readings |
+| Shear outside 0–15 | 0 readings |
+| Index/penetration/shear boundary values at 0 or 15 | 7,943 / 7,943 / 7,958 readings |
+| Missing or non-numeric index, penetration or shear | 0 readings |
+| Duplicate report/waypoint keys | 0 rows |
+| Unexpected waypoint numbers | 5,985 rows |
+| Reports exceeding configured waypoint count | 307 reports |
+| Report-level QA reviews | 318 reports |
+
+The numeric readings are within the expected range, but waypoint compliance is not yet accepted. The largest exceptions occur on maps where the current configured waypoint rows are fewer than the observed reading sequence, including Kempton map 29, Warwick map 54, Nottingham map 39, Wincanton map 56 and several Cheltenham maps. This may reflect historical map/track variants or incomplete current waypoint configuration; it must be resolved using map identity, Going Reports and SVG evidence before readings are silently excluded.
+
+Generated outputs:
+
+- `data/config/jcr_waypoints.parquet`
+- `data/config/jcr_stick_readings.parquet`
+- `data/config/jcr_waypoint_compliance.parquet`
+- `data/config/jcr_waypoint_map_qa.parquet`
+- `data/config/jcr_stick_reading_qa_report.json`
 
 ## 4. Model sections and overlapping zones
 
@@ -211,6 +260,37 @@ Tasks:
 
 Deliverable: four versioned configuration tables plus an overlap report.
 
+### Step 4 result: sections, zones and overlapping memberships
+
+The live Hub extract covers all 14 JCR courses and 56 maps with section or zone records. Memberships were parsed from the explicit Hub `way_points` fields and retained as map-specific many-to-many tables.
+
+| QA measure | Result |
+|---|---:|
+| Sections | 208 |
+| Zones | 703 |
+| Section memberships | 7,943 |
+| Zone memberships | 3,760 |
+| Waypoints in multiple zones | 7 |
+| Maximum zones on one waypoint | 2 |
+| Maximum sections on one waypoint | 5 |
+| Section references to unconfigured waypoints | 51 |
+| Zone references to unconfigured waypoints | 7 |
+| Configured waypoints with no section | 759 |
+| Configured waypoints with no zone | 748 |
+
+The seven overlapping zone memberships are preserved as separate rows; zones have not been reduced to an exclusive category. One section contains the range-formatted token `1-36`, which is retained as a parsing exception rather than expanded without confirmation. No zone had an empty waypoint list and no invalid zone tokens were found.
+
+References to unconfigured waypoint numbers and waypoints without memberships are retained for review. They may reflect historical map variants, incomplete current configuration or different operational uses of sections and zones. SVG and map-review evidence should be used before making manual assignments.
+
+Generated outputs:
+
+- `data/config/jcr_sections.parquet`
+- `data/config/jcr_zones.parquet`
+- `data/config/jcr_waypoint_sections.parquet`
+- `data/config/jcr_waypoint_zones.parquet`
+- `data/config/jcr_section_zone_map_qa.parquet`
+- `data/config/jcr_section_zone_qa_report.json`
+
 ## 5. Inventory and validate KML files
 
 KML files provide spatial evidence for waypoint location, but availability and quality may vary by course and map.
@@ -241,61 +321,184 @@ Do not spatially place a waypoint using nearest-neighbour matching without recor
 
 Deliverable: `data/config/jcr_kml_inventory.parquet`, extracted KML waypoint tables and a KML validation report.
 
+### Step 5 result: KML inventory and validation
+
+The `resources/001-kml` directory contains 24 standalone KML files and an archive containing 23 of those files. All 24 standalone files parsed successfully. Nine files claim JCR courses; the remaining 15 are retained in the inventory as outside the JCR scope rather than discarded.
+
+| QA measure | Result |
+|---|---:|
+| Standalone KML files | 24 |
+| JCR KML files | 9 |
+| JCR files matched to one active Hub map | 8 |
+| JCR files requiring map review | 1 |
+| JCR numeric waypoint placemarks | 709 |
+| JCR invalid or implausible coordinates | 0 |
+| Duplicate placemark IDs | 0 |
+| Duplicate numeric waypoint labels | 0 |
+| XML parse errors | 0 |
+
+Eight JCR files match their candidate active Hub map exactly by numeric waypoint set and count. The Cheltenham `All Maps` file matches both active maps 256 and 741, each with 96 configured waypoints, so its status remains `available_but_ambiguous`. The Aintree Hydrosight/WTX file contains additional non-waypoint placemarks, which are retained in the extracted KML table and do not affect the 90-waypoint match.
+
+Every JCR KML file has a SHA256 checksum, source path, document name, coordinate count and match status. No nearest-neighbour or unrecorded spatial inference was used.
+
+Generated outputs:
+
+- `data/config/jcr_kml_inventory.parquet`
+- `data/config/jcr_kml_waypoints.parquet`
+- `data/config/jcr_kml_archive_inventory.json`
+- `data/config/jcr_kml_validation_report.json`
+
+
+## Data workstreams supporting Phase 1
+
+The map SVGs required for waypoint and zone matching are associated with Going Reports. SVG handling must therefore follow a complete Going Report import rather than relying on the planned fixture calendar alone.
+
+Before SVG discovery is run:
+
+- import all available Going Reports for the selected analysis period from TT Hub;
+- retain report identifiers, map identifiers, report dates and source provenance;
+- retain report SVG references for waypoints and zones where available;
+- record report import status, errors and duplicate or superseded reports;
+- make the imported reports available to the SVG discovery step below.
+
+The import is read-only against TT Hub and should write a local, versioned cache. A missing Going Report must be recorded as an exception; it must not be silently treated as a missing map or missing SVG.
+
+Deliverable: imported Going Report cache and an import-status report, including the number of reports available per course, map and year.
+
+### Going Report extraction result
+
+**Status: extracted; representative SVG retrieval and parsing complete, full asset backfill outstanding.** On 9 October 2026, the read-only TT Hub extract returned 21,829 Going Report records for the 14 JCR courses with race dates from 2021 through 2025. The cache retains the report ID, course ID, map ID, race date, report status, archive/delete flags, going and operational comments, abandoned flag, map references and PDF references.
+
+| Measure | Result |
+|---|---:|
+| Courses represented | 14 / 14 |
+| Reports retained | 21,829 |
+| Maps represented in reports | 33 |
+| Published reports | 13,648 |
+| Unpublished reports | 8,181 |
+| Archived reports | 9 |
+| Deleted reports | 25 |
+| Abandoned reports | 139 |
+| Waypoint-map references | 19,950 |
+| Zone-map references | 19,950 |
+| PDF references | 6,420 |
+| Uploaded-map references | 0 |
+
+Multiple reports for the same map and race date are retained. There are 1,673 map/date groups containing 21,707 records; these may represent revisions or repeated operational reports and are not labelled as duplicates without stronger report-version evidence. No records were silently removed. The extract is metadata-only at this stage: referenced PDFs, waypoint SVGs, zone SVGs and uploaded maps still need to be retrieved, checksummed and parsed.
+
+Generated outputs:
+
+- `data/config/jcr_going_reports.parquet`
+- `data/config/jcr_going_report_import_status.parquet`
+- `data/config/jcr_going_report_import_report.json`
+
+### Going Report authorship and Hub-user validation
+
+The report records were joined to the Hub `users` table using `going_reports.user_id = users.id`. All 21,829 extracted reports matched a Hub user ID; no report user IDs were unmatched. The extract contains 27 distinct Hub users.
+
+Authorship was separated using two fields:
+
+- `clerk_name = TT Auto-updater` identifies the operational auto-updater label;
+- all other non-empty `clerk_name` values are treated as clerk entries;
+- the relational `user_id` and Hub user record remain the authoritative account link.
+
+| Report classification | Reports |
+|---|---:|
+| TT Auto-updater | 15,762 |
+| Named clerk entry | 1,010 |
+| No clerk name | 5,057 |
+
+The principal auto-updater account is Hub user ID 203, `apiuser.bhagoing@turftrax.co.uk`, displayed as `TT Going-Update`, with the Hub role `Clerk`; it accounts for 15,753 auto-updater-labelled reports. Nine further auto-updater-labelled reports were saved under other Hub accounts.
+
+`clerk_name` is free text rather than a foreign key. Among named clerk entries, 454 exactly matched the linked Hub user name and 556 did not. Those non-exact values are retained for review rather than being force-matched.
+
+Generated outputs:
+
+- `data/config/jcr_going_report_authorship.parquet`
+- `data/config/jcr_going_report_authorship_report.json`
+
+### Preliminary meeting-status workstream
+
+The live Hub does not contain the BHA fixture/result tables present in the historical database dump, so an independent results-based meeting status is not yet available. A preliminary status table was therefore created from the retained Going Reports, aggregated at course and race-date level.
+
+| Preliminary status | Course/date rows |
+|---|---:|
+| Reported as run | 1,578 |
+| Reported mixed | 85 |
+| Reported as abandoned | 1 |
+| **Total report-observed dates** | **1,664** |
+
+A date is `reported_as_run` when at least one non-abandoned Going Report exists and no abandoned report exists. It is `reported_mixed` when both abandoned and non-abandoned reports exist for the same course/date. It is `reported_as_abandoned` when only abandoned reports exist. All records retain report counts, map counts, published counts, archive/delete counts and authorship counts.
+
+This is evidence that a Going Report was recorded, not independent proof that racing took place. It cannot identify planned fixtures with no report, rescheduled dates or partially run meetings. Those require the BHA fixture/results source or another actual-racing source. The table is therefore marked for external results validation before it is used as the BHAGI denominator.
+
+Generated outputs:
+
+- `data/config/jcr_actual_meetings_preliminary.parquet`
+- `data/config/jcr_actual_meeting_status_report.json`
+
+
 ## 6. Import and validate SVG map assets
 
-SVG assets are discovered from the imported Going Reports and their associated maps. Both waypoint and zone SVGs must be retained because they may contain different feature identifiers and visual information.
-
-For every discovered SVG:
-
-- record the source Going Report, map, course and document role;
-- retain the original SVG text and a local copy where appropriate;
-- calculate a SHA256 checksum and avoid re-downloading unchanged assets;
-- parse elements with an `id`, preserving element name, class, style and labels;
-- link SVG IDs to Hub waypoints, zones and sections where possible;
-- record duplicate IDs, unmatched IDs, missing assets and parse errors;
-- keep the original document even when parsing fails.
-
-Recommended local datasets:
+SVG assets are discovered using the GRV-compatible Python rule derived from the report ID, not from the filename-only `waypoint_map` and `zone_map` fields:
 
 ```text
-svg_source_documents
-svg_documents
-svg_elements
+maps/going-reports/{report_id}_waypoints.svg
+maps/going-reports/{report_id}_zones.svg
 ```
 
-SVG status values:
+The Python importer resolves these paths against `https://hub.turftrax.co.uk`, stores local copies under `data/config/svg`, records SHA256 checksums and HTTP status, parses XML elements with IDs, and links numeric SVG labels to configured Hub waypoint numbers where possible. Repeated revisions were reduced to one representative report per `map_id` and `race_date` for this Phase 1 configuration validation; the complete 21,829-report inventory remains in `jcr_going_reports.parquet` for a later full asset backfill.
 
-```text
-retrieved_and_parsed
-retrieved_parse_failed
-not_available
-source_report_not_imported
-```
+The representative import covered 897 reports and 3,590 SVG candidates: 3,300 were retrieved and parsed successfully, 290 returned HTTP 404 (not available), and none had transport or XML parse failures. The retrieved files contained 232,474 identified SVG elements; 35,416 matched configured waypoint numbers and 197,058 remain unmatched pending zone/section feature mapping. No duplicate element IDs were found within a source document.
 
-No SVG-dependent configuration check can pass while the relevant Going Reports remain unimported.
+Generated outputs:
 
-Deliverable: retained SVG assets, parsed SVG element tables and an SVG validation report.
+- `data/config/jcr_svg_source_documents.parquet`
+- `data/config/jcr_svg_documents.parquet`
+- `data/config/jcr_svg_elements.parquet`
+- `data/config/jcr_svg_validation_report.json`
+
+The result is suitable for representative map-configuration validation. A complete all-report SVG retention run remains a separate storage-intensive backfill.
 
 ## 7. Resolve map discipline and layout
 
-Map discipline and layout determine which observations may be compared.
+Map discipline and layout were resolved as far as the current Hub, KML and representative SVG evidence allows. The Python resolution retains the existing Hub map classification, adds explicit layout and comparison-group fields, and isolates unresolved maps so they cannot be compared silently.
 
-For each map, record:
+| Result | Maps |
+|---|---:|
+| Flat | 20 |
+| Jumps | 16 |
+| Unknown discipline | 40 |
+| Resolved non-generic layouts | 36 |
+| Ambiguous/generic layouts | 24 |
+| Discipline unresolved | 16 |
+| Active/primary maps | 37 |
+| Archived/historical maps | 39 |
 
-```text
-discipline = flat | jumps | all_weather | unknown
-layout_label
-map_role = primary | secondary | historical | unknown
-comparison_group
-evidence
-confidence
-```
+Evidence coverage includes 7 exact in-scope KML map matches and representative SVG evidence for 33 maps. The remaining maps rely on Hub metadata only or have no retrieved representative SVG.
 
-For Cheltenham, explicitly investigate separate layouts such as Old Course and New Course, and retain hurdle/chase distinctions where the map metadata or Going Reports support them.
+Cheltenham remains the principal unresolved area. The Hub clearly identifies maps 446, 513, 514, 515 and 516 as chase/hurdle layouts, while Old/New, X Country, All Maps and numbered maps remain conservatively unresolved because the available labels do not establish a safe comparison discipline. Map 256 and map 741 also require separate review; the Cheltenham KML is ambiguous between them.
 
-Acceptance rule: no cross-map comparison is allowed until the maps have either been assigned to a common comparison group or explicitly marked incomparable.
+Generated output:
+
+- `data/config/jcr_map_discipline_layout.parquet`
+- `data/config/jcr_map_discipline_layout_report.json`
+
+Acceptance rule: no cross-map comparison is allowed until maps share a resolved discipline and non-generic layout comparison group. Unknown or generic maps are isolated by map ID and remain explicit exceptions.
 
 ## 8. Create the configuration package
+
+A versioned package was created as far as the current evidence allows. Package version is `phase-1-2026-10-09`; it contains 24 configuration/provenance members, SHA256 metadata, generated map aliases, an unresolved-issues register and a ZIP archive. The retained SVG binaries remain in `data/config/svg` and are referenced by the SVG tables rather than duplicated in the archive.
+
+Package outputs:
+
+- `data/config/jcr_configuration_package/`
+- `data/config/jcr_configuration_package_phase-1-2026-10-09.zip`
+- `data/config/jcr_configuration_package/jcr_map_aliases.yml`
+- `data/config/jcr_configuration_package/jcr_config_metadata.yml`
+- `data/config/jcr_configuration_package/manifest.json`
+
+The package is not yet marked final because discipline/layout exceptions, Cheltenham review, independent meeting-status validation and full all-report SVG retention remain open.
 
 Create a versioned configuration package containing:
 
@@ -327,6 +530,10 @@ config/
 - reviewer and review date.
 
 ## 9. Run Phase 1 validation
+
+A preliminary rules-based validation was executed against the acceptance table below. The result is `preliminary_with_documented_exceptions`: 9 checks pass and 5 remain documented exceptions. The exceptions are known configuration or source-coverage limitations, not silent failures.
+
+The validation output is `data/config/jcr_phase1_validation_report.json`; the executable check is `src/datatrax_jcr/validate_phase1.py`. Phase 1 is not marked complete until the unresolved map layouts, waypoint exceptions, KML ambiguity, full SVG retention and independent meeting-status validation are resolved or formally accepted.
 
 The phase validation report must show:
 
@@ -384,7 +591,9 @@ These measures become the baseline for later phases and should be rerun whenever
 
 # Phase 1 acceptance decision
 
-The phase review should end with one of three decisions:
+**Current decision: `approved_with_exceptions`.** The course and map identifiers are stable enough for controlled continuation and the configuration package is versioned. Spatial comparison and final closure remain conditional on the exceptions below.
+
+The phase review uses one of three decisions:
 
 ```text
 approved
@@ -392,7 +601,15 @@ approved_with_exceptions
 not_approved
 ```
 
-The approval record must name the exceptions that later phases may proceed with and those that block spatial analysis.
+The current exceptions are:
+
+- **Operational review pending:** the map-review workbook has not yet been returned, so aliases, lifecycle decisions and provisional disciplines remain unconfirmed.
+- **Spatial configuration pending:** 40 maps have unknown discipline or generic layout status; Cheltenham maps 256 and 741 remain ambiguous in the supplied KML evidence.
+- **Waypoint QA pending:** unexpected waypoint rows and report/map count excesses remain under investigation.
+- **Asset coverage partial:** representative SVGs were retrieved and parsed, but full all-report SVG retention and PDF/uploaded-map extraction have not been completed.
+- **Meeting reconciliation pending:** the report-observed meeting status has not been reconciled to an independent fixture/results source.
+
+These exceptions may support continued configuration work, but they block final cross-map spatial comparison and a `complete` Phase 1 decision.
 
 The next phase may begin only after the course and map identifiers are stable, the Cheltenham map hierarchy has been reviewed, and the configuration package has been versioned.
 
@@ -400,6 +617,25 @@ The next phase may begin only after the course and map identifiers are stable, t
   <span>DataTrax · JCR GoingStick Analysis</span>
   <img src="../resources/tt_brand/LOGO/Master Logo/TurfTrax_Logo_White.png" alt="TurfTrax" />
 </div>
+
+## Next steps
+
+### Completed
+
+- Course scope, map inventory, waypoint/stick-reading QA, sections/zones, KML inventory, representative SVG import, discipline/layout assessment, package creation and preliminary validation.
+
+### Partially complete
+
+- Apply the operational users’ returned map-review workbook when available.
+- Extend SVG retention from one representative report per map/date to the full Going Report inventory if required for later analysis.
+- Extract and checksum PDF and uploaded-map assets; waypoint/zone SVG retrieval and parsing are already complete for the representative set.
+
+### Blockers to final Phase 1 closure
+
+- Resolve the 40 unknown/generic map layouts, especially the Cheltenham hierarchy and the ambiguous KML match between maps 256 and 741.
+- Investigate unexpected waypoint readings, report/map count excesses and unconfigured section/zone references before accepting spatial comparisons.
+- Obtain and reconcile an independent fixture/results source for actual meeting status.
+- Re-run the preliminary validation and replace `approved_with_exceptions` with `approved` only after the exceptions are resolved or formally accepted.
 
 # Branding note
 
