@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <Style id="event-pin">
+      <IconStyle>
+        <scale>0.75</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/red-circle.png</href></Icon>
+      </IconStyle>
+    </Style>
+    <Folder>
+      <name>Course Walk s00602 Events</name>
+      <Placemark><name>E:1 - WP:1</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2734258,52.2224922,0</coordinates></Point></Placemark>
+      <Placemark><name>E:2 - WP:1</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2734469,52.2224655,0</coordinates></Point></Placemark>
+      <Placemark><name>E:3 - WP:2</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2739623,52.2223320,0</coordinates></Point></Placemark>
+      <Placemark><name>E:4 - WP:3</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2746143,52.2222290,0</coordinates></Point></Placemark>
+      <Placemark><name>E:5 - WP:4</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2750615,52.2221260,0</coordinates></Point></Placemark>
+      <Placemark><name>E:6 - WP:5</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2755097,52.2219582,0</coordinates></Point></Placemark>
+      <Placemark><name>E:7 - WP:6</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2754941,52.2219620,0</coordinates></Point></Placemark>
+      <Placemark><name>E:8 - WP:7</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2759556,52.2216492,0</coordinates></Point></Placemark>
+      <Placemark><name>E:9 - WP:8</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2764590,52.2215004,0</coordinates></Point></Placemark>
+      <Placemark><name>E:10 - WP:9</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2764601,52.2215233,0</coordinates></Point></Placemark>
+      <Placemark><name>E:11 - WP:10</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2763658,52.2217522,0</coordinates></Point></Placemark>
+      <Placemark><name>E:12 - WP:11</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2760789,52.2221260,0</coordinates></Point></Placemark>
+      <Placemark><name>E:13 - WP:12</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2754809,52.2223244,0</coordinates></Point></Placemark>
+      <Placemark><name>E:14 - WP:13</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2748299,52.2224693,0</coordinates></Point></Placemark>
+      <Placemark><name>E:15 - WP:14</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2744559,52.2227364,0</coordinates></Point></Placemark>
+      <Placemark><name>E:16 - WP:14</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2744505,52.2227364,0</coordinates></Point></Placemark>
+      <Placemark><name>E:17 - WP:15</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2739993,52.2230263,0</coordinates></Point></Placemark>
+      <Placemark><name>E:18 - WP:16</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2736969,52.2233620,0</coordinates></Point></Placemark>
+      <Placemark><name>E:19 - WP:17</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2727967,52.2236443,0</coordinates></Point></Placemark>
+      <Placemark><name>E:20 - WP:17</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2728139,52.2236404,0</coordinates></Point></Placemark>
+      <Placemark><name>E:21 - WP:18</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2727127,52.2240982,0</coordinates></Point></Placemark>
+      <Placemark><name>E:22 - WP:19</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2726018,52.2245026,0</coordinates></Point></Placemark>
+      <Placemark><name>E:23 - WP:20</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2724209,52.2248459,0</coordinates></Point></Placemark>
+      <Placemark><name>E:24 - WP:21</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2721668,52.2254982,0</coordinates></Point></Placemark>
+      <Placemark><name>E:25 - WP:22</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2726080,52.2255974,0</coordinates></Point></Placemark>
+      <Placemark><name>E:26 - WP:23</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2732248,52.2256546,0</coordinates></Point></Placemark>
+      <Placemark><name>E:27 - WP:24</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2737715,52.2254257,0</coordinates></Point></Placemark>
+      <Placemark><name>E:28 - WP:25</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2735377,52.2251396,0</coordinates></Point></Placemark>
+      <Placemark><name>E:29 - WP:25</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2734916,52.2251396,0</coordinates></Point></Placemark>
+      <Placemark><name>E:30 - WP:26</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2734545,52.2246552,0</coordinates></Point></Placemark>
+      <Placemark><name>E:31 - WP:27</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2737241,52.2243690,0</coordinates></Point></Placemark>
+      <Placemark><name>E:32 - WP:28</name><styleUrl>#event-pin</styleUrl><Point><coordinates>-0.2736583,52.2239532,0</coordinates></Point></Placemark>
+    </Folder>
+  </Document>
+</kml>
