@@ -479,6 +479,35 @@ Generated outputs:
 
 This is a report/meeting-level surface classification and does not change the shared map identity.
 
+### Preliminary BHAGI compliance measures
+
+The BHAGI 3.2 requirements were applied to actual Turf meetings only. GoingStick “downloaded” means that one or more imported stick-reading rows were linked to a Going Report recorded on the relevant day; it is an evidence-of-download criterion, not a claim that the source system’s download event log was available. Actual means `resolved_status = reported_as_run`; 205 actual AWT meetings and 66 actual meetings without a resolved surface were excluded from the Turf denominator. The source requires the official going to be recorded and accompanied by GoingStick readings by the declarations point and on the day of racing, with Going App updates retained at the specified times. See the [BHAGI Section 3 source](https://media.britishhorseracing.com/bha/Rules/BHAGI/Section3_The_Racecourse.pdf), paragraphs 21–24.
+
+The extract has no declaration-closing date. For this preliminary measure, declaration day is therefore defined as two calendar days before the race date. This is an explicit proxy, not a claim that it is the actual declarations deadline.
+
+| Measure | Meetings |
+|---|---:|
+| Actual Turf meetings scored | 1,306 |
+| Declaration-day Going Report present | 1,302 |
+| Race-day Going Report present | 1,305 |
+| Declaration-day GoingStick present | 189 |
+| Race-day GoingStick present | 446 |
+| Declaration-day GoingStick downloaded | 189 |
+| Race-day GoingStick downloaded | 446 |
+| Official going reported on race day | 1,305 |
+| Abandonment correctly recorded | 1,306 |
+| Watering information available | 719 |
+| Rails information available | 1,208 |
+| Stalls information available | 521 |
+
+Overall categories are prioritised as `reporting_or_going_gap`, `goingstick_gap`, `metadata_gap` and `compliant`. The current preliminary result is 1,157 `goingstick_gap`, 135 `metadata_gap`, 5 `reporting_or_going_gap` and 9 `compliant` under the all-measures rule. These are data-availability measures, not a legal finding of BHAGI breach.
+
+Generated outputs:
+
+- `data/config/jcr_bhagi_compliance.parquet`
+- `data/config/jcr_bhagi_compliance_report.json`
+- `src/datatrax_jcr/bhagi_compliance.py`
+
 ## 6. Import and validate SVG map assets
 
 SVG assets are discovered using the GRV-compatible Python rule derived from the report ID, not from the filename-only `waypoint_map` and `zone_map` fields:
@@ -529,7 +558,7 @@ Acceptance rule: no cross-map comparison is allowed until maps share a resolved 
 
 ## 8. Create the configuration package
 
-A versioned package was created as far as the current evidence allows. Package version is `phase-1-2026-10-09`; it contains 38 configuration/provenance members, SHA256 metadata, generated map aliases, an unresolved-issues register and a ZIP archive. The retained SVG binaries remain in `data/config/svg` and are referenced by the SVG tables rather than duplicated in the archive.
+A versioned package was created as far as the current evidence allows. Package version is `phase-1-2026-10-09`; it contains 40 configuration/provenance members, SHA256 metadata, generated map aliases, an unresolved-issues register and a ZIP archive. The retained SVG binaries remain in `data/config/svg` and are referenced by the SVG tables rather than duplicated in the archive.
 
 Package outputs:
 

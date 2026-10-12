@@ -1,0 +1,392 @@
+---
+title: "JCR Weather Data Processing"
+subtitle: "Phase 2 — Weather and WTX Integration"
+author: "TurfTrax"
+date: last-modified
+format:
+  html:
+    css: ../resources/tt_brand/turftrax.css
+    toc: true
+    code-fold: true
+    self-contained: true
+execute:
+  echo: false
+  warning: false
+  error: true
+---
+
+# Phase 2 — Weather and WTX Integration
+
+## Purpose
+
+Build a reproducible weather-data layer for the JCR GoingStick analysis. The first release will establish an all-course weather baseline for 2021–2025 and then provide a Cheltenham-focused analysis. Weather is joined to the canonical meeting table, not directly to individual GoingStick readings.
+
+The phase will keep three concepts separate:
+
+- **Observed weather:** EMDB or local racecourse-station measurements, where available.
+- **Model-derived weather:** Open-Meteo historical/reanalysis-style data used as a consistent supplementary source.
+- **Racecourse ground evidence:** official going, GoingStick readings, watering, rails and stalls from TurfTrax/BHA-related extracts.
+
+Open-Meteo values must not be presented as local observations. Source, model, coordinates, retrieval time, timezone and quality flags will be retained for every imported series.
+
+## Working status
+
+| Item | Current status |
+|---|---|
+| Phase | Phase 2 |
+| Overall status | Planned; no weather data imported in this phase document yet |
+| Scope | 14 JCR courses; all-course baseline followed by Cheltenham detail |
+| Analysis period | 2021–2025 initially; 2026 may be added as a partial year |
+| Primary output | Validated weather observations and meeting-level weather features |
+| Detailed course | Cheltenham |
+
+## Inputs and dependencies
+
+Phase 2 reuses the controlled outputs from Phase 1:
+
+- `jcr_courses.parquet` for course IDs, names and coordinates;
+- `jcr_meeting_status_reconciliation.parquet` for planned/actual meeting status;
+- `jcr_bhagi_compliance.parquet` for the Turf-only actual-meeting denominator;
+- `jcr_going_reports.parquet` for report timestamps, official going, watering, rails, stalls and weather comments;
+- `jcr_stick_readings.parquet` for declaration-day and race-day GoingStick evidence;
+- `jcr_maps.parquet` and waypoint tables for map-specific analysis;
+- BHA fixture/calendar data for planned meeting context.
+
+The weather workstream must not silently re-create the meeting denominator. Actual meetings continue to mean `resolved_status = reported_as_run`, with AWT excluded from the Turf analysis unless a later scope decision changes that rule.
+
+## Processing principles
+
+1. Use stable `course_id` and `race_date` keys for meeting joins.
+2. Retain raw source fields before normalisation or aggregation.
+3. Store both UTC and `Europe/London` timestamps.
+4. Preserve source, station/model, coordinates, units, retrieval timestamp and quality flags.
+5. Use explicit unit conversions; never infer units from value ranges alone.
+6. Detect duplicates, gaps, impossible values and timezone/date shifts before deriving features.
+7. Keep Open-Meteo model data separate from local-station observations.
+8. Aggregate weather to the meeting before joining it to GoingStick rows.
+9. Do not infer causality from weather/going associations.
+10. Make all windows and thresholds configuration values rather than hard-coded presentation logic.
+
+# Phase steps
+
+## 1. Confirm the analytical denominator and course geography
+
+Use the Phase 1 meeting reconciliation to create the weather analysis population:
+
+- identify actual meetings and their status basis;
+- retain course ID, canonical course name, race date and surface/discipline;
+- exclude AWT meetings from the Turf baseline;
+- identify the 66 actual meetings whose surface remains unresolved;
+- confirm course latitude, longitude, timezone and any elevation metadata;
+- nominate Cheltenham maps and layouts for the detailed analysis.
+
+Deliverables:
+
+- `jcr_weather_meeting_population.parquet`;
+- a course-coordinate and timezone provenance table;
+- a report of excluded AWT and unresolved-surface meetings.
+
+Acceptance checks:
+
+- one canonical row per course/meeting date;
+- no join to a report ID or waypoint is used as the meeting key;
+- all excluded meetings have an explicit reason.
+
+## 2. Inventory weather sources and station links
+
+Identify all weather sources available for the 14 courses:
+
+- EMDB station and sensor tables;
+- local racecourse weather stations and replacement stations;
+- Open-Meteo coordinates and model endpoints;
+- weather text already captured in Going Reports.
+
+For EMDB/local stations, resolve:
+
+- station ID and name;
+- course association;
+- sensor ID and name;
+- variable and unit;
+- installation, replacement and retirement dates;
+- distance and elevation relative to the course;
+- simulation, development, diagnostic and maintenance records.
+
+Do not assume that a station name identifies a course permanently. Station aliases and replacement periods must be versioned.
+
+Deliverables:
+
+- `jcr_weather_source_inventory.parquet`;
+- `jcr_weather_station_map.parquet`;
+- source schema and availability report.
+
+Blocker to resolve before extraction: the EMDB schema, connection/query route and station-to-course mapping must be confirmed.
+
+## 3. Define the canonical weather schema
+
+Use one long-form schema for EMDB, local stations and Open-Meteo observations:
+
+```text
+weather_source
+station_id
+station_name
+course_id
+sensor_id
+sensor_name
+latitude
+longitude
+elevation_m
+observed_at_utc
+observed_at_local
+reading_epoch
+variable
+value
+unit
+quality_flag
+source_record_id
+retrieved_at_utc
+model_name
+source_file
+```
+
+Required source labels include:
+
+- `local_station`;
+- `emdb`;
+- `open_meteo`.
+
+Open-Meteo rows must also retain model name, requested coordinates, API parameters and retrieval metadata. A local station and a model grid cell are not interchangeable observations.
+
+## 4. Extract and cache EMDB/local-station data
+
+For each linked station and sensor:
+
+1. extract only the required analysis period plus weather windows around the first and last meeting;
+2. map source variables into the canonical variable names;
+3. normalise units to the project standard;
+4. convert timestamps while retaining the original timestamp/epoch;
+5. exclude simulation, diagnostic and invalid records;
+6. retain quality flags and source record IDs;
+7. write immutable raw extracts and a clean Parquet table;
+8. record row counts, date coverage and missingness by station/variable.
+
+Initial variables should include, where available:
+
+- precipitation/rainfall;
+- air temperature;
+- dew point;
+- relative humidity;
+- wind speed and gust;
+- soil moisture;
+- ground/surface temperature;
+- irrigation or watering observations if present;
+- weather code or condition indicator.
+
+## 5. Retrieve and cache Open-Meteo data
+
+Use Open-Meteo as a supplementary model-derived source. Request hourly data for each course coordinate and the same analysis period used for EMDB/local observations. The initial variable set should include:
+
+- precipitation and rain;
+- temperature and apparent temperature;
+- dew point and relative humidity;
+- wind speed and gust;
+- reference evapotranspiration (`ET₀`);
+- soil moisture where available;
+- weather code.
+
+Cache by:
+
+```text
+(source, latitude, longitude, start_date, end_date,
+ variables, model, timezone)
+```
+
+Retain the raw response, request parameters, model, API URL, retrieval timestamp and checksum. Open-Meteo documentation and data-source notes should be recorded with the extraction metadata:
+
+- [Open-Meteo API documentation](https://open-meteo.com/en/docs)
+
+## 6. Validate weather observations
+
+Run source-level QA before any meeting aggregation.
+
+### Schema and provenance
+
+- required columns exist;
+- variable/unit combinations are valid;
+- source and station/model identifiers are populated;
+- timestamps are parseable and timezone conversion is reproducible;
+- source records or raw-response checksums are retained.
+
+### Time and continuity
+
+- no impossible local/UTC date shifts;
+- no duplicate `(source, station/sensor, observed_at_utc, variable)` rows;
+- hourly intervals are measured rather than assumed;
+- gaps are reported by course, station, variable and year;
+- station replacement periods are not joined across incompatible sensors without a flag.
+
+### Value checks
+
+- precipitation is non-negative;
+- relative humidity is between 0 and 100%;
+- wind speed and gust are non-negative;
+- gust is not silently lower than sustained wind where both are comparable;
+- soil moisture and temperature ranges are source-checked, not blindly clipped;
+- suspicious values are flagged, not overwritten.
+
+Deliverable: `jcr_weather_observation_qa.parquet` and a JSON QA report.
+
+## 7. Derive meeting-level weather features
+
+Aggregate weather after source QA and before joining to GoingStick data. For every actual Turf meeting, derive features using `Europe/London` local time and retain the UTC window boundaries.
+
+Required rainfall windows:
+
+- preceding 6, 12, 24, 48 and 72 hours;
+- preceding 7 and 14 days;
+- rainfall from declaration day through race day;
+- dry-spell length before the meeting.
+
+Required atmospheric and surface features:
+
+- mean, minimum and maximum temperature;
+- mean and maximum wind speed/gust;
+- minimum relative humidity;
+- cumulative `ET₀` over 3, 7 and 14 days;
+- soil-moisture summaries where available;
+- weather-code frequencies;
+- source coverage and percentage of expected observations.
+
+Every derived feature should retain:
+
+- source used;
+- aggregation method;
+- window start/end;
+- observation count;
+- missingness/quality flag;
+- whether the value is model-derived or locally observed.
+
+Deliverable: `jcr_meeting_weather_features.parquet`.
+
+## 8. Join weather to Going Report and GoingStick evidence
+
+Join meeting features to the canonical meeting table using `course_id` and `race_date`. Then link the meeting-level features to Going Reports and stick readings only through that meeting key.
+
+For the declaration-day convention currently used by the BHAGI workstream, use race date minus two days. Keep this as a configurable field because the actual declaration-closing date is not present in the current extract.
+
+Compare, without causal claims:
+
+- antecedent rainfall versus official going;
+- antecedent rainfall versus index, penetration and shear;
+- temperature, wind and humidity versus within-meeting variation;
+- weather changes between declaration and race day;
+- local station versus Open-Meteo model differences.
+
+No weather feature should be used to repair missing GoingStick or Going Report data. Missingness remains a result in its own right.
+
+## 9. Build the all-course baseline
+
+Produce an all-course monitoring section with:
+
+- meeting and weather-source coverage;
+- station/model availability by course and year;
+- rainfall and temperature distributions;
+- declaration-to-race weather changes;
+- GoingStick coverage alongside weather coverage;
+- missing-data and quality-flag rates;
+- observed versus model-derived comparisons.
+
+All-course results are the gate for the Cheltenham deep dive. Courses with incompatible station coverage or unresolved surface identity must be visibly separated, not pooled silently.
+
+## 10. Develop the Cheltenham analysis
+
+After the all-course baseline is trusted, focus on Cheltenham:
+
+- annual and meeting-level weather history;
+- Festival versus non-Festival meetings;
+- Old Course versus New Course and other layouts;
+- hurdles versus chases;
+- waypoint-level index, penetration and shear;
+- official going versus GoingStick readings;
+- rainfall, temperature, humidity, wind and soil/ground conditions;
+- watering and rail movements where reported;
+- local-station versus Open-Meteo differences;
+- race-time validation when results are available.
+
+The Cheltenham analysis must keep map/layout identity separate from weather source and must report the number of meetings available for every comparison.
+
+## 11. Package, monitor and document
+
+The final Phase 2 package should contain:
+
+- canonical weather observations;
+- source/station inventory and aliases;
+- Open-Meteo request/cache metadata;
+- weather QA outputs;
+- meeting-level weather features;
+- all-course baseline tables and figures;
+- Cheltenham analysis tables and figures;
+- unresolved issues and source limitations;
+- this Quarto document and rendered HTML.
+
+Rerun monitoring should report:
+
+- expected versus observed weather rows;
+- station/model coverage by course and year;
+- duplicate and gap counts;
+- unit/timezone QA failures;
+- meeting join coverage;
+- feature missingness;
+- observed/model source mix;
+- weather/GoingStick comparison sample sizes.
+
+## Current blockers and decisions
+
+### Genuine blockers
+
+- EMDB schema and extraction access have not yet been confirmed in the JCR workspace.
+- Local station IDs, replacements and course links are not yet available as a controlled table.
+- Actual declaration-closing timestamps are unavailable; the current two-day convention is only a proxy.
+- Historical race results are not required for weather ingestion but are needed for race-time validation.
+
+### Decisions recorded for Phase 2
+
+- Start with 2021–2025.
+- Build the all-course baseline before Cheltenham detail.
+- Exclude confirmed AWT meetings from the Turf baseline.
+- Keep model-derived and observed weather separate.
+- Use `course_id` and `race_date` as the canonical join key.
+- Use Open-Meteo as supplementary model data until local/EMDB observations are validated.
+- Preserve all source and quality metadata.
+
+## Proposed first implementation
+
+1. Create the course-coordinate and weather-source inventory.
+2. Confirm EMDB tables, station links and variable units.
+3. Add an Open-Meteo cache/configuration layer.
+4. Extract one representative year for all courses and validate the schema.
+5. Expand to 2021–2025 after the one-year QA passes.
+6. Generate meeting-level weather features.
+7. Join weather to actual Turf meetings, Going Reports and GoingStick evidence.
+8. Produce the all-course baseline.
+9. Begin the Cheltenham deep dive.
+
+## Phase 2 acceptance criteria
+
+Phase 2 can be marked `complete` only when:
+
+- every weather source has a documented schema and provenance;
+- station/course links and coordinate metadata are controlled;
+- timestamps and units pass QA;
+- expected weather gaps are quantified;
+- meeting-level features are reproducible from cached inputs;
+- weather joins do not multiply meeting or GoingStick rows;
+- model-derived data is clearly separated from local observations;
+- all-course coverage is reported before Cheltenham interpretation;
+- unresolved source and declaration-date limitations are documented.
+
+Current decision: `planned`.
+
+<div class="tt-footer">
+  <span>DataTrax · JCR Weather and WTX Integration</span>
+  <img src="../resources/tt_brand/LOGO/Master Logo/TurfTrax_Logo_White.png" alt="TurfTrax" />
+</div>

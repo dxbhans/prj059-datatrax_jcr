@@ -34,6 +34,7 @@ REQUIRED = [
     "jcr_bha_fixture_calendar.parquet", "jcr_bha_calendar_comparison.parquet",
     "jcr_bha_calendar_comparison_report.json",
     "jcr_kempton_surface_classification.parquet", "jcr_kempton_surface_classification_report.json",
+    "jcr_bhagi_compliance.parquet", "jcr_bhagi_compliance_report.json",
 ]
 
 
@@ -95,6 +96,7 @@ def main() -> None:
             "SVG retention is representative: one report per map/date; full all-report backfill remains pending.",
             "56 planned calendar course/date rows have no Going Report and remain unresolved; no race results were used.",
             "Kempton surface classification excludes 555 AWT reports from Going Stick analysis; 8 reports on four dates remain unresolved.",
+            "BHAGI compliance is Turf-only and preliminary: declaration day uses race_date minus two days because declaration-closing dates are not present in the extract.",
         ],
         "reviewer": None,
         "review_date": None,
