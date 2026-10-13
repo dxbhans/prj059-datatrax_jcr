@@ -96,7 +96,7 @@ def main() -> None:
             "SVG retention is representative: one report per map/date; full all-report backfill remains pending.",
             "56 planned calendar course/date rows have no Going Report and remain unresolved; no race results were used.",
             "Kempton surface classification excludes 555 AWT reports from Going Stick analysis; 8 reports on four dates remain unresolved.",
-            "BHAGI compliance is Turf-only and preliminary: declaration day uses race_date minus two days because declaration-closing dates are not present in the extract.",
+            "BHAGI compliance is Turf-only and preliminary: declaration evidence accepts make_date two or three days before the report race_date; the report race_date remains the target meeting date for festival sequences. Compliance levels are analysis labels, not legal findings.",
         ],
         "reviewer": None,
         "review_date": None,

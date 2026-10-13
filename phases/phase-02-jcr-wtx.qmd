@@ -5,7 +5,7 @@ author: "TurfTrax"
 date: last-modified
 format:
   html:
-    css: ../resources/tt_brand/turftrax.css
+    css: ../resources/001-tt_brand/turftrax.css
     toc: true
     code-fold: true
     self-contained: true
@@ -271,7 +271,7 @@ Deliverable: `jcr_meeting_weather_features.parquet`.
 
 Join meeting features to the canonical meeting table using `course_id` and `race_date`. Then link the meeting-level features to Going Reports and stick readings only through that meeting key.
 
-For the declaration-day convention currently used by the BHAGI workstream, use race date minus two days. Keep this as a configurable field because the actual declaration-closing date is not present in the current extract.
+For the declaration-day convention currently used by the BHAGI workstream, accept reports made two or three calendar days before the report's target race date. Keep this as a configurable field because the actual declaration-closing date is not present in the current extract. During festivals, a report made during one meeting may be the declaration report for the following meeting; the report's `race_date` remains the target meeting key.
 
 Compare, without causal claims:
 
@@ -388,5 +388,5 @@ Current decision: `planned`.
 
 <div class="tt-footer">
   <span>DataTrax · JCR Weather and WTX Integration</span>
-  <img src="../resources/tt_brand/LOGO/Master Logo/TurfTrax_Logo_White.png" alt="TurfTrax" />
+  <img src="../resources/001-tt_brand/LOGO/Master Logo/TurfTrax_Logo_White.png" alt="TurfTrax" />
 </div>

@@ -5,7 +5,7 @@ author: "TurfTrax"
 date: last-modified
 format:
   html:
-    css: ../resources/tt_brand/turftrax.css
+    css: ../resources/001-tt_brand/turftrax.css
     toc: true
     code-fold: true
     self-contained: true
@@ -323,7 +323,7 @@ Deliverable: `data/config/jcr_kml_inventory.parquet`, extracted KML waypoint tab
 
 ### Step 5 result: KML inventory and validation
 
-The `resources/001-kml` directory contains 24 standalone KML files and an archive containing 23 of those files. All 24 standalone files parsed successfully. Nine files claim JCR courses; the remaining 15 are retained in the inventory as outside the JCR scope rather than discarded.
+The `resources/002-kml` directory contains 24 standalone KML files and an archive containing 23 of those files. All 24 standalone files parsed successfully. Nine files claim JCR courses; the remaining 15 are retained in the inventory as outside the JCR scope rather than discarded.
 
 | QA measure | Result |
 |---|---:|
@@ -483,24 +483,25 @@ This is a report/meeting-level surface classification and does not change the sh
 
 The BHAGI 3.2 requirements were applied to actual Turf meetings only. GoingStick “downloaded” means that one or more imported stick-reading rows were linked to a Going Report recorded on the relevant day; it is an evidence-of-download criterion, not a claim that the source system’s download event log was available. Actual means `resolved_status = reported_as_run`; 205 actual AWT meetings and 66 actual meetings without a resolved surface were excluded from the Turf denominator. The source requires the official going to be recorded and accompanied by GoingStick readings by the declarations point and on the day of racing, with Going App updates retained at the specified times. See the [BHAGI Section 3 source](https://media.britishhorseracing.com/bha/Rules/BHAGI/Section3_The_Racecourse.pdf), paragraphs 21–24.
 
-The extract has no declaration-closing date. For this preliminary measure, declaration day is therefore defined as two calendar days before the race date. This is an explicit proxy, not a claim that it is the actual declarations deadline.
+The extract has no declaration-closing date. For this preliminary measure, declaration evidence is accepted when `make_date` is two or three calendar days before the report's `race_date`. The report's `race_date` remains the target meeting date; this is important during festivals, where a report made during one meeting can be the declaration report for the following meeting. This is an explicit proxy, not a claim that it is the actual declarations deadline.
 
 | Measure | Meetings |
 |---|---:|
 | Actual Turf meetings scored | 1,306 |
-| Declaration-day Going Report present | 1,302 |
+| Declaration-day Going Report present | 1,305 |
 | Race-day Going Report present | 1,305 |
-| Declaration-day GoingStick present | 189 |
+| Declaration-day GoingStick present | 313 |
 | Race-day GoingStick present | 446 |
-| Declaration-day GoingStick downloaded | 189 |
+| Declaration-day GoingStick downloaded | 313 |
 | Race-day GoingStick downloaded | 446 |
+| Official going reported on declaration day | 1,305 |
 | Official going reported on race day | 1,305 |
 | Abandonment correctly recorded | 1,306 |
 | Watering information available | 719 |
 | Rails information available | 1,208 |
 | Stalls information available | 521 |
 
-Overall categories are prioritised as `reporting_or_going_gap`, `goingstick_gap`, `metadata_gap` and `compliant`. The current preliminary result is 1,157 `goingstick_gap`, 135 `metadata_gap`, 5 `reporting_or_going_gap` and 9 `compliant` under the all-measures rule. These are data-availability measures, not a legal finding of BHAGI breach.
+Compliance is reported using mutually exclusive analysis levels: `Full`, `watering, rails and stalls information missing`, `no readings downloaded`, `dec official going missing` and `race meeting official going missing`. Detailed flags retain overlapping deficiencies. These are data-availability measures, not legal findings of BHAGI breach.
 
 Generated outputs:
 
@@ -687,7 +688,7 @@ The next phase may begin only after the course and map identifiers are stable, t
 
 <div class="tt-footer">
   <span>DataTrax · JCR GoingStick Analysis</span>
-  <img src="../resources/tt_brand/LOGO/Master Logo/TurfTrax_Logo_White.png" alt="TurfTrax" />
+  <img src="../resources/001-tt_brand/LOGO/Master Logo/TurfTrax_Logo_White.png" alt="TurfTrax" />
 </div>
 
 ## Next steps

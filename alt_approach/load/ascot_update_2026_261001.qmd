@@ -1,0 +1,628 @@
+---
+title: "Ascot Racecourse"
+jupyter: python3
+execute:
+  echo: false
+  warning: false
+  fig-dpi: 300
+format:
+  pptx:
+    reference-doc: ../resources/ascot_presentation_template.pptx
+    slide-number: true
+---
+
+```{python}
+#| include: false
+
+from pathlib import Path
+import importlib
+import logging
+import os
+import re
+
+import sys
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+
+plt.rcParams.update(
+    {
+        "figure.dpi": 300,
+        "savefig.dpi": 300,
+        "savefig.bbox": "tight",
+    }
+)
+
+PROJECT_DIR = Path.cwd().resolve()
+if PROJECT_DIR.name == "load":
+    PROJECT_DIR = PROJECT_DIR.parent
+LOAD_DIR = PROJECT_DIR / "load"
+DATA_DIR = PROJECT_DIR / "data"
+sys.path.insert(0, str(LOAD_DIR))
+
+import ascot_update_loader as ascot
+ascot = importlib.reload(ascot)
+
+ascot.configure_logging()
+refresh_cache = os.getenv("ASCOT_REFRESH_CACHE", "0").strip().lower() in {"1", "true", "yes", "y"}
+print(f"[Ascot] Starting report setup (refresh_cache={refresh_cache}).", flush=True)
+print("[Ascot] Loading database sources...", flush=True)
+raw_sources = ascot.load_database_sources(LOAD_DIR, DATA_DIR, refresh=refresh_cache)
+print("[Ascot] Preparing database sources...", flush=True)
+sources = ascot.prepare_sources(raw_sources)
+print("[Ascot] Source loading complete.", flush=True)
+
+df_sre = sources["stick_readings"]
+df_gre = sources["going_reports"]
+calendar_database = sources["calendar_database"]
+going_groups = sources["going_groups"]
+map_waypoints = sources["map_waypoints"]
+maps = sources["maps"]
+map_zones = sources["map_zones"]
+
+ASCOT = "Ascot"
+df_sre = df_sre.loc[df_sre["course"].eq(ASCOT)].copy()
+df_gre = df_gre.loc[df_gre["course"].eq(ASCOT)].copy()
+calendar_database = calendar_database.loc[calendar_database["course"].eq(ASCOT)].copy()
+going_groups = going_groups.loc[going_groups["course"].eq(ASCOT)].copy()
+map_waypoints = map_waypoints.loc[map_waypoints["course"].eq(ASCOT)].copy()
+maps = maps.loc[maps["course"].eq(ASCOT)].copy()
+
+calendar_reconciliation = calendar_database.copy()
+waypoint_compliance, _ = ascot.map_waypoint_compliance(
+    df_gre,
+    df_sre,
+    map_waypoints,
+)
+observations = ascot.going_compliance_observations(
+    calendar_reconciliation,
+    df_gre,
+    df_sre,
+    going_groups,
+    waypoint_compliance,
+)
+
+chart_cutoff_date = pd.Timestamp.today().normalize()
+chart_observations = observations.loc[
+    observations["meeting_date"].le(chart_cutoff_date)
+].copy()
+chart_observations["reporting_category"] = chart_observations[
+    "reporting_category"
+].replace(
+    {
+        "data uploaded - Going matches": "data uploaded",
+        "data uploaded - mismatch or review": "data uploaded",
+    }
+)
+
+declaration = chart_observations.loc[
+    chart_observations["observation_window"].eq("declaration_day"),
+    ["meeting_date", "course", "is_abandoned", "reporting_category"],
+]
+race_day = chart_observations.loc[
+    chart_observations["observation_window"].eq("race_day"),
+    ["meeting_date", "course", "is_abandoned", "reporting_category"],
+]
+combined = declaration.merge(
+    race_day,
+    on=["meeting_date", "course"],
+    suffixes=("_declaration", "_race_day"),
+)
+combined["year"] = combined["meeting_date"].dt.year
+combined["combined_reporting_category"] = "going value not reported"
+
+both_have_going = (
+    combined["reporting_category_declaration"].ne("going value not reported")
+    & combined["reporting_category_race_day"].ne("going value not reported")
+)
+both_uploaded = (
+    combined["reporting_category_declaration"].eq("data uploaded")
+    & combined["reporting_category_race_day"].eq("data uploaded")
+)
+combined.loc[both_have_going, "combined_reporting_category"] = (
+    "going value reported"
+)
+combined.loc[both_uploaded, "combined_reporting_category"] = "data uploaded"
+combined.loc[
+    combined["is_abandoned_declaration"] | combined["is_abandoned_race_day"],
+    "combined_reporting_category",
+] = "abandoned"
+
+category_order = [
+    "abandoned",
+    "data uploaded",
+    "going value reported",
+    "going value not reported",
+]
+category_colors = ["#d62728", "#2ca02c", "#ff7f0e", "#1f77b4"]
+combined_percentages = (
+    combined.groupby(["year", "combined_reporting_category"])
+    .size()
+    .unstack(fill_value=0)
+    .reindex(columns=category_order, fill_value=0)
+)
+combined_percentages = combined_percentages.div(
+    combined_percentages.sum(axis=1), axis=0
+).fillna(0) * 100
+```
+
+# GoingStick Data&#10;Regulatory Compliance
+
+## GoingStick Reporting
+
+```{python}
+#| fig-width: 12.5
+#| fig-height: 5.8
+#| fig-align: center
+
+fig, ax = plt.subplots(figsize=(12.5, 5.8))
+combined_percentages.plot(
+    kind="bar",
+    stacked=True,
+    width=0.82,
+    color=category_colors,
+    ax=ax,
+)
+ax.set_title("Combined Declaration and Race Day Reporting by Year", fontsize=18)
+ax.set_xlabel("Year")
+ax.set_ylabel("Race meetings (%)")
+ax.set_ylim(0, 100)
+ax.tick_params(axis="x", rotation=0)
+ax.grid(axis="y", alpha=0.22)
+ax.legend(
+    title="Reporting status",
+    loc="upper center",
+    bbox_to_anchor=(0.5, -0.14),
+    ncol=4,
+    frameon=False,
+)
+fig.tight_layout()
+plt.show()
+```
+
+# GoingStick Data&#10;Stats
+
+## Index Values by Year
+
+```{python}
+#| fig-width: 12.5
+#| fig-height: 5.0
+#| fig-align: center
+
+map_race_type = maps[["map_id", "map_label", "goings_group_id"]].drop_duplicates("map_id").assign(
+    race_type=lambda dataframe: dataframe["map_label"].astype("string").str.casefold().eq("jump").map(
+        {True: "Jump", False: "Flat"}
+    )
+)
+
+api_reports = df_gre.loc[
+    df_gre["stick_user"].astype("string").str.strip().str.casefold()
+    .eq("apiuser.bhagoing@turftrax.co.uk")
+    & df_gre["official_going"].astype("string").fillna("").str.strip().ne("")
+].copy()
+api_reports["meeting_date"] = pd.to_datetime(
+    api_reports["race_date"], errors="coerce"
+).dt.normalize()
+api_reports["report_timestamp"] = pd.to_datetime(
+    api_reports["make_date"], errors="coerce"
+).fillna(pd.to_datetime(api_reports["created_at_gr"], errors="coerce"))
+api_reports = (
+    api_reports.sort_values("report_timestamp")
+    .drop_duplicates(["meeting_date", "course", "map_id"], keep="last")
+    [["meeting_date", "course", "map_id", "official_going"]]
+    .rename(columns={"official_going": "api_official_going"})
+)
+
+direct_official = (
+    df_gre.loc[
+        df_gre["official_going"].astype("string").fillna("").str.strip().ne(""),
+        ["gr_id", "official_going"],
+    ]
+    .drop_duplicates("gr_id")
+    .rename(columns={"official_going": "direct_official_going"})
+)
+report_dates = df_gre[["gr_id", "course", "make_date", "created_at_gr"]].drop_duplicates(
+    "gr_id"
+).copy()
+report_dates["report_date"] = pd.to_datetime(
+    report_dates["make_date"], errors="coerce"
+).fillna(pd.to_datetime(report_dates["created_at_gr"], errors="coerce")).dt.normalize()
+meeting_candidates = pd.concat(
+    [
+        calendar_database[["meeting_date", "course"]].assign(
+            report_date=calendar_database["meeting_date"], candidate_priority=0
+        ),
+        calendar_database[["meeting_date", "course"]].assign(
+            report_date=calendar_database["meeting_date"] - pd.Timedelta(days=2),
+            candidate_priority=1,
+        ),
+        calendar_database[["meeting_date", "course"]].assign(
+            report_date=calendar_database["meeting_date"] - pd.Timedelta(days=3),
+            candidate_priority=2,
+        ),
+    ],
+    ignore_index=True,
+)
+report_meeting_keys = (
+    report_dates.merge(meeting_candidates, on=["course", "report_date"], how="inner")
+    .sort_values(["gr_id", "candidate_priority", "meeting_date"])
+    .drop_duplicates("gr_id")
+    [["gr_id", "meeting_date"]]
+)
+
+index_boxplot_data = (
+    df_sre.loc[
+        df_sre["data_type"].eq("data point")
+        & df_sre["date"].dt.year.between(2021, 2026)
+        & df_sre["date"].le(pd.Timestamp.today().normalize()),
+        ["date", "gr_id", "gr_map_id", "sr_waypoint", "course", "sr_index", "sr_penetration", "sr_shear"],
+    ]
+    .merge(direct_official, on="gr_id", how="left")
+    .merge(report_meeting_keys, on="gr_id", how="left")
+    .merge(
+        api_reports,
+        left_on=["meeting_date", "course", "gr_map_id"],
+        right_on=["meeting_date", "course", "map_id"],
+        how="left",
+    )
+    .merge(
+        map_race_type[["map_id", "race_type", "goings_group_id"]],
+        left_on="gr_map_id",
+        right_on="map_id",
+        how="left",
+        suffixes=("", "_map"),
+    )
+    .assign(
+        official_going=lambda dataframe: dataframe["direct_official_going"].fillna(
+            dataframe["api_official_going"]
+        )
+    )
+    .dropna(subset=["course", "sr_index", "race_type", "official_going"])
+    .assign(year=lambda dataframe: dataframe["date"].dt.year)
+)
+
+# Use only the active Ascot Flat and Jump groups, ordered by their numeric cutoffs.
+active_ascot_going_groups = {30, 62}
+index_boxplot_data = index_boxplot_data.loc[
+    index_boxplot_data["goings_group_id"].isin(active_ascot_going_groups)
+].copy()
+going_group_bands = going_groups.loc[
+    going_groups["goings_group_id"].isin(active_ascot_going_groups)
+    & going_groups["going"].notna()
+    & going_groups["going_min"].notna()
+    & going_groups["going_max"].notna()
+    & ~going_groups["going"].astype("string").str.casefold().eq("not in use")
+].copy()
+going_labels = (
+    going_group_bands.assign(label_key=lambda dataframe: dataframe["going"].str.casefold())
+    .drop_duplicates("label_key")
+    .set_index("label_key")["going"]
+    .to_dict()
+)
+label_pattern = re.compile(
+    r"(?<!\w)(" + "|".join(
+        re.escape(label) for label in sorted(going_labels, key=len, reverse=True)
+    ) + r")(?!\w)"
+)
+index_boxplot_data["official_going_category"] = (
+    index_boxplot_data["official_going"]
+    .astype("string")
+    .str.casefold()
+    .str.extract(label_pattern.pattern, expand=False)
+    .map(going_labels)
+)
+going_order = (
+    going_group_bands.groupby("going", as_index=False)["going_min"]
+    .min()
+    .sort_values("going_min")["going"]
+    .tolist()
+)
+
+race_type_colours = {"Jump": "#1f4e79", "Flat": "#5b9bd5"}
+fig, axes = plt.subplots(1, 2, figsize=(12.5, 5.0), sharey=True)
+for ax, race_type in zip(axes, ("Jump", "Flat")):
+    subset = index_boxplot_data.loc[index_boxplot_data["race_type"].eq(race_type)].copy()
+    subset["year"] = pd.Categorical(
+        subset["year"], categories=list(range(2021, 2027)), ordered=True
+    )
+    subset.boxplot(
+        column="sr_index",
+        by="year",
+        ax=ax,
+        grid=False,
+        patch_artist=True,
+        boxprops={"facecolor": race_type_colours[race_type], "alpha": 0.75},
+        medianprops={"color": "#202020", "linewidth": 1.5},
+    )
+    ax.set_title(f"{race_type} racing", fontsize=18)
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Going Stick index")
+    ax.grid(axis="y", alpha=0.22)
+
+fig.suptitle("")
+fig.tight_layout()
+plt.show()
+```
+
+## Flat Course Zones
+
+![](../data/ascot_flat_course_zones.png){width=11.8in}
+
+## Flat GS Index by Track Section
+
+```{python}
+#| fig-width: 12.5
+#| fig-height: 5.0
+#| fig-align: center
+
+# Build the section assignments locally so this slide is self-contained.
+flat_course_data = index_boxplot_data.loc[
+    index_boxplot_data["race_type"].eq("Flat")
+].copy()
+flat_course_data["track_section"] = "Round"
+flat_course_data.loc[
+    flat_course_data["gr_map_id"].eq(97)
+    & flat_course_data["sr_waypoint"].between(1, 72),
+    "track_section",
+] = "Straight"
+flat_course_data.loc[
+    flat_course_data["gr_map_id"].eq(97)
+    & flat_course_data["sr_waypoint"].ge(73),
+    "track_section",
+] = "Round"
+
+map_97_zones = map_zones.loc[map_zones["map_id"].eq(97)].copy()
+zone_by_waypoint = {}
+for _, zone in map_97_zones.iterrows():
+    zone_name = str(zone["zone_name"]).strip().casefold()
+    section = next(
+        (
+            label
+            for key, label in (
+                ("stand", "Stand Side"),
+                ("centre", "Centre"),
+                ("far", "Far Side"),
+            )
+            if zone_name.startswith(key)
+        ),
+        None,
+    )
+    if section:
+        for waypoint in str(zone["zone_waypoints"]).split(","):
+            zone_by_waypoint[int(float(waypoint))] = section
+flat_course_data["track_section"] = flat_course_data.apply(
+    lambda row: zone_by_waypoint.get(int(row["sr_waypoint"]), row["track_section"])
+    if row["gr_map_id"] == 97 and pd.notna(row["sr_waypoint"])
+    else row["track_section"],
+    axis=1,
+)
+straight_data = flat_course_data.loc[
+    flat_course_data["track_section"].isin(["Stand Side", "Centre", "Far Side"])
+].assign(track_section="Straight")
+track_plot_data = pd.concat(
+    [flat_course_data.assign(track_section="Overall"), flat_course_data, straight_data],
+    ignore_index=True,
+)
+
+track_section_order = [
+    "Overall", "Round", "Straight", "Stand Side", "Centre", "Far Side"
+]
+track_section_colours = {
+    "Overall": "#9ecae1",
+    "Round": "#1f4e79",
+    "Straight": "#2f75b5",
+    "Stand Side": "#2171b5",
+    "Centre": "#4292c6",
+    "Far Side": "#6baed6",
+}
+fig, ax = plt.subplots(figsize=(12.5, 5.0))
+plot_values = [
+    track_plot_data.loc[
+        track_plot_data["track_section"].eq(section), "sr_index"
+    ].dropna().to_numpy()
+    for section in track_section_order
+]
+artists = ax.boxplot(
+    plot_values,
+    tick_labels=track_section_order,
+    widths=0.62,
+    patch_artist=True,
+    medianprops={"color": "#202020", "linewidth": 1.4},
+    whiskerprops={"color": "#202020"},
+    capprops={"color": "#202020"},
+    flierprops={"marker": ".", "markersize": 2, "alpha": 0.35},
+)
+for box, section in zip(artists["boxes"], track_section_order):
+    box.set_facecolor(track_section_colours[section])
+    box.set_alpha(0.78)
+ax.set_xlabel("Track section")
+ax.set_ylabel("Going Stick index")
+ax.tick_params(axis="x", rotation=35)
+ax.grid(axis="y", alpha=0.22)
+fig.tight_layout()
+plt.show()
+```
+
+
+## Index Values by Official Going
+
+```{python}
+#| fig-width: 12.5
+#| fig-height: 5.0
+#| fig-align: center
+
+fig, axes = plt.subplots(1, 2, figsize=(12.5, 5.0), sharey=True)
+for ax, race_type in zip(axes, ("Jump", "Flat")):
+    subset = index_boxplot_data.loc[index_boxplot_data["race_type"].eq(race_type)].copy()
+    subset = subset.dropna(subset=["official_going_category"])
+    subset["official_going_category"] = pd.Categorical(
+        subset["official_going_category"], categories=going_order, ordered=True
+    )
+    subset.boxplot(
+        column="sr_index",
+        by="official_going_category",
+        ax=ax,
+        grid=False,
+        patch_artist=True,
+        boxprops={"facecolor": race_type_colours[race_type], "alpha": 0.75},
+        medianprops={"color": "#202020", "linewidth": 1.5},
+    )
+    ax.set_title(f"{race_type} racing", fontsize=18)
+    ax.set_xlabel("Going description")
+    ax.set_ylabel("Going Stick index")
+    ax.tick_params(axis="x", rotation=60, labelsize=9)
+    ax.grid(axis="y", alpha=0.22)
+
+fig.suptitle("")
+fig.tight_layout()
+plt.show()
+```
+
+
+## Penetration Values by Official Going
+
+```{python}
+#| fig-width: 12.5
+#| fig-height: 5.0
+#| fig-align: center
+
+penetration_boxplot_data = index_boxplot_data.dropna(
+    subset=["sr_penetration", "official_going_category"]
+).copy()
+fig, axes = plt.subplots(1, 2, figsize=(12.5, 5.0), sharey=True)
+for ax, race_type in zip(axes, ("Jump", "Flat")):
+    subset = penetration_boxplot_data.loc[
+        penetration_boxplot_data["race_type"].eq(race_type)
+    ].copy()
+    subset["official_going_category"] = pd.Categorical(
+        subset["official_going_category"], categories=going_order, ordered=True
+    )
+    subset.boxplot(
+        column="sr_penetration",
+        by="official_going_category",
+        ax=ax,
+        grid=False,
+        patch_artist=True,
+        boxprops={"facecolor": race_type_colours[race_type], "alpha": 0.75},
+        medianprops={"color": "#202020", "linewidth": 1.5},
+    )
+    ax.set_title(f"{race_type} racing", fontsize=18)
+    ax.set_xlabel("Official Going")
+    ax.set_ylabel("GS penetration")
+    ax.tick_params(axis="x", rotation=60, labelsize=9)
+    ax.grid(axis="y", alpha=0.22)
+
+fig.suptitle("")
+fig.tight_layout()
+plt.show()
+```
+
+## Shear Values by Official Going
+
+```{python}
+#| fig-width: 12.5
+#| fig-height: 5.0
+#| fig-align: center
+
+shear_boxplot_data = index_boxplot_data.dropna(
+    subset=["sr_shear", "official_going_category"]
+).copy()
+fig, axes = plt.subplots(1, 2, figsize=(12.5, 5.0), sharey=True)
+for ax, race_type in zip(axes, ("Jump", "Flat")):
+    subset = shear_boxplot_data.loc[
+        shear_boxplot_data["race_type"].eq(race_type)
+    ].copy()
+    subset["official_going_category"] = pd.Categorical(
+        subset["official_going_category"], categories=going_order, ordered=True
+    )
+    subset.boxplot(
+        column="sr_shear",
+        by="official_going_category",
+        ax=ax,
+        grid=False,
+        patch_artist=True,
+        boxprops={"facecolor": race_type_colours[race_type], "alpha": 0.75},
+        medianprops={"color": "#202020", "linewidth": 1.5},
+    )
+    ax.set_title(f"{race_type} racing", fontsize=18)
+    ax.set_xlabel("Official Going")
+    ax.set_ylabel("GS shear")
+    ax.tick_params(axis="x", rotation=60, labelsize=9)
+    ax.grid(axis="y", alpha=0.22)
+
+fig.suptitle("")
+fig.tight_layout()
+plt.show()
+```
+
+
+## Daily GS Shear
+
+```{python}
+#| fig-width: 14.5
+#| fig-height: 6.2
+#| fig-align: center
+
+from matplotlib.lines import Line2D
+import matplotlib.dates as mdates
+
+daily_shear = (
+    index_boxplot_data.dropna(subset=["sr_shear"])
+    .assign(year=lambda dataframe: dataframe["date"].dt.year)
+    .groupby(["race_type", "year", "date"], observed=True)["sr_shear"]
+    .mean()
+    .reset_index()
+)
+start_date = pd.Timestamp("2022-06-01")
+end_date = pd.Timestamp("2026-12-31")
+flat_colour = "#f28e2b"
+jump_colour = "#2f75b5"
+line_colour = "#808080"
+fig, ax = plt.subplots(figsize=(14.5, 6.2))
+for year in range(2021, 2027):
+    year_data = daily_shear.loc[daily_shear["year"].eq(year)].sort_values("date")
+    ax.plot(
+        year_data["date"],
+        year_data["sr_shear"],
+        color=line_colour,
+        linewidth=1.2,
+        alpha=0.8,
+    )
+    for race_type, dot_colour in (("Flat", flat_colour), ("Jump", jump_colour)):
+        points = year_data.loc[year_data["race_type"].eq(race_type)]
+        ax.scatter(
+            points["date"],
+            points["sr_shear"],
+            color=dot_colour,
+            s=24,
+            zorder=3,
+        )
+
+ax.set_title("Daily GS Shear by Fixture Type", fontsize=18)
+ax.set_xlim(start_date, end_date)
+ax.xaxis.set_major_locator(mdates.MonthLocator(interval=3))
+ax.xaxis.set_major_formatter(mdates.DateFormatter("%b\n%Y"))
+ax.set_xlabel("Date")
+ax.set_ylabel("Mean GS shear")
+ax.grid(axis="y", alpha=0.22)
+legend_handles = [
+    Line2D([0], [0], color=line_colour, linewidth=1.2, label=str(year))
+    for year in range(2021, 2027)
+]
+legend_handles += [
+    Line2D([0], [0], marker="o", color="none", markerfacecolor=flat_colour,
+           markeredgecolor=flat_colour, markersize=6, label="Flat fixture"),
+    Line2D([0], [0], marker="o", color="none", markerfacecolor=jump_colour,
+           markeredgecolor=jump_colour, markersize=6, label="Jump fixture"),
+]
+ax.legend(
+    handles=legend_handles,
+    title="Year / fixture type",
+    loc="center left",
+    bbox_to_anchor=(1.01, 0.5),
+    frameon=False,
+)
+fig.subplots_adjust(right=0.82, bottom=0.22)
+plt.show()
+```

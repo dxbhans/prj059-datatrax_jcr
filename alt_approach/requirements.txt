@@ -1,0 +1,10 @@
+pandas
+pymysql
+openpyxl
+duckdb
+pyarrow
+ipykernel
+jupyter
+matplotlib
+seaborn
+PyYAML
