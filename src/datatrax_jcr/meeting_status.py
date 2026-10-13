@@ -12,6 +12,8 @@ import pandas as pd
 import pymysql
 from dotenv import load_dotenv
 
+from datatrax_jcr.report_selection import select_primary_reports
+
 
 OUT = Path("data/config")
 
@@ -59,7 +61,7 @@ def main() -> None:
                        Code AS race_type_code, note, isdeployment, created_at, updated_at
                 FROM calendar
                 WHERE CourseId IN ({placeholders})
-                  AND MeetingDate BETWEEN '2021-01-01' AND '2025-12-31'
+                  AND MeetingDate BETWEEN '2021-01-01' AND '2026-12-31'
                 ORDER BY MeetingDate, CourseId, calendar_id
             """, course_ids)
             calendar = pd.DataFrame(cur.fetchall())
@@ -89,8 +91,7 @@ def main() -> None:
         else "reported_as_abandoned", axis=1
     )
     latest = (
-        reports.sort_values(["course_id", "race_date", "updated_at", "report_id"])
-        .groupby(["course_id", "race_date"], as_index=False).tail(1)
+        select_primary_reports(reports, ["course_id", "race_date"])
         [["course_id", "race_date", "report_id", "updated_at", "abandoned", "report_state", "status", "author_type", "hub_user"]]
         .rename(columns={
             "report_id": "latest_report_id", "updated_at": "latest_report_updated_at",
@@ -126,7 +127,7 @@ def main() -> None:
 
     report = {
         "extracted_at_utc": datetime.now(timezone.utc).isoformat(),
-        "analysis_period": ["2021-01-01", "2025-12-31"],
+        "analysis_period": ["2021-01-01", "2026-12-31"],
         "course_id_match_count": int(course_match["hub_id_match_tt_maps_id"].sum()),
         "course_count": int(len(course_match)),
         "course_name_match_count": int(course_match["name_match"].sum()),
@@ -144,6 +145,7 @@ def main() -> None:
         "mixed_latest_report_author_type_counts": result[result["resolved_status"] == "reported_mixed"]["latest_report_author_type"].value_counts(dropna=False).to_dict(),
         "mixed_latest_report_status_counts": result[result["resolved_status"] == "reported_mixed"].assign(latest=lambda d: d["latest_report_abandoned"].map({0: "non_abandoned", 1: "abandoned"})).assign(latest_status=lambda d: d["latest"] + ":" + d["latest_report_state"].astype(str))["latest_status"].value_counts().to_dict(),
         "source_limit": "Calendar presence proves planned fixture; explicit cancellation/replacement notes provide status evidence. A planned row without a report remains unresolved rather than being called held.",
+        "primary_report_selection_rule": "Select the latest report_state=published report by updated_at/report_id; if none exists, select the latest available report by updated_at/report_id.",
         "outputs": ["jcr_tt_maps_course_match.parquet", "jcr_tt_maps_calendar.parquet", "jcr_meeting_status_reconciliation.parquet"],
     }
     (OUT / "jcr_meeting_status_reconciliation_report.json").write_text(json.dumps(report, indent=2, default=str) + "\n", encoding="utf-8")

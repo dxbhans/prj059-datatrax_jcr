@@ -1,0 +1,1002 @@
+---
+title: "JCR Data Check"
+subtitle: "Phase 1 — Course, Map and Waypoint Data"
+author: "Hans Meijer"
+date: last-modified
+format:
+  html:
+    css: ../resources/001-tt_brand/turftrax.css
+    toc: true
+    code-fold: true
+    self-contained: true
+jupyter: python3
+execute:
+  echo: false
+  warning: false
+  error: true
+---
+
+# Phase 1 — Data Check
+
+This document presents the current course, map and waypoint data. The tables are queried directly from the available Parquet data through DuckDB. Open a SQL query disclosure to view the query used for its table.
+
+```{python}
+#| output: false
+from html import escape
+from pathlib import Path
+
+import duckdb
+from IPython.display import HTML, display
+
+
+def find_data_root():
+    for parent in (Path.cwd(), *Path.cwd().parents):
+        if all((parent / "data" / "config" / name).exists() for name in (
+            "jcr_courses.parquet",
+            "jcr_maps.parquet",
+            "jcr_waypoints.parquet",
+        )):
+            return parent
+    raise FileNotFoundError("Could not locate the Phase 1 course, map and waypoint Parquet data")
+
+
+DATA_ROOT = find_data_root()
+DATA_DIR = DATA_ROOT / "data" / "config"
+DB = duckdb.connect(database=":memory:")
+
+
+def show_sql_table(query):
+    result = DB.execute(query).fetchdf()
+    sql_disclosure = (
+        '<details class="sql-query"><summary>SQL query</summary>'
+        f'<pre><code>{escape(query.strip())}</code></pre></details>'
+    )
+    display(HTML(sql_disclosure))
+    display(HTML(result.to_html(index=False, escape=True, border=0)))
+```
+
+## 1. Course overview
+
+```{python}
+overview_sql = f"""
+SELECT
+    c.course_id,
+    c.canonical_name,
+    c.country,
+    COUNT(DISTINCT m.map_id) AS map_count,
+    COUNT(w.waypoint_id) AS configured_waypoint_count
+FROM read_parquet('{DATA_DIR / 'jcr_courses.parquet'}') AS c
+LEFT JOIN read_parquet('{DATA_DIR / 'jcr_maps.parquet'}') AS m
+    ON m.course_id = c.course_id
+LEFT JOIN read_parquet('{DATA_DIR / 'jcr_waypoints.parquet'}') AS w
+    ON w.map_id = m.map_id
+GROUP BY c.course_id, c.canonical_name, c.country, c.scope_order
+ORDER BY c.scope_order
+"""
+show_sql_table(overview_sql)
+```
+
+## 2. Map data
+
+The table groups maps by review status, operational map type and lifecycle status.
+
+```{python}
+maps_sql = f"""
+WITH maps AS (
+    SELECT
+        course_id,
+        canonical_name AS course,
+        COALESCE(review_status, 'Not reviewed') AS review_status,
+        COALESCE(reviewed_map_type, map_type, 'Unknown') AS map_type,
+        CASE
+            WHEN active THEN 'Active'
+            ELSE 'Archived'
+        END AS lifecycle_status
+    FROM read_parquet('{DATA_DIR / 'jcr_maps.parquet'}')
+)
+SELECT
+    course_id,
+    course,
+    review_status,
+    map_type,
+    lifecycle_status,
+    COUNT(*) AS map_count
+FROM maps
+GROUP BY course_id, course, review_status, map_type, lifecycle_status
+ORDER BY course_id, review_status, map_type, lifecycle_status
+"""
+show_sql_table(maps_sql)
+```
+
+## 3. Waypoint data
+
+The table groups configured waypoints by course, map, review status, operational map type and lifecycle status.
+
+```{python}
+waypoints_sql = f"""
+WITH maps AS (
+    SELECT
+        course_id,
+        canonical_name AS course,
+        map_id,
+        COALESCE(review_status, 'Not reviewed') AS review_status,
+        COALESCE(reviewed_map_type, map_type, 'Unknown') AS map_type,
+        CASE
+            WHEN active THEN 'Active'
+            ELSE 'Archived'
+        END AS lifecycle_status
+    FROM read_parquet('{DATA_DIR / 'jcr_maps.parquet'}')
+)
+SELECT
+    m.course_id,
+    m.course,
+    m.review_status,
+    m.map_id,
+    m.map_type,
+    m.lifecycle_status,
+    COUNT(w.waypoint_id) AS waypoint_count
+FROM maps AS m
+LEFT JOIN read_parquet('{DATA_DIR / 'jcr_waypoints.parquet'}') AS w
+    ON w.map_id = m.map_id
+GROUP BY m.course_id, m.course, m.review_status, m.map_id, m.map_type, m.lifecycle_status
+ORDER BY m.course_id, m.review_status, m.map_id, m.map_type, m.lifecycle_status
+"""
+show_sql_table(waypoints_sql)
+```
+
+## 4. KML data
+
+The table lists matched KML map records and counts distinct numeric waypoint labels. When a KML matches more than one candidate map, each candidate appears as a separate map row.
+
+```{python}
+kml_sql = f"""
+WITH kml_map_matches AS (
+    SELECT
+        i.kml_path,
+        i.claimed_course,
+        TRIM(candidate_map_id) AS map_id
+    FROM read_parquet('{DATA_DIR / 'jcr_kml_inventory.parquet'}') AS i,
+         UNNEST(STRING_SPLIT(i.match_map_ids_exact, ',')) AS candidates(candidate_map_id)
+    WHERE i.match_map_ids_exact IS NOT NULL
+      AND TRIM(i.match_map_ids_exact) <> ''
+),
+kml_waypoint_counts AS (
+    SELECT
+        k.map_id,
+        k.kml_path,
+        COUNT(DISTINCT w.waypoint_number) AS waypoint_count
+    FROM kml_map_matches AS k
+    JOIN read_parquet('{DATA_DIR / 'jcr_kml_waypoints.parquet'}') AS w
+        ON w.kml_path = k.kml_path
+    WHERE w.waypoint_number IS NOT NULL
+    GROUP BY k.map_id, k.kml_path
+)
+SELECT
+    COALESCE(m.canonical_name, k.claimed_course) AS course,
+    m.map_id,
+    m.map_label AS map,
+    MAX(kwc.waypoint_count) AS waypoint_count
+FROM kml_map_matches AS k
+JOIN read_parquet('{DATA_DIR / 'jcr_maps.parquet'}') AS m
+    ON m.map_id = TRY_CAST(k.map_id AS BIGINT)
+LEFT JOIN kml_waypoint_counts AS kwc
+    ON kwc.map_id = k.map_id
+   AND kwc.kml_path = k.kml_path
+GROUP BY course, m.map_id, m.map_label
+ORDER BY course, m.map_id
+"""
+show_sql_table(kml_sql)
+```
+
+## 5. Meeting calendars and course/date keys
+
+The BHA workbook records and TT Maps calendar rows are retained at their original source grain. Reconciliation uses the validated course ID and meeting date; source-specific details and multiple calendar rows remain visible rather than being discarded during key creation.
+
+### 5.1 BHA fixture records
+
+The table shows the requested fixture fields for the first 10 BHA rows, ordered by meeting date, course and source file.
+
+```{python}
+bha_sql = f"""
+SELECT
+    course_id,
+    canonical_name AS course,
+    meeting_date,
+    coursegroup,
+    bha_surface,
+    bha_race_code,
+    type,
+    racetype,
+    additional_races,
+    source_file
+FROM read_parquet('{DATA_DIR / 'jcr_bha_fixture_calendar.parquet'}')
+ORDER BY meeting_date DESC, course_id DESC, source_file DESC
+LIMIT 10
+"""
+show_sql_table(bha_sql)
+```
+
+### 5.2 TT Maps calendar rows
+
+This is the TT Maps source grain: one row per calendar record, with its course/date key, race type, note, status and timestamps.
+
+```{python}
+tt_calendar_sql = f"""
+SELECT
+    course_id,
+    course_name AS course,
+    race_date AS meeting_date,
+    calendar_id,
+    race_type_code,
+    note,
+    calendar_status,
+    created_at,
+    updated_at
+FROM read_parquet('{DATA_DIR / 'jcr_tt_maps_calendar.parquet'}')
+ORDER BY race_date DESC, course_id DESC, calendar_id DESC
+LIMIT 10
+"""
+show_sql_table(tt_calendar_sql)
+```
+
+### 5.3 Reconciled course/date keys
+
+The comparison table contains one row per normalized course/date key. The source counts and source-specific fields show how each key was assembled and preserve duplicate-row signals.
+
+```{python}
+meeting_keys_sql = f"""
+SELECT
+    course_id,
+    course_name AS course,
+    meeting_date,
+    comparison_status,
+    bha_fixture_row_count,
+    bha_surfaces,
+    bha_race_codes,
+    bha_source_files,
+    tt_maps_calendar_row_count,
+    tt_maps_status,
+    tt_maps_race_type_codes,
+    tt_maps_notes
+FROM read_parquet('{DATA_DIR / 'jcr_bha_calendar_comparison.parquet'}')
+ORDER BY meeting_date DESC, course_id DESC
+LIMIT 10
+"""
+show_sql_table(meeting_keys_sql)
+```
+
+### 5.4 Course/date exceptions
+
+This exception view filters the reconciled keys to source-only meetings or keys with multiple source rows. These require review before downstream meeting-level analysis.
+
+```{python}
+meeting_exceptions_sql = f"""
+SELECT
+    course_id,
+    course_name AS course,
+    meeting_date,
+    comparison_status,
+    bha_fixture_row_count,
+    bha_surfaces,
+    bha_race_codes,
+    bha_source_files,
+    tt_maps_calendar_row_count,
+    tt_maps_status,
+    tt_maps_race_type_codes,
+    tt_maps_notes
+FROM read_parquet('{DATA_DIR / 'jcr_bha_calendar_comparison.parquet'}')
+WHERE comparison_status <> 'matched'
+ORDER BY meeting_date DESC, course_id DESC, comparison_status DESC
+LIMIT 10
+"""
+show_sql_table(meeting_exceptions_sql)
+```
+
+## 6. Going Reports
+
+Going Reports are first inspected as report records, then reduced to course/date meeting history. Publication is determined by `report_state`, not the numeric `status` field. For each meeting, the last published report is selected by `updated_at` and then `report_id`; if none is published, the latest available report is shown as a fallback. This selection identifies meeting-level report history and does not determine whether or when stick readings were taken.
+
+### 6.1 Going Report inventory
+
+The cached report inventory is scoped by report `created_at` (2021–2026), not `race_date`, because race dates may be missing. It is summarized by course, publication state and author classification so the full extract can be reviewed without embedding tens of thousands of raw rows in the HTML. Auto-updater and user-generated records remain distinguishable; missing race dates are retained for the key-exception review.
+
+```{python}
+going_report_inventory_sql = f"""
+SELECT
+    course_id,
+    course_name AS course,
+    report_state,
+    author_type,
+    COUNT(DISTINCT report_id) AS report_count,
+    COUNT(DISTINCT report_id) FILTER (WHERE abandoned = 1) AS abandoned_report_count,
+    COUNT(DISTINCT report_id) FILTER (WHERE duplicate_candidate) AS duplicate_candidate_count,
+    COUNT(DISTINCT report_id) FILTER (WHERE asset_waypoint_ref) AS reports_with_waypoint_map,
+    COUNT(DISTINCT report_id) FILTER (WHERE asset_zone_ref) AS reports_with_zone_map,
+    COUNT(DISTINCT report_id) FILTER (WHERE asset_uploaded_map_ref) AS reports_with_uploaded_map,
+    COUNT(DISTINCT report_id) FILTER (WHERE asset_pdf_ref) AS reports_with_pdf
+FROM read_parquet('{DATA_DIR / 'jcr_going_reports.parquet'}')
+WHERE created_at >= TIMESTAMP '2021-01-01 00:00:00'
+  AND created_at < TIMESTAMP '2027-01-01 00:00:00'
+GROUP BY course_id, course_name, report_state, author_type
+ORDER BY course_id DESC, report_state DESC, author_type DESC
+LIMIT 10
+"""
+show_sql_table(going_report_inventory_sql)
+```
+
+### 6.2 Report history and selected meeting report
+
+The result has one row per course/date. It gives report counts by publication state and identifies the last published report where available, otherwise the latest report as a fallback. The selected record's author classification is included so an auto-updater report is not mistaken for a user-generated report (or vice versa).
+
+```{python}
+meeting_report_history_sql = f"""
+WITH reports AS (
+    SELECT *
+    FROM read_parquet('{DATA_DIR / 'jcr_going_reports.parquet'}')
+    WHERE created_at >= TIMESTAMP '2021-01-01 00:00:00'
+      AND created_at < TIMESTAMP '2027-01-01 00:00:00'
+),
+history AS (
+    SELECT
+        course_id,
+        course_name AS course,
+        race_date,
+        COUNT(DISTINCT report_id) AS report_count,
+        COUNT(DISTINCT report_id) FILTER (WHERE report_state = 'published') AS published_report_count,
+        COUNT(DISTINCT report_id) FILTER (WHERE report_state = 'unpublished') AS unpublished_report_count,
+        COUNT(DISTINCT report_id) FILTER (WHERE report_state = 'archived') AS archived_report_count,
+        COUNT(DISTINCT report_id) FILTER (WHERE report_state = 'deleted') AS deleted_report_count,
+        COUNT(DISTINCT report_id) FILTER (WHERE author_type ILIKE '%auto%') AS auto_updater_report_count,
+        COUNT(DISTINCT report_id) FILTER (WHERE author_type NOT ILIKE '%auto%' AND author_type IS NOT NULL) AS non_auto_report_count
+    FROM reports
+    GROUP BY course_id, course_name, race_date
+),
+ranked AS (
+    SELECT
+        *,
+        ROW_NUMBER() OVER (
+            PARTITION BY course_id, race_date
+            ORDER BY (report_state = 'published') DESC, updated_at DESC NULLS LAST, report_id DESC
+        ) AS meeting_report_rank
+    FROM reports
+)
+SELECT
+    h.course_id,
+    h.course,
+    h.race_date,
+    h.report_count,
+    h.published_report_count,
+    h.unpublished_report_count,
+    h.archived_report_count,
+    h.deleted_report_count,
+    h.auto_updater_report_count,
+    h.non_auto_report_count,
+    r.report_id AS selected_report_id,
+    r.report_state AS selected_report_state,
+    CASE WHEN r.report_state = 'published' THEN 'last published report'
+         ELSE 'latest available fallback; no published report' END AS selection_basis,
+    r.updated_at AS selected_report_updated_at,
+    r.make_date AS selected_report_make_date,
+    r.author_type AS selected_report_author_type,
+    r.abandoned AS selected_report_abandoned
+FROM history AS h
+JOIN ranked AS r
+  ON r.course_id = h.course_id
+ AND r.race_date IS NOT DISTINCT FROM h.race_date
+ AND r.meeting_report_rank = 1
+ORDER BY h.race_date DESC, h.course_id DESC
+LIMIT 10
+"""
+show_sql_table(meeting_report_history_sql)
+```
+
+### 6.3 Duplicate and repeat-report review indicators
+
+This query reports the duplicate/repeat indicators already present in the report cache, including multiple reports on the same map/date and records flagged as duplicate candidates. These are review signals, not proof of repeated downloads: the cached fields do not provide a definitive download-event or dataset-fingerprint audit trail.
+
+```{python}
+report_repeat_qa_sql = f"""
+SELECT
+    course_id,
+    course_name AS course,
+    race_date,
+    map_id,
+    COUNT(DISTINCT report_id) AS report_count,
+    COUNT(DISTINCT report_id) FILTER (WHERE report_state = 'published') AS published_report_count,
+    COUNT(DISTINCT report_id) FILTER (WHERE duplicate_candidate) AS duplicate_candidate_count,
+    MAX(duplicate_group_count) AS cached_duplicate_group_count,
+    MAX(same_map_date_group_size) AS same_map_date_group_size,
+    STRING_AGG(DISTINCT CASE WHEN duplicate_candidate THEN CAST(report_id AS VARCHAR) END, ', ' ORDER BY CASE WHEN duplicate_candidate THEN CAST(report_id AS VARCHAR) END) AS candidate_report_ids
+FROM read_parquet('{DATA_DIR / 'jcr_going_reports.parquet'}')
+WHERE created_at >= TIMESTAMP '2021-01-01 00:00:00'
+  AND created_at < TIMESTAMP '2027-01-01 00:00:00'
+GROUP BY course_id, course_name, race_date, map_id
+HAVING COUNT(DISTINCT report_id) FILTER (WHERE duplicate_candidate) > 0
+ORDER BY race_date DESC, course_id DESC, map_id DESC
+LIMIT 10
+"""
+show_sql_table(report_repeat_qa_sql)
+```
+
+### 6.4 Calendar-to-report meeting coverage
+
+This full key comparison joins the reconciled BHA/TT Maps course/date calendar to grouped Going Report history. A meeting key is counted once regardless of its number of reports or TT Maps calendar rows. Calendar-only keys, report-only keys and keys present in both sources remain separately identifiable.
+
+```{python}
+report_coverage_sql = f"""
+WITH calendar AS (
+    SELECT
+        course_id,
+        meeting_date AS race_date,
+        course_name AS course,
+        comparison_status AS calendar_comparison_status,
+        COALESCE(bha_fixture_row_count, 0) AS bha_fixture_row_count,
+        COALESCE(tt_maps_calendar_row_count, 0) AS tt_maps_calendar_row_count
+    FROM read_parquet('{DATA_DIR / 'jcr_bha_calendar_comparison.parquet'}')
+    WHERE meeting_date BETWEEN DATE '2021-01-01' AND DATE '2026-12-31'
+),
+report_meetings AS (
+    SELECT
+        course_id,
+        race_date,
+        course_name AS course,
+        COUNT(DISTINCT report_id) AS report_count,
+        COUNT(DISTINCT report_id) FILTER (WHERE report_state = 'published') AS published_report_count
+    FROM read_parquet('{DATA_DIR / 'jcr_going_reports.parquet'}')
+    WHERE created_at >= TIMESTAMP '2021-01-01 00:00:00'
+      AND created_at < TIMESTAMP '2027-01-01 00:00:00'
+    GROUP BY course_id, race_date, course_name
+)
+SELECT
+    COALESCE(c.course_id, r.course_id) AS course_id,
+    COALESCE(c.course, r.course) AS course,
+    COALESCE(c.race_date, r.race_date) AS meeting_date,
+    CASE WHEN c.course_id IS NULL THEN 'report_only'
+         WHEN r.course_id IS NULL THEN 'calendar_without_report'
+         ELSE 'calendar_and_report' END AS coverage_status,
+    c.calendar_comparison_status,
+    c.bha_fixture_row_count,
+    c.tt_maps_calendar_row_count,
+    r.report_count,
+    r.published_report_count
+FROM calendar AS c
+FULL OUTER JOIN report_meetings AS r
+    ON c.course_id = r.course_id
+   AND c.race_date IS NOT DISTINCT FROM r.race_date
+ORDER BY meeting_date DESC, course_id DESC
+LIMIT 10
+"""
+show_sql_table(report_coverage_sql)
+```
+
+### 6.5 Report-selection and key exceptions
+
+This exception list identifies missing course/date keys, meetings with more than one published report candidate, and meeting/map groups with cached duplicate-candidate flags. Multiple published reports are not silently collapsed from this review list; the selected report remains governed by the timestamp and report-ID ordering shown in subsection 6.2.
+
+```{python}
+report_exceptions_sql = f"""
+WITH reports AS (
+    SELECT *
+    FROM read_parquet('{DATA_DIR / 'jcr_going_reports.parquet'}')
+    WHERE created_at >= TIMESTAMP '2021-01-01 00:00:00'
+      AND created_at < TIMESTAMP '2027-01-01 00:00:00'
+),
+meeting_flags AS (
+    SELECT
+        course_id,
+        course_name AS course,
+        race_date,
+        COUNT(DISTINCT report_id) FILTER (WHERE report_state = 'published') AS published_report_count,
+        COUNT(DISTINCT report_id) FILTER (WHERE duplicate_candidate) AS duplicate_candidate_count,
+        STRING_AGG(DISTINCT CAST(report_id AS VARCHAR), ', ' ORDER BY CAST(report_id AS VARCHAR)) AS report_ids
+    FROM reports
+    GROUP BY course_id, course_name, race_date
+)
+SELECT
+    course_id,
+    course,
+    race_date,
+    CASE
+        WHEN course_id IS NULL OR race_date IS NULL THEN 'missing course/date key'
+        WHEN published_report_count > 1 THEN 'multiple published reports'
+        WHEN duplicate_candidate_count > 0 THEN 'cached duplicate candidate'
+    END AS exception_type,
+    published_report_count,
+    duplicate_candidate_count,
+    report_ids
+FROM meeting_flags
+WHERE course_id IS NULL
+   OR race_date IS NULL
+   OR published_report_count > 1
+   OR duplicate_candidate_count > 0
+ORDER BY race_date DESC, course_id DESC, exception_type DESC
+LIMIT 10
+"""
+show_sql_table(report_exceptions_sql)
+```
+
+## 7. GoingStick readings
+
+The reading tables scope reports by joined report `created_at` (2021–2026), not meeting `race_date`. Meeting-level stick analysis includes course/date keys with at least one BHA Turf fixture, including mixed meetings; pure AWT and unmatched dates are not treated as Turf evidence. Missing race dates are retained in overall QA counts. Every table is limited to 10 rows and sorted descending by its principal count or timestamp.
+
+### 7.1 Overall import and QA summary
+
+```{python}
+stick_overall_sql = f"""
+WITH r AS (
+    SELECT * FROM read_parquet('{DATA_DIR / 'jcr_stick_readings_enriched.parquet'}')
+    WHERE report_created_at >= TIMESTAMP '2021-01-01'
+      AND report_created_at < TIMESTAMP '2027-01-01'
+),
+t AS (
+    SELECT DISTINCT course_id, meeting_date
+    FROM read_parquet('{DATA_DIR / 'jcr_bha_fixture_calendar.parquet'}')
+    WHERE UPPER(TRIM(bha_surface)) = 'TURF'
+),
+s AS (
+    SELECT COUNT(*) AS reading_rows,
+        COUNT(DISTINCT going_report_id) AS report_count,
+        COUNT(DISTINCT r.course_id) AS course_count,
+        COUNT(*) FILTER (WHERE t.course_id IS NOT NULL) AS turf_reading_rows,
+        COUNT(DISTINCT CASE WHEN t.course_id IS NOT NULL THEN going_report_id END) AS turf_report_count,
+        COUNT(*) FILTER (WHERE r.report_race_date IS NULL) AS missing_race_date_rows,
+        COUNT(*) FILTER (WHERE r.report_race_date IS NOT NULL AND t.course_id IS NULL) AS non_turf_or_unmatched_rows,
+        COUNT(*) FILTER (WHERE index_missing_or_non_numeric OR penetrate_missing_or_non_numeric OR shear_missing_or_non_numeric) AS missing_or_non_numeric_rows,
+        COUNT(*) FILTER (WHERE index_out_of_range OR penetrate_out_of_range OR shear_out_of_range) AS out_of_range_rows,
+        COUNT(*) FILTER (WHERE stick_created_equals_updated) AS stick_created_equals_updated_rows
+    FROM r LEFT JOIN t ON t.course_id = r.course_id AND t.meeting_date = r.report_race_date
+)
+SELECT metric, result FROM s
+UNPIVOT (result FOR metric IN (reading_rows, report_count, course_count, turf_reading_rows,
+    turf_report_count, missing_race_date_rows, non_turf_or_unmatched_rows,
+    missing_or_non_numeric_rows, out_of_range_rows, stick_created_equals_updated_rows))
+ORDER BY result DESC, metric DESC
+LIMIT 10
+"""
+show_sql_table(stick_overall_sql)
+```
+
+### 7.2 Reading coverage by course and report make-date year
+
+Each annual value is a reading-row count attributed using the linked report `make_date`, not `race_date`. Records with no race date are retained as surface-unconfirmed; records with a known date are included only when the BHA calendar identifies at least one Turf fixture. Rows without a make date are shown separately rather than silently dropped. All represented courses are shown in ascending course-name order.
+
+```{python}
+stick_course_year_sql = f"""
+WITH turf AS (
+    SELECT DISTINCT course_id, meeting_date
+    FROM read_parquet('{DATA_DIR / 'jcr_bha_fixture_calendar.parquet'}')
+    WHERE UPPER(TRIM(bha_surface)) = 'TURF'
+)
+SELECT r.course_id, r.course_name AS course,
+    COUNT(*) FILTER (WHERE YEAR(r.make_date) = 2021) AS readings_2021,
+    COUNT(*) FILTER (WHERE YEAR(r.make_date) = 2022) AS readings_2022,
+    COUNT(*) FILTER (WHERE YEAR(r.make_date) = 2023) AS readings_2023,
+    COUNT(*) FILTER (WHERE YEAR(r.make_date) = 2024) AS readings_2024,
+    COUNT(*) FILTER (WHERE YEAR(r.make_date) = 2025) AS readings_2025,
+    COUNT(*) FILTER (WHERE YEAR(r.make_date) = 2026) AS readings_2026,
+    COUNT(*) FILTER (WHERE r.make_date IS NULL) AS readings_missing_make_date,
+    COUNT(*) FILTER (WHERE r.report_race_date IS NULL) AS readings_missing_race_date,
+    COUNT(*) AS total_readings
+FROM read_parquet('{DATA_DIR / 'jcr_stick_readings_enriched.parquet'}') r
+WHERE r.report_created_at >= TIMESTAMP '2021-01-01'
+  AND r.report_created_at < TIMESTAMP '2027-01-01'
+  AND (r.report_race_date IS NULL OR EXISTS (
+      SELECT 1 FROM turf t
+      WHERE t.course_id = r.course_id AND t.meeting_date = r.report_race_date
+  ))
+GROUP BY r.course_id, r.course_name
+ORDER BY course ASC
+"""
+show_sql_table(stick_course_year_sql)
+```
+
+### 7.3 Difference between report `make_date` and reading `created_at`
+
+```{python}
+stick_make_date_frequency_sql = f"""
+WITH turf AS (
+    SELECT DISTINCT course_id, meeting_date
+    FROM read_parquet('{DATA_DIR / 'jcr_bha_fixture_calendar.parquet'}')
+    WHERE UPPER(TRIM(bha_surface)) = 'TURF'
+)
+SELECT r.course_id, r.course_name AS course,
+    COALESCE(CAST(r.make_to_stick_created_days AS VARCHAR), 'Missing make_date') AS make_to_reading_days,
+    COUNT(*) AS reading_count,
+    COUNT(DISTINCT r.going_report_id) AS report_count
+FROM read_parquet('{DATA_DIR / 'jcr_stick_readings_enriched.parquet'}') r
+JOIN turf t ON t.course_id = r.course_id AND t.meeting_date = r.report_race_date
+WHERE r.report_created_at >= TIMESTAMP '2021-01-01'
+  AND r.report_created_at < TIMESTAMP '2027-01-01'
+GROUP BY r.course_id, r.course_name, r.make_to_stick_created_days
+ORDER BY reading_count DESC, report_count DESC, r.course_id DESC, make_to_reading_days DESC
+LIMIT 10
+"""
+show_sql_table(stick_make_date_frequency_sql)
+```
+
+### 7.4 Missing and extra waypoint readings
+
+This compares measured waypoints with configured map waypoints for Turf-linked meetings. Missing configured waypoints and measurements above the highest configured number are review flags; the data does not establish whether an extra reading is new or stale.
+
+```{python}
+stick_waypoint_qa_sql = f"""
+WITH turf AS (
+    SELECT DISTINCT course_id, meeting_date
+    FROM read_parquet('{DATA_DIR / 'jcr_bha_fixture_calendar.parquet'}')
+    WHERE UPPER(TRIM(bha_surface)) = 'TURF'
+),
+reports AS (
+    SELECT DISTINCT r.course_id, r.course_name, r.map_id, r.map_label,
+        r.report_id, r.going_report_id, r.report_race_date, r.report_created_at
+    FROM read_parquet('{DATA_DIR / 'jcr_stick_readings_enriched.parquet'}') r
+    JOIN turf t ON t.course_id = r.course_id AND t.meeting_date = r.report_race_date
+    WHERE r.report_created_at >= TIMESTAMP '2021-01-01'
+      AND r.report_created_at < TIMESTAMP '2027-01-01'
+),
+configured AS (
+    SELECT map_id, COUNT(DISTINCT waypoint_number) AS configured_count,
+        MAX(waypoint_number) AS highest_configured
+    FROM read_parquet('{DATA_DIR / 'jcr_waypoints.parquet'}')
+    WHERE waypoint_number IS NOT NULL GROUP BY map_id
+),
+expected AS (
+    SELECT r.going_report_id, COUNT(DISTINCT w.waypoint_number) AS configured_count,
+        COUNT(DISTINCT CASE WHEN sr.reading_id IS NOT NULL THEN w.waypoint_number END) AS measured_configured_count,
+        MAX(c.highest_configured) AS highest_configured
+    FROM reports r JOIN configured c ON c.map_id = r.map_id
+    LEFT JOIN read_parquet('{DATA_DIR / 'jcr_waypoints.parquet'}') w
+      ON w.map_id = r.map_id AND w.waypoint_number IS NOT NULL
+    LEFT JOIN read_parquet('{DATA_DIR / 'jcr_stick_readings_enriched.parquet'}') sr
+      ON sr.going_report_id = r.going_report_id
+     AND TRY_CAST(sr.way_point AS DOUBLE) = w.waypoint_number
+    GROUP BY r.going_report_id
+),
+actual AS (
+    SELECT r.going_report_id,
+        COUNT(DISTINCT r.way_point) FILTER (WHERE r.way_point > c.highest_configured) AS extra_count,
+        MAX(r.way_point) AS highest_measured
+    FROM read_parquet('{DATA_DIR / 'jcr_stick_readings_enriched.parquet'}') r
+    JOIN reports rp ON rp.going_report_id = r.going_report_id
+    JOIN configured c ON c.map_id = r.map_id
+    GROUP BY r.going_report_id
+)
+SELECT r.course_id, r.course_name AS course, r.report_race_date AS meeting_date,
+    r.map_id, r.map_label AS map, r.report_id,
+    e.configured_count,
+    e.configured_count - e.measured_configured_count AS missing_configured_waypoints,
+    a.extra_count AS readings_above_highest_configured,
+    e.highest_configured, a.highest_measured, r.report_created_at
+FROM reports r JOIN expected e USING (going_report_id) JOIN actual a USING (going_report_id)
+WHERE e.configured_count - e.measured_configured_count > 0 OR a.extra_count > 0
+ORDER BY r.report_race_date DESC, a.extra_count DESC,
+    missing_configured_waypoints DESC, r.report_id DESC
+LIMIT 10
+"""
+show_sql_table(stick_waypoint_qa_sql)
+```
+
+### 7.5 Identical reading-set candidates
+
+The fingerprint compares each report’s complete ordered measurement set. Matches are candidates for repeat datasets, not proof of repeated downloads; no download-event or deletion audit trail is present in the cache.
+
+```{python}
+stick_fingerprint_sql = f"""
+WITH turf AS (
+    SELECT DISTINCT course_id, meeting_date
+    FROM read_parquet('{DATA_DIR / 'jcr_bha_fixture_calendar.parquet'}')
+    WHERE UPPER(TRIM(bha_surface)) = 'TURF'
+),
+fingerprints AS (
+    SELECT r.course_id, r.course_name AS course, r.map_id, r.report_id,
+        r.going_report_id, r.report_race_date AS meeting_date, r.report_created_at,
+        COUNT(*) AS reading_count,
+        MD5(STRING_AGG(CONCAT_WS('|',
+            COALESCE(CAST(r.way_point AS VARCHAR), 'NULL'),
+            COALESCE(CAST(r.index AS VARCHAR), 'NULL'),
+            COALESCE(CAST(r.penetrate AS VARCHAR), 'NULL'),
+            COALESCE(CAST(r.shear AS VARCHAR), 'NULL'),
+            COALESCE(CAST(r.going AS VARCHAR), 'NULL')),
+            ';' ORDER BY r.way_point, r.index, r.penetrate, r.shear, r.going)) AS fingerprint
+    FROM read_parquet('{DATA_DIR / 'jcr_stick_readings_enriched.parquet'}') r
+    JOIN turf t ON t.course_id = r.course_id AND t.meeting_date = r.report_race_date
+    WHERE r.report_created_at >= TIMESTAMP '2021-01-01'
+      AND r.report_created_at < TIMESTAMP '2027-01-01'
+    GROUP BY r.course_id, r.course_name, r.map_id, r.report_id,
+        r.going_report_id, r.report_race_date, r.report_created_at
+),
+repeated AS (
+    SELECT fingerprint, COUNT(DISTINCT report_id) AS report_count,
+        COUNT(DISTINCT course_id) AS course_count,
+        MIN(report_created_at) AS first_created_at,
+        MAX(report_created_at) AS last_created_at,
+        STRING_AGG(DISTINCT CAST(report_id AS VARCHAR), ', ' ORDER BY CAST(report_id AS VARCHAR)) AS report_ids
+    FROM fingerprints GROUP BY fingerprint
+    HAVING COUNT(DISTINCT report_id) > 1
+)
+SELECT SUBSTR(fingerprint, 1, 16) AS fingerprint_prefix, report_count,
+    course_count, first_created_at, last_created_at, report_ids
+FROM repeated
+ORDER BY report_count DESC, last_created_at DESC, fingerprint_prefix DESC
+LIMIT 10
+"""
+show_sql_table(stick_fingerprint_sql)
+```
+
+### 7.6 Latest Turf-linked reading records
+
+```{python}
+stick_latest_rows_sql = f"""
+WITH turf AS (
+    SELECT DISTINCT course_id, meeting_date
+    FROM read_parquet('{DATA_DIR / 'jcr_bha_fixture_calendar.parquet'}')
+    WHERE UPPER(TRIM(bha_surface)) = 'TURF'
+)
+SELECT r.course_id, r.course_name AS course, r.report_race_date AS meeting_date,
+    r.report_id, r.going_report_id, r.map_id, r.map_label, r.way_point AS waypoint,
+    r.index, r.penetrate, r.shear, r.going,
+    r.created_at AS stick_created_at, r.updated_at AS stick_updated_at,
+    r.make_date, r.report_created_at, r.report_state, r.author_type
+FROM read_parquet('{DATA_DIR / 'jcr_stick_readings_enriched.parquet'}') r
+JOIN turf t ON t.course_id = r.course_id AND t.meeting_date = r.report_race_date
+WHERE r.report_created_at >= TIMESTAMP '2021-01-01'
+  AND r.report_created_at < TIMESTAMP '2027-01-01'
+ORDER BY r.created_at DESC, r.report_id DESC, r.way_point DESC
+LIMIT 10
+"""
+show_sql_table(stick_latest_rows_sql)
+```
+
+## 8. BHAGI compliance evidence
+
+These tables query the generated meeting-level BHAGI outputs directly. The scored population is actual Turf meetings; mixed meetings remain eligible when Turf is present, while AWT-only and unresolved-surface meetings remain visible in scope totals. Report fields use the selected last-published report for each timepoint (latest available fallback); GoingStick evidence is evaluated independently using linked measurement dates. Declaration-day timing is a proxy of two or three days before the target meeting date.
+
+### 8.1 Overall scope and evidence by year
+
+```{python}
+bhagi_year_overview_sql = f"""
+WITH scope AS (
+    SELECT *, YEAR(TRY_CAST(race_date AS DATE)) AS meeting_year
+    FROM read_parquet('{DATA_DIR / 'jcr_bhagi_scope.parquet'}')
+    WHERE TRY_CAST(race_date AS DATE) >= DATE '2021-01-01'
+      AND TRY_CAST(race_date AS DATE) < DATE '2027-01-01'
+), compliance AS (
+    SELECT *, YEAR(TRY_CAST(race_date AS DATE)) AS meeting_year
+    FROM read_parquet('{DATA_DIR / 'jcr_bhagi_compliance.parquet'}')
+    WHERE TRY_CAST(race_date AS DATE) >= DATE '2021-01-01'
+      AND TRY_CAST(race_date AS DATE) < DATE '2027-01-01'
+)
+SELECT s.meeting_year AS year,
+    COUNT(*) FILTER (WHERE s.scope_status = 'scored_Turf') AS turf_meetings_scored,
+    COUNT(*) FILTER (WHERE s.scope_status = 'excluded_AWT_only') AS awt_only_meetings_excluded,
+    COUNT(*) FILTER (WHERE s.scope_status = 'unresolved_surface') AS unresolved_surface_meetings,
+    COUNT(c.course_id) FILTER (WHERE c.compliance_level = 'Full') AS full_evidence_meetings,
+    COUNT(c.course_id) FILTER (WHERE NOT c.declaration_day_goingstick_present) AS missing_declaration_day_stick,
+    COUNT(c.course_id) FILTER (WHERE NOT c.race_day_goingstick_present) AS missing_race_day_stick,
+    COUNT(c.course_id) FILTER (WHERE NOT c.all_requested_information_available) AS missing_watering_rails_stalls
+FROM scope s
+LEFT JOIN compliance c USING (course_id, race_date)
+GROUP BY s.meeting_year
+ORDER BY year DESC
+"""
+show_sql_table(bhagi_year_overview_sql)
+```
+
+### 8.2 Scope by course and year
+
+```{python}
+bhagi_scope_course_year_sql = f"""
+SELECT course_name AS course,
+    YEAR(TRY_CAST(race_date AS DATE)) AS year,
+    COUNT(*) FILTER (WHERE scope_status = 'scored_Turf') AS turf_meetings_scored,
+    COUNT(*) FILTER (WHERE scope_status = 'excluded_AWT_only') AS awt_only_meetings_excluded,
+    COUNT(*) FILTER (WHERE scope_status = 'unresolved_surface') AS unresolved_surface_meetings
+FROM read_parquet('{DATA_DIR / 'jcr_bhagi_scope.parquet'}')
+WHERE TRY_CAST(race_date AS DATE) >= DATE '2021-01-01'
+  AND TRY_CAST(race_date AS DATE) < DATE '2027-01-01'
+GROUP BY course_name, year
+ORDER BY course ASC, year DESC
+"""
+show_sql_table(bhagi_scope_course_year_sql)
+```
+
+### 8.3 Evidence summary by course and year
+
+Deficiency counts may overlap. The full-evidence percentage uses all scored Turf meetings for that course/year as its denominator.
+
+```{python}
+bhagi_course_year_sql = f"""
+SELECT course_name AS course,
+    YEAR(TRY_CAST(race_date AS DATE)) AS year,
+    COUNT(*) AS turf_meetings,
+    COUNT(*) FILTER (WHERE compliance_level = 'Full') AS full_evidence_meetings,
+    ROUND(100.0 * COUNT(*) FILTER (WHERE compliance_level = 'Full') / NULLIF(COUNT(*), 0), 1) AS full_evidence_pct,
+    COUNT(*) FILTER (WHERE NOT declaration_day_going_report_present) AS missing_declaration_report,
+    COUNT(*) FILTER (WHERE NOT race_day_going_report_present) AS missing_race_day_report,
+    COUNT(*) FILTER (WHERE NOT declaration_day_goingstick_present) AS missing_declaration_day_stick,
+    COUNT(*) FILTER (WHERE NOT race_day_goingstick_present) AS missing_race_day_stick,
+    COUNT(*) FILTER (WHERE NOT declaration_day_official_going_reported) AS missing_declaration_day_official_going,
+    COUNT(*) FILTER (WHERE NOT race_day_official_going_reported) AS missing_race_day_official_going,
+    COUNT(*) FILTER (WHERE NOT all_requested_information_available) AS missing_watering_rails_stalls
+FROM read_parquet('{DATA_DIR / 'jcr_bhagi_compliance.parquet'}')
+WHERE TRY_CAST(race_date AS DATE) >= DATE '2021-01-01'
+  AND TRY_CAST(race_date AS DATE) < DATE '2027-01-01'
+GROUP BY course_name, year
+ORDER BY course ASC, year DESC
+"""
+show_sql_table(bhagi_course_year_sql)
+```
+
+### 8.4 Meeting-level evidence and selected reports
+
+The complete scored meeting set is shown, not a sample. Selected report IDs and their publication/author fields remain distinct from independently counted stick datasets.
+
+```{python}
+bhagi_meeting_detail_sql = f"""
+SELECT course_id, course_name AS course, race_date, surface, surface_source,
+    declaration_day_proxy_dates,
+    declaration_day_report_id, declaration_day_report_state, declaration_day_report_author_type,
+    declaration_day_report_make_date, declaration_day_official_going,
+    declaration_day_watering, declaration_day_rails, declaration_day_stalls,
+    declaration_day_unique_stick_dataset_count, declaration_day_unique_stick_reading_rows,
+    declaration_day_stick_measurement_dates,
+    race_day_report_id, race_day_report_state, race_day_report_author_type,
+    race_day_report_make_date, race_day_official_going,
+    race_day_watering, race_day_rails, race_day_stalls,
+    race_day_unique_stick_dataset_count, race_day_unique_stick_reading_rows,
+    race_day_stick_measurement_dates, compliance_level, compliance_flags
+FROM read_parquet('{DATA_DIR / 'jcr_bhagi_compliance.parquet'}')
+WHERE TRY_CAST(race_date AS DATE) >= DATE '2021-01-01'
+  AND TRY_CAST(race_date AS DATE) < DATE '2027-01-01'
+ORDER BY course ASC, race_date DESC
+"""
+show_sql_table(bhagi_meeting_detail_sql)
+```
+
+### 8.5 Meetings with missing evidence
+
+```{python}
+bhagi_exceptions_sql = f"""
+SELECT course_id, course_name AS course, race_date, surface_source,
+    declaration_day_report_id, declaration_day_report_state,
+    race_day_report_id, race_day_report_state,
+    declaration_day_unique_stick_dataset_count, race_day_unique_stick_dataset_count,
+    compliance_flags
+FROM read_parquet('{DATA_DIR / 'jcr_bhagi_compliance.parquet'}')
+WHERE TRY_CAST(race_date AS DATE) >= DATE '2021-01-01'
+  AND TRY_CAST(race_date AS DATE) < DATE '2027-01-01'
+  AND COALESCE(TRIM(compliance_flags), '') <> ''
+ORDER BY course ASC, race_date DESC
+"""
+show_sql_table(bhagi_exceptions_sql)
+```
+
+### 8.6 GoingStick values and downloaded reading data by course and year
+
+This table has six rows for every JCR course, including years with zero meetings. A report “showed GoingStick values” when its `stick_comments` contains a numeric GoingStick value; “data downloaded” means linked `stick_readings` rows exist for that same report. This is a report-history presence check: it searches all available reports at each timepoint for at least one qualifying report, rather than considering only the selected primary report. The last-published selection remains the basis for the other BHAGI tables. The four outcome counts are mutually exclusive: both timepoints have a report showing values with downloaded data; both have values but neither has downloaded rows; other non-abandoned meetings with absent or partial evidence; and meetings whose selected primary race-day report marks them abandoned. The last four columns sum to total meetings.
+
+```{python}
+bhagi_stick_status_course_year_sql = f"""
+WITH years AS (
+    SELECT year FROM range(2021, 2027) AS year_rows(year)
+),
+courses AS (
+    SELECT course_id, canonical_name AS course
+    FROM read_parquet('{DATA_DIR / 'jcr_courses.parquet'}')
+),
+bha_surface AS (
+    SELECT course_id, CAST(meeting_date AS DATE) AS race_date,
+        BOOL_OR(UPPER(TRIM(bha_surface)) = 'TURF') AS has_turf,
+        BOOL_OR(UPPER(TRIM(bha_surface)) = 'AWT') AS has_awt
+    FROM read_parquet('{DATA_DIR / 'jcr_bha_fixture_calendar.parquet'}')
+    GROUP BY course_id, CAST(meeting_date AS DATE)
+),
+tt_surface AS (
+    SELECT course_id, CAST(race_date AS DATE) AS race_date,
+        BOOL_OR(TRIM(CAST(race_type_code AS VARCHAR)) = '2') AS has_turf_code
+    FROM read_parquet('{DATA_DIR / 'jcr_tt_maps_calendar.parquet'}')
+    GROUP BY course_id, CAST(race_date AS DATE)
+),
+meetings AS (
+    SELECT m.course_id, c.course, CAST(m.race_date AS DATE) AS race_date,
+        YEAR(CAST(m.race_date AS DATE)) AS year,
+        COALESCE(b.has_turf, t.has_turf_code, FALSE) AS has_turf,
+        COALESCE(TRY_CAST(m.latest_report_abandoned AS INTEGER) = 1, FALSE) AS is_abandoned
+    FROM read_parquet('{DATA_DIR / 'jcr_meeting_status_reconciliation.parquet'}') m
+    JOIN courses c USING (course_id)
+    LEFT JOIN bha_surface b ON b.course_id = m.course_id AND b.race_date = CAST(m.race_date AS DATE)
+    LEFT JOIN tt_surface t ON t.course_id = m.course_id AND t.race_date = CAST(m.race_date AS DATE)
+    WHERE CAST(m.race_date AS DATE) >= DATE '2021-01-01'
+      AND CAST(m.race_date AS DATE) < DATE '2027-01-01'
+      AND m.resolved_status IN ('reported_as_run', 'reported_mixed', 'reported_as_abandoned')
+),
+eligible_meetings AS (
+    SELECT * FROM meetings WHERE has_turf
+),
+reading_counts AS (
+    SELECT going_report_id, COUNT(DISTINCT reading_id) AS downloaded_reading_rows
+    FROM read_parquet('{DATA_DIR / 'jcr_stick_readings.parquet'}')
+    GROUP BY going_report_id
+),
+report_roles AS (
+    SELECT e.course_id, e.race_date,
+        CASE
+            WHEN CAST(r.make_date AS DATE) = e.race_date THEN 'race_day'
+            WHEN CAST(r.make_date AS DATE) IN (e.race_date - INTERVAL 2 DAY, e.race_date - INTERVAL 3 DAY) THEN 'declaration_day'
+        END AS timepoint,
+        r.report_id, r.report_state, r.updated_at, r.stick_comments,
+        COALESCE(rc.downloaded_reading_rows, 0) AS downloaded_reading_rows
+    FROM eligible_meetings e
+    JOIN read_parquet('{DATA_DIR / 'jcr_going_reports.parquet'}') r
+      ON r.course_id = e.course_id AND CAST(r.race_date AS DATE) = e.race_date
+    LEFT JOIN reading_counts rc ON rc.going_report_id = r.report_id
+    WHERE r.created_at >= TIMESTAMP '2021-01-01'
+      AND r.created_at < TIMESTAMP '2027-01-01'
+      AND CAST(r.make_date AS DATE) IN (
+          e.race_date, e.race_date - INTERVAL 2 DAY, e.race_date - INTERVAL 3 DAY
+      )
+),
+selected_timepoints AS (
+    SELECT course_id, race_date, timepoint,
+        BOOL_OR(REGEXP_MATCHES(COALESCE(stick_comments, ''), '(^|[^0-9])[0-9][0-9]?[.,][0-9]')) AS showed_stick_values,
+        BOOL_OR(REGEXP_MATCHES(COALESCE(stick_comments, ''), '(^|[^0-9])[0-9][0-9]?[.,][0-9]')
+            AND downloaded_reading_rows > 0) AS report_showed_values_and_data,
+        BOOL_OR(downloaded_reading_rows > 0) AS any_report_data_downloaded
+    FROM report_roles
+    WHERE timepoint IS NOT NULL
+    GROUP BY course_id, race_date, timepoint
+),
+meeting_evidence AS (
+    SELECT e.course_id, e.course, e.year, e.race_date, e.is_abandoned,
+        COALESCE(MAX(s.showed_stick_values) FILTER (WHERE s.timepoint = 'race_day'), FALSE) AS race_day_showed_values,
+        COALESCE(MAX(s.showed_stick_values) FILTER (WHERE s.timepoint = 'declaration_day'), FALSE) AS declaration_day_showed_values,
+        COALESCE(MAX(s.report_showed_values_and_data) FILTER (WHERE s.timepoint = 'race_day'), FALSE) AS race_day_values_and_data,
+        COALESCE(MAX(s.report_showed_values_and_data) FILTER (WHERE s.timepoint = 'declaration_day'), FALSE) AS declaration_day_values_and_data,
+        COALESCE(MAX(s.any_report_data_downloaded) FILTER (WHERE s.timepoint = 'race_day'), FALSE) AS race_day_data_downloaded,
+        COALESCE(MAX(s.any_report_data_downloaded) FILTER (WHERE s.timepoint = 'declaration_day'), FALSE) AS declaration_day_data_downloaded
+    FROM eligible_meetings e
+    LEFT JOIN selected_timepoints s USING (course_id, race_date)
+    GROUP BY e.course_id, e.course, e.year, e.race_date, e.is_abandoned
+),
+course_year_counts AS (
+    SELECT course_id, course, year,
+        COUNT(*) AS total_meetings,
+        COUNT(*) FILTER (WHERE NOT is_abandoned
+            AND race_day_values_and_data AND declaration_day_values_and_data) AS values_and_data_both_timepoints,
+        COUNT(*) FILTER (WHERE NOT is_abandoned
+            AND race_day_showed_values AND declaration_day_showed_values
+            AND NOT race_day_data_downloaded AND NOT declaration_day_data_downloaded) AS values_but_no_data_both_timepoints,
+        COUNT(*) FILTER (WHERE NOT is_abandoned
+            AND NOT (race_day_values_and_data AND declaration_day_values_and_data)
+            AND NOT (race_day_showed_values AND declaration_day_showed_values
+                AND NOT race_day_data_downloaded AND NOT declaration_day_data_downloaded)) AS absent_or_partial_evidence,
+        COUNT(*) FILTER (WHERE is_abandoned) AS abandoned_meetings
+    FROM meeting_evidence
+    GROUP BY course_id, course, year
+)
+SELECT c.course_id, c.course, y.year,
+    COALESCE(x.total_meetings, 0) AS total_meetings,
+    COALESCE(x.values_and_data_both_timepoints, 0) AS values_and_data_both_timepoints,
+    COALESCE(x.values_but_no_data_both_timepoints, 0) AS values_but_no_data_both_timepoints,
+    COALESCE(x.absent_or_partial_evidence, 0) AS absent_or_partial_evidence,
+    COALESCE(x.abandoned_meetings, 0) AS abandoned_meetings,
+    COALESCE(x.values_and_data_both_timepoints, 0)
+      + COALESCE(x.values_but_no_data_both_timepoints, 0)
+      + COALESCE(x.absent_or_partial_evidence, 0)
+      + COALESCE(x.abandoned_meetings, 0) AS outcome_total,
+    COALESCE(x.total_meetings, 0) =
+      COALESCE(x.values_and_data_both_timepoints, 0)
+      + COALESCE(x.values_but_no_data_both_timepoints, 0)
+      + COALESCE(x.absent_or_partial_evidence, 0)
+      + COALESCE(x.abandoned_meetings, 0) AS totals_reconcile
+FROM courses c
+CROSS JOIN years y
+LEFT JOIN course_year_counts x USING (course_id, year)
+ORDER BY c.course ASC, y.year ASC
+"""
+show_sql_table(bhagi_stick_status_course_year_sql)
+```
+
+<div class="tt-footer">
+  <span>DataTrax · JCR Data Check</span>
+  <img src="../resources/001-tt_brand/LOGO/Master Logo/TurfTrax_Logo_White.png" alt="TurfTrax" />
+</div>

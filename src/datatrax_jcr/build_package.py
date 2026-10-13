@@ -24,7 +24,9 @@ REQUIRED = [
     "jcr_svg_source_documents.parquet", "jcr_svg_documents.parquet", "jcr_svg_elements.parquet",
     "jcr_map_discipline_layout.parquet", "jcr_section_zone_map_qa.parquet",
     "jcr_waypoint_compliance.parquet", "jcr_waypoint_map_qa.parquet",
-    "jcr_stick_readings.parquet", "jcr_actual_meetings_preliminary.parquet",
+    "jcr_stick_readings.parquet", "jcr_stick_readings_enriched.parquet",
+    "jcr_stick_report_timestamp_qa.parquet", "jcr_stick_timestamp_qa_report.json",
+    "jcr_actual_meetings_preliminary.parquet",
     "jcr_going_reports.parquet", "jcr_going_report_authorship.parquet",
     "jcr_map_review.xlsx", "jcr_map_review_import_report.json",
     "jcr_map_discipline_layout_report.json", "jcr_phase1_validation_report.json",
@@ -34,7 +36,7 @@ REQUIRED = [
     "jcr_bha_fixture_calendar.parquet", "jcr_bha_calendar_comparison.parquet",
     "jcr_bha_calendar_comparison_report.json",
     "jcr_kempton_surface_classification.parquet", "jcr_kempton_surface_classification_report.json",
-    "jcr_bhagi_compliance.parquet", "jcr_bhagi_compliance_report.json",
+    "jcr_bhagi_scope.parquet", "jcr_bhagi_compliance.parquet", "jcr_bhagi_compliance_report.json",
 ]
 
 
@@ -92,11 +94,11 @@ def main() -> None:
         "manual_decisions": [],
         "unresolved_issues": [
             "6 maps retain unknown discipline because they were not reviewed in the workbook.",
-            "Cheltenham detailed layout review remains open; the general workbook assignment is applied.",
+            "Layout identity exceptions remain open; the general map-review workbook assignments are applied.",
             "SVG retention is representative: one report per map/date; full all-report backfill remains pending.",
             "56 planned calendar course/date rows have no Going Report and remain unresolved; no race results were used.",
             "Kempton surface classification excludes 555 AWT reports from Going Stick analysis; 8 reports on four dates remain unresolved.",
-            "BHAGI compliance is Turf-only and preliminary: declaration evidence accepts make_date two or three days before the report race_date; the report race_date remains the target meeting date for festival sequences. Compliance levels are analysis labels, not legal findings.",
+            "BHAGI evidence assessment covers actual 2021-2026 meetings: Turf (including mixed meetings with Turf) is scored, while AWT-only and unresolved-surface meetings are retained in a separate scope table. Report fields use the latest published report per meeting/timepoint (latest available fallback); GoingStick evidence uses unique report-linked datasets and make_date independently. Declaration-day timing is proxied as two or three days before the target race_date. Results are evidence-availability measures, not legal findings.",
         ],
         "reviewer": None,
         "review_date": None,

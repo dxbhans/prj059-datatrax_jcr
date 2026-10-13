@@ -15,6 +15,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from datatrax_jcr.report_selection import select_primary_reports
+
 
 BASE_URL = os.getenv("TURFTRAX_SVG_BASE_URL", "https://hub.turftrax.co.uk").rstrip("/")
 OUTPUT = Path("data/config")
@@ -124,10 +126,7 @@ def retrieve(candidate: dict) -> dict:
 def candidate_rows(reports: pd.DataFrame) -> pd.DataFrame:
     # One retained revision per map/date is sufficient for configuration validation;
     # the full report inventory remains available in jcr_going_reports.parquet.
-    selected = (
-        reports.sort_values(["map_id", "race_date", "report_id"])
-        .drop_duplicates(["map_id", "race_date"], keep="last")
-    )
+    selected = select_primary_reports(reports, ["map_id", "race_date"])
     rows = []
     for row in selected.to_dict("records"):
         report_id = int(row["report_id"])
@@ -204,7 +203,7 @@ def main() -> None:
         "base_url": BASE_URL,
         "source_report_count": int(reports["report_id"].nunique()),
         "representative_report_count": int(candidates["report_id"].nunique() // 2),
-        "selection_rule": "one report per map_id and race_date, highest report_id retained",
+        "selection_rule": "last report_state=published report per map_id and race_date by updated_at/report_id; latest available fallback when no published report exists",
         "candidate_count": int(len(candidates)),
         "retrieved_count": int((documents["retrieval_status"] == "retrieved").sum()),
         "not_available_count": int((documents["retrieval_status"] == "not_available").sum()),

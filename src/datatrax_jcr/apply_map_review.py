@@ -18,11 +18,13 @@ NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 
 def read_sheet(path: Path, sheet_number: int) -> list[dict[str, str]]:
     with ZipFile(path) as archive:
-        strings_root = ET.fromstring(archive.read("xl/sharedStrings.xml"))
-        strings = [
-            "".join(node.text or "" for node in item.findall(".//m:t", NS))
-            for item in strings_root.findall("m:si", NS)
-        ]
+        strings = []
+        if "xl/sharedStrings.xml" in archive.namelist():
+            strings_root = ET.fromstring(archive.read("xl/sharedStrings.xml"))
+            strings = [
+                "".join(node.text or "" for node in item.findall(".//m:t", NS))
+                for item in strings_root.findall("m:si", NS)
+            ]
         root = ET.fromstring(archive.read(f"xl/worksheets/sheet{sheet_number}.xml"))
     rows = []
     for row in root.findall(".//m:sheetData/m:row", NS):
@@ -30,10 +32,14 @@ def read_sheet(path: Path, sheet_number: int) -> list[dict[str, str]]:
             continue
         values = {}
         for cell in row.findall("m:c", NS):
-            value = cell.find("m:v", NS)
-            text = "" if value is None else value.text or ""
-            if cell.attrib.get("t") == "s" and text:
-                text = strings[int(text)]
+            cell_type = cell.attrib.get("t")
+            if cell_type == "inlineStr":
+                text = "".join(node.text or "" for node in cell.findall(".//m:t", NS))
+            else:
+                value = cell.find("m:v", NS)
+                text = "" if value is None else value.text or ""
+                if cell_type == "s" and text:
+                    text = strings[int(text)]
             values[re.sub(r"\d", "", cell.attrib["r"])] = text
         rows.append(values)
     return rows
@@ -76,7 +82,6 @@ def main() -> None:
         "status_counts": pd.Series([row.get("U", "") for row in rows]).value_counts().to_dict(),
         "reviewed_type_counts": pd.Series([row.get("T", "") for row in assignments]).value_counts().to_dict(),
         "unreviewed_map_ids": [int(row["C"]) for row in rows if row.get("U") == "Not reviewed"],
-        "cheltenham_detail_review_status": "not_reviewed",
         "assignments": applied,
     }
     (OUT / "jcr_map_review_import_report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")

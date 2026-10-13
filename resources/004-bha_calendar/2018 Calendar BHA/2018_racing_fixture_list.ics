@@ -1,0 +1,2955 @@
+BEGIN:VCALENDAR
+METHOD:PUBLISH
+PRODID:-//britishhorseracing.com_2018//NONSGML iCalcreator 2.6//
+VERSION:2.0
+X-WR-CALNAME:British Horseracing Authority Fixture List 2018
+X-WR-CALDESC:British Horseracing Authority Fixture List 2018
+X-WR-TIMEZONE:Europe/London
+X-PUBLISHED-TTL:PT12H
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917wHB0VC@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180101T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Jump) / Cheltenham (Afternoon Jump) / E
+ xeter (Afternoon Jump) / Fakenham (Afternoon Jump) / Musselburgh (Afternoo
+ n Jump) / Southwell (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917503Ekj@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180102T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Jump) / Ffos Las (Afternoon Jump) / Newcastle (Twili
+ ght Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917SONTac@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180103T000000
+DURATION:P1D
+SUMMARY:Ludlow (Afternoon Jump) / Musselburgh (Afternoon Jump) / Southwell 
+ (Afternoon Flat) / Wolverhampton (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-19174vu6E3@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180104T000000
+DURATION:P1D
+SUMMARY:Bangor-on-dee (Afternoon Jump) / Chelmsford City (Evening Flat) / N
+ ewcastle (Afternoon Flat) / Wolverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917M5uZZs@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180105T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Evening Flat) / Lingfield Park (Afternoon Jump) / Sou
+ thwell (Afternoon Flat) / Wetherby (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917Fu3dJA@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180106T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Evening Flat) / Lingfield Park (Afternoon Flat) / New
+ castle (Afternoon Jump) / Sandown Park (Afternoon Jump) / Wincanton (After
+ noon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917TfPoNJ@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180107T000000
+DURATION:P1D
+SUMMARY:Chepstow (Afternoon Jump) / Plumpton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917RVG78U@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180108T000000
+DURATION:P1D
+SUMMARY:Fontwell Park (Afternoon Jump) / Hereford (Afternoon Jump) / Wolver
+ hampton (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-19172KUBGI@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180109T000000
+DURATION:P1D
+SUMMARY:Doncaster (Afternoon Jump) / Southwell (Afternoon Flat) / Taunton (
+ Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917BaEJ3u@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180110T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Jump) / Kempton Park (Twilight Flat) / Lingfield Par
+ k (Afternoon Flat) / Ludlow (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917ZtCCnh@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180111T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Jump) / Chelmsford City (Evening Flat) 
+ / Leicester (Afternoon Jump) / Newcastle (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917KLaOrJ@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180112T000000
+DURATION:P1D
+SUMMARY:Huntingdon (Afternoon Jump) / Lingfield Park (Afternoon Flat) / New
+ castle (Evening Flat) / Sedgefield (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917VVz8xp@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180113T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Afternoon Jump) / Lingfield Park (Afternoon Flat) / W
+ arwick (Afternoon Jump) / Wetherby (Afternoon Jump) / Wolverhampton (Eveni
+ ng Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-19171aDzah@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180114T000000
+DURATION:P1D
+SUMMARY:Kelso (Afternoon Jump) / Southwell (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917BPrfLn@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180115T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Jump) / Plumpton (Afternoon Jump) / Wolverhampton (T
+ wilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917WCV8cU@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180116T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Jump) / Hereford (Afternoon Jump) / Kempton Park (Tw
+ ilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917iSzOn1@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180117T000000
+DURATION:P1D
+SUMMARY:Lingfield Park (Afternoon Flat) / Market Rasen (Afternoon Jump) / N
+ ewbury (Afternoon Jump) / Newcastle (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917lbAX6U@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180118T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Ludlow (Afternoon Jump) / Southwel
+ l (Afternoon Flat) / Wincanton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-19178iDFwW@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180119T000000
+DURATION:P1D
+SUMMARY:Chepstow (Afternoon Jump) / Lingfield Park (Afternoon Flat) / Musse
+ lburgh (Afternoon Jump) / Newcastle (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-1917HzbM1U@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180120T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Jump) / Chelmsford City (Evening Flat) / Haydock P
+ ark (Afternoon Jump) / Lingfield Park (Afternoon Flat) / Taunton (Afternoo
+ n Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073KZwfNA@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180121T000000
+DURATION:P1D
+SUMMARY:Fontwell Park (Afternoon Jump) / Newcastle (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073DXZzgm@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180122T000000
+DURATION:P1D
+SUMMARY:Fakenham (Afternoon Jump) / Lingfield Park (Afternoon Jump) / Wolve
+ rhampton (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073GdEfbB@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180123T000000
+DURATION:P1D
+SUMMARY:Leicester (Afternoon Jump) / Southwell (Afternoon Flat) / Wetherby 
+ (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073uz5VN1@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180124T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Jump) / Exeter (Afternoon Jump) / Kempt
+ on Park (Twilight Flat) / Lingfield Park (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073McuCXb@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180125T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Kelso (Afternoon Jump) / Southwell
+  (Afternoon Flat) / Warwick (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-20739CUd2v@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180126T000000
+DURATION:P1D
+SUMMARY:Doncaster (Afternoon Jump) / Huntingdon (Afternoon Jump) / Kempton 
+ Park (Evening Flat) / Lingfield Park (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073VWMXfA@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180127T000000
+DURATION:P1D
+SUMMARY:Cheltenham (Afternoon Jump) / Doncaster (Afternoon Jump) / Kempton 
+ Park (Evening Flat) / Lingfield Park (Afternoon Flat) / Uttoxeter (Afterno
+ on Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073dtZUV2@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180128T000000
+DURATION:P1D
+SUMMARY:Fontwell Park (Afternoon Jump) / Sedgefield (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073Zgu1M3@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180129T000000
+DURATION:P1D
+SUMMARY:Hereford (Afternoon Jump) / Plumpton (Afternoon Jump) / Wolverhampt
+ on (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-20730tublT@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180130T000000
+DURATION:P1D
+SUMMARY:Lingfield Park (Afternoon Jump) / Newcastle (Afternoon Jump) / Sout
+ hwell (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073vOoj6n@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180131T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Jump) / Chelmsford City (Afternoon Flat) / Leicester
+  (Afternoon Jump) / Newcastle (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073EP1vWD@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180201T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Evening Flat) / Southwell (Afternoon Flat) / Towceste
+ r (Afternoon Jump) / Wincanton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073smkewk@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180202T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Jump) / Chepstow (Afternoon Jump) / Lin
+ gfield Park (Afternoon Flat) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073GC3PO6@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180203T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Evening Flat) / Lingfield Park (Afternoon Flat) / Mus
+ selburgh (Afternoon Jump) / Sandown Park (Afternoon Jump) / Wetherby (Afte
+ rnoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-20737NhLgU@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180204T000000
+DURATION:P1D
+SUMMARY:Musselburgh (Afternoon Jump) / Taunton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073Xr7ksB@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180205T000000
+DURATION:P1D
+SUMMARY:Newcastle (Afternoon Jump) / Southwell (Afternoon Jump) / Wolverham
+ pton (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073BvjkES@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180206T000000
+DURATION:P1D
+SUMMARY:Market Rasen (Afternoon Jump) / Sedgefield (Afternoon Jump) / South
+ well (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073lNL92c@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180207T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Jump) / Fakenham (Afternoon Jump) / Ludlow (Aft
+ ernoon Jump) / Wolverhampton (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073EOprrH@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180208T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Doncaster (Afternoon Jump) / Hunti
+ ngdon (Afternoon Jump) / Newcastle (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073hTs9mu@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180209T000000
+DURATION:P1D
+SUMMARY:Bangor-on-dee (Afternoon Jump) / Chelmsford City (Afternoon Flat) /
+  Kempton Park (Afternoon Jump) / Newcastle (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073T6gdet@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180210T000000
+DURATION:P1D
+SUMMARY:Lingfield Park (Afternoon Flat) / Newbury (Afternoon Jump) / Uttoxe
+ ter (Afternoon Jump) / Warwick (Afternoon Jump) / Wolverhampton (Evening F
+ lat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073J9mZSs@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180211T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Jump) / Exeter (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073wr8I3I@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180212T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Jump) / Plumpton (Afternoon Jump) / Wol
+ verhampton (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073lIhkUZ@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180213T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Jump) / Lingfield Park (Afternoon Jump) / Southwell 
+ (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073wGI0av@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180214T000000
+DURATION:P1D
+SUMMARY:Lingfield Park (Afternoon Flat) / Musselburgh (Afternoon Jump) / To
+ wcester (Afternoon Jump) / Wolverhampton (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073UXsN3v@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180215T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Fontwell Park (Afternoon Jump) / K
+ elso (Afternoon Jump) / Leicester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073bVuw50@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180216T000000
+DURATION:P1D
+SUMMARY:Fakenham (Afternoon Jump) / Lingfield Park (Afternoon Flat) / Newca
+ stle (Evening Flat) / Sandown Park (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-207349UEtl@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180217T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Jump) / Haydock Park (Afternoon Jump) / Kempton Pa
+ rk (Evening Flat) / Lingfield Park (Afternoon Flat) / Wincanton (Afternoon
+  Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073nzphv1@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180218T000000
+DURATION:P1D
+SUMMARY:Ffos Las (Afternoon Jump) / Market Rasen (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073ALhUV3@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180219T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Jump) / Kempton Park (Twilight Flat) / Lingfiel
+ d Park (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073f5nDKm@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180220T000000
+DURATION:P1D
+SUMMARY:Taunton (Afternoon Jump) / Wetherby (Afternoon Jump) / Wolverhampto
+ n (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-20734rdxWb@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180221T000000
+DURATION:P1D
+SUMMARY:Doncaster (Afternoon Jump) / Kempton Park (Twilight Flat) / Ludlow 
+ (Afternoon Jump) / Newcastle (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073gEbJRK@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180222T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Huntingdon (Afternoon Jump) / Sedg
+ efield (Afternoon Jump) / Southwell (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073BPLvIl@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180223T000000
+DURATION:P1D
+SUMMARY:Exeter (Afternoon Jump) / Lingfield Park (Afternoon Flat) / Warwick
+  (Afternoon Jump) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073lRhe8F@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180224T000000
+DURATION:P1D
+SUMMARY:Chepstow (Afternoon Jump) / Kempton Park (Afternoon Jump) / Lingfie
+ ld Park (Afternoon Flat) / Newcastle (Afternoon Jump) / Wolverhampton (Eve
+ ning Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073VrRkfb@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180225T000000
+DURATION:P1D
+SUMMARY:Fontwell Park (Afternoon Jump) / Southwell (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073JhlHPL@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180226T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Jump) / Plumpton (Afternoon Jump) / Wolverhampton (T
+ wilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073RtlUr3@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180227T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Jump) / Leicester (Afternoon Jump) / Li
+ ngfield Park (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073id2Z6k@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180228T000000
+DURATION:P1D
+SUMMARY:Market Rasen (Afternoon Jump) / Musselburgh (Afternoon Jump) / Newc
+ astle (Twilight Flat) / Wincanton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073Bsathj@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180301T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Evening Flat) / Ludlow (Afternoon Jump) / Newcastle (
+ Afternoon Flat) / Taunton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073raciuv@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180302T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Doncaster (Afternoon Jump) / Lingf
+ ield Park (Afternoon Flat) / Newbury (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073Xjk4kc@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180303T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Doncaster (Afternoon Jump) / Kelso
+  (Afternoon Jump) / Lingfield Park (Afternoon Flat) / Newbury (Afternoon J
+ ump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073ttovo4@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180304T000000
+DURATION:P1D
+SUMMARY:Huntingdon (Afternoon Jump) / Sedgefield (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-20731zbNFX@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180305T000000
+DURATION:P1D
+SUMMARY:Lingfield Park (Afternoon Jump) / Southwell (Afternoon Jump) / Wolv
+ erhampton (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2073U5AomR@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180306T000000
+DURATION:P1D
+SUMMARY:Exeter (Afternoon Jump) / Newcastle (Afternoon Jump) / Southwell (A
+ fternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230buXzWn@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180307T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Jump) / Fontwell Park (Afternoon Jump) 
+ / Kempton Park (Twilight Flat) / Lingfield Park (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230jr64EL@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180308T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Jump) / Newcastle (Evening Flat) / Southwell (A
+ fternoon Flat) / Wincanton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230pgfdwF@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180309T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Jump) / Leicester (Afternoon Jump) / Newcastle (Even
+ ing Flat) / Sandown Park (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230Xz515P@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180310T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Jump) / Chelmsford City (Evening Flat) / Hereford (A
+ fternoon Jump) / Sandown Park (Afternoon Jump) / Wolverhampton (Afternoon 
+ Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230h8muv7@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180311T000000
+DURATION:P1D
+SUMMARY:Market Rasen (Afternoon Jump) / Warwick (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230eIEXfG@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180312T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Twilight Flat) / Plumpton (Afternoon Jump) / Strat
+ ford-on-avon (Afternoon Jump) / Taunton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-22300VDaF6@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180313T000000
+DURATION:P1D
+SUMMARY:Cheltenham (Afternoon Jump) / Newcastle (Twilight Flat) / Sedgefiel
+ d (Afternoon Jump) / Southwell (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230Fj1zvc@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180314T000000
+DURATION:P1D
+SUMMARY:Cheltenham (Afternoon Jump) / Huntingdon (Afternoon Jump) / Southwe
+ ll (Afternoon Flat) / Wolverhampton (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230gtrkzz@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180315T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Cheltenham (Afternoon Jump) / Hexh
+ am (Afternoon Jump) / Towcester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230aOX5ar@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180316T000000
+DURATION:P1D
+SUMMARY:Cheltenham (Afternoon Jump) / Fakenham (Afternoon Jump) / Lingfield
+  Park (Afternoon Flat) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230a1oLAE@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180317T000000
+DURATION:P1D
+SUMMARY:Fontwell Park (Afternoon Jump) / Kempton Park (Afternoon Jump) / Ne
+ wcastle (Afternoon Jump) / Uttoxeter (Afternoon Jump) / Wolverhampton (Eve
+ ning Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230JVPi3u@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180318T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Jump) / Ffos Las (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230LzrP71@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180319T000000
+DURATION:P1D
+SUMMARY:Kelso (Afternoon Jump) / Lingfield Park (Afternoon Flat) / Southwel
+ l (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230A5sfj5@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180320T000000
+DURATION:P1D
+SUMMARY:Exeter (Afternoon Jump) / Newcastle (Twilight Flat) / Wetherby (Aft
+ ernoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230sVsA8g@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180321T000000
+DURATION:P1D
+SUMMARY:Chepstow (Afternoon Jump) / Haydock Park (Afternoon Jump) / Kempton
+  Park (Twilight Flat) / Southwell (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230KvNkuv@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180322T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Chepstow (Afternoon Jump) / Ludlow
+  (Afternoon Jump) / Wolverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230Ig7Hve@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180323T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Evening Flat) / Lingfield Park (Afternoon Flat) / New
+ bury (Afternoon Jump) / Sedgefield (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230A5cVUx@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180324T000000
+DURATION:P1D
+SUMMARY:Bangor-on-dee (Afternoon Jump) / Doncaster (Afternoon Flat) / Lingf
+ ield Park (Afternoon Flat) / Newbury (Afternoon Jump) / Wolverhampton (Eve
+ ning Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230pBn8ei@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180325T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Jump) / Doncaster (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230OBSV3j@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180326T000000
+DURATION:P1D
+SUMMARY:Huntingdon (Afternoon Jump) / Market Rasen (Afternoon Jump) / Taunt
+ on (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230RG5O59@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180327T000000
+DURATION:P1D
+SUMMARY:Hereford (Afternoon Jump) / Newcastle (Twilight Flat) / Southwell (
+ Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230tG7ws1@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180328T000000
+DURATION:P1D
+SUMMARY:Newcastle (Twilight Flat) / Warwick (Afternoon Jump) / Wincanton (A
+ fternoon Jump) / Wolverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230pSD2uZ@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180329T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Afternoon Flat) / Towcester (Afternoon Jump) / Wet
+ herby (Afternoon Jump) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230fNsvu4@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180330T000000
+DURATION:P1D
+SUMMARY:Bath (Afternoon Flat) / Lingfield Park (Afternoon Flat) / Newcastle
+  (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230vjIB41@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180331T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Jump) / Chelmsford City (Evening Flat) / Haydoc
+ k Park (Afternoon Jump) / Kempton Park (Afternoon Flat) / Musselburgh (Aft
+ ernoon Flat) / Newton Abbot (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230vrvlcZ@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180401T000000
+DURATION:P1D
+SUMMARY:Ffos Las (Afternoon Jump) / Plumpton (Afternoon Jump) / Southwell (
+ Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230Rn4S8G@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180402T000000
+DURATION:P1D
+SUMMARY:Chepstow (Afternoon Jump) / Fakenham (Afternoon Jump) / Huntingdon 
+ (Afternoon Jump) / Market Rasen (Afternoon Jump) / Plumpton (Afternoon Jum
+ p) / Redcar (Afternoon Flat) / Wolverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230wn0lR2@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180403T000000
+DURATION:P1D
+SUMMARY:Lingfield Park (Afternoon Flat) / Pontefract (Afternoon Flat) / Win
+ canton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230Ie4woA@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180404T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Flat) / Kempton Park (Twilight Flat) / 
+ Lingfield Park (Afternoon Flat) / Southwell (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-22309UZNc7@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180405T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Musselburgh (Afternoon Flat) / War
+ wick (Afternoon Jump) / Wolverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230TtZUB6@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180406T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Fontwell Park (Afternoon Jump) / L
+ ingfield Park (Afternoon Flat) / Wetherby (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-22302hB16x@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180407T000000
+DURATION:P1D
+SUMMARY:Kelso (Afternoon Jump) / Kempton Park (Afternoon Flat) / Stratford-
+ on-avon (Afternoon Jump) / Uttoxeter (Afternoon Jump) / Wolverhampton (Eve
+ ning Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230nnkuOJ@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180408T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Jump) / Exeter (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230UtFLmW@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180409T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Afternoon Jump) / Ludlow (Afternoon Jump) / Wolverham
+ pton (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-22308OX1XV@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180410T000000
+DURATION:P1D
+SUMMARY:Hexham (Afternoon Jump) / Southwell (Afternoon Jump) / Wolverhampto
+ n (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-22303Uashb@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180411T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Twilight Flat) / Lingfield Park (Afternoon Flat) / Ma
+ rket Rasen (Afternoon Jump) / Nottingham (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230eEKE4U@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180412T000000
+DURATION:P1D
+SUMMARY:Aintree (Afternoon Jump) / Chelmsford City (Evening Flat) / Southwe
+ ll (Afternoon Flat) / Taunton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230P2U5u2@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180413T000000
+DURATION:P1D
+SUMMARY:Aintree (Afternoon Jump) / Kempton Park (Evening Flat) / Leicester 
+ (Afternoon Flat) / Sedgefield (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230jEsI6p@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180414T000000
+DURATION:P1D
+SUMMARY:Aintree (Afternoon Jump) / Chepstow (Afternoon Jump) / Lingfield Pa
+ rk (Afternoon Flat) / Newcastle (Afternoon Jump) / Wolverhampton (Evening 
+ Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230VimM0x@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180415T000000
+DURATION:P1D
+SUMMARY:Ffos Las (Afternoon Jump) / Plumpton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230sWT0Jn@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180416T000000
+DURATION:P1D
+SUMMARY:Kelso (Afternoon Jump) / Redcar (Afternoon Flat) / Windsor (Afterno
+ on Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-22309U9hVx@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180417T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Jump) / Exeter (Afternoon Jump) / Newmarket (Af
+ ternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2230XuVjpb@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180418T000000
+DURATION:P1D
+SUMMARY:Beverley (Afternoon Flat) / Cheltenham (Afternoon Jump) / Kempton P
+ ark (Twilight Flat) / Newmarket (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386jBbZtV@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180419T000000
+DURATION:P1D
+SUMMARY:Cheltenham (Afternoon Jump) / Newcastle (Evening Flat) / Newmarket 
+ (Afternoon Flat) / Ripon (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386ZpGiX8@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180420T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Jump) / Bath (Evening Flat) / Fontwell Park (Afterno
+ on Jump) / Newbury (Afternoon Flat) / Southwell (Evening Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386dA9oj2@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180421T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Jump) / Bangor-on-dee (Afternoon Jump) / Newbury (Af
+ ternoon Flat) / Nottingham (Evening Flat) / Thirsk (Afternoon Flat) / Wolv
+ erhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386Ocb6uV@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180422T000000
+DURATION:P1D
+SUMMARY:Stratford-on-avon (Afternoon Jump) / Wincanton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386CgwKI5@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180423T000000
+DURATION:P1D
+SUMMARY:Hexham (Afternoon Jump) / Newton Abbot (Afternoon Jump) / Pontefrac
+ t (Afternoon Flat) / Sedgefield (Evening Jump) / Windsor (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386U1JeIU@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180424T000000
+DURATION:P1D
+SUMMARY:Brighton (Evening Flat) / Exeter (Afternoon Jump) / Huntingdon (Eve
+ ning Jump) / Ludlow (Afternoon Jump) / Yarmouth (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386H43Vpf@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180425T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Flat) / Epsom Downs (Afternoon Flat) / 
+ Lingfield Park (Evening Flat) / Perth (Afternoon Jump) / Taunton (Evening 
+ Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386ELK6vw@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180426T000000
+DURATION:P1D
+SUMMARY:Beverley (Afternoon Flat) / Chelmsford City (Evening Flat) / Kempto
+ n Park (Evening Jump) / Perth (Afternoon Jump) / Warwick (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386poLVuh@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180427T000000
+DURATION:P1D
+SUMMARY:Chepstow (Evening Jump) / Doncaster (Afternoon Flat) / Perth (After
+ noon Jump) / Sandown Park (Afternoon Flat) / Towcester (Evening Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386NFaSf8@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180428T000000
+DURATION:P1D
+SUMMARY:Doncaster (Evening Flat) / Haydock Park (Afternoon Flat) / Leiceste
+ r (Afternoon Flat) / Ripon (Afternoon Flat) / Sandown Park (Afternoon Jump
+ ) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386vwutUS@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180429T000000
+DURATION:P1D
+SUMMARY:Salisbury (Afternoon Flat) / Wetherby (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386WrBdIE@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180430T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Flat) / Salisbury (Afternoon Flat) / Southwell (Even
+ ing Flat) / Thirsk (Afternoon Flat) / Windsor (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386Ntvutl@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180501T000000
+DURATION:P1D
+SUMMARY:Ayr (Evening Flat) / Brighton (Afternoon Flat) / Kempton Park (Even
+ ing Flat) / Nottingham (Afternoon Flat) / Yarmouth (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386UPBHfV@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180502T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Bath (Evening Flat) / Brighton (Evening Fl
+ at) / Pontefract (Afternoon Flat) / Wolverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386kj9xhS@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180503T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Lingfield Park (Afternoon Flat) / 
+ Musselburgh (Evening Flat) / Redcar (Afternoon Flat) / Southwell (Afternoo
+ n Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386HRGlnZ@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180504T000000
+DURATION:P1D
+SUMMARY:Cheltenham (Evening Jump) / Chepstow (Afternoon Flat) / Lingfield P
+ ark (Afternoon Flat) / Musselburgh (Afternoon Flat) / Newcastle (Evening F
+ lat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386v5T3Nw@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180505T000000
+DURATION:P1D
+SUMMARY:Doncaster (Evening Flat) / Goodwood (Afternoon Flat) / Hexham (Even
+ ing Jump) / Newmarket (Afternoon Flat) / Thirsk (Afternoon Flat) / Uttoxet
+ er (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386uHrwuC@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180506T000000
+DURATION:P1D
+SUMMARY:Hamilton Park (Afternoon Flat) / Newmarket (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386KWWD2A@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180507T000000
+DURATION:P1D
+SUMMARY:Bath (Afternoon Flat) / Beverley (Afternoon Flat) / Kempton Park (A
+ fternoon Jump) / Warwick (Afternoon Jump) / Windsor (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386ziU9VS@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180508T000000
+DURATION:P1D
+SUMMARY:Brighton (Afternoon Flat) / Exeter (Evening Jump) / Fakenham (After
+ noon Jump) / Ludlow (Evening Jump) / Wetherby (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386joN1Uu@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180509T000000
+DURATION:P1D
+SUMMARY:Chester (Afternoon Flat) / Fontwell Park (Evening Jump) / Kelso (Af
+ ternoon Jump) / Newton Abbot (Afternoon Jump) / Wolverhampton (Evening Fla
+ t)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386rcjnt0@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180510T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Chester (Afternoon Flat) / Hunting
+ don (Afternoon Jump) / Wincanton (Evening Jump) / Worcester (Afternoon Jum
+ p)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386Oh10vt@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180511T000000
+DURATION:P1D
+SUMMARY:Ascot (Evening Flat) / Chester (Afternoon Flat) / Lingfield Park (A
+ fternoon Flat) / Market Rasen (Afternoon Jump) / Nottingham (Evening Flat)
+  / Ripon (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386g984Jv@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180512T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Haydock Park (Afternoon Mixed) / Hexham (A
+ fternoon Jump) / Lingfield Park (Afternoon Flat) / Nottingham (Afternoon F
+ lat) / Thirsk (Evening Flat) / Warwick (Evening Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386lbtbLm@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180513T000000
+DURATION:P1D
+SUMMARY:Ludlow (Afternoon Jump) / Plumpton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386FIUcVT@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180514T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Flat) / Kempton Park (Afternoon Jump) /
+  Towcester (Evening Jump) / Windsor (Evening Flat) / Wolverhampton (Aftern
+ oon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386XdoSu6@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180515T000000
+DURATION:P1D
+SUMMARY:Beverley (Afternoon Flat) / Chepstow (Evening Flat) / Sedgefield (A
+ fternoon Jump) / Southwell (Evening Jump) / Wincanton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386IUPrpk@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180516T000000
+DURATION:P1D
+SUMMARY:Bath (Evening Flat) / Newton Abbot (Afternoon Jump) / Perth (Evenin
+ g Jump) / Yarmouth (Afternoon Flat) / York (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386uJz8Ax@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180517T000000
+DURATION:P1D
+SUMMARY:Fontwell Park (Evening Jump) / Newmarket (Evening Flat) / Perth (Af
+ ternoon Jump) / Salisbury (Afternoon Flat) / York (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-23869awl3u@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180518T000000
+DURATION:P1D
+SUMMARY:Aintree (Evening Jump) / Hamilton Park (Evening Flat) / Newbury (Af
+ ternoon Flat) / Newmarket (Afternoon Flat) / York (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-23867nInv0@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180519T000000
+DURATION:P1D
+SUMMARY:Bangor-on-dee (Afternoon Jump) / Doncaster (Evening Flat) / Newbury
+  (Afternoon Flat) / Newmarket (Afternoon Flat) / Thirsk (Afternoon Flat) /
+  Uttoxeter (Evening Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386ueeHTw@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180520T000000
+DURATION:P1D
+SUMMARY:Market Rasen (Afternoon Jump) / Ripon (Afternoon Flat) / Stratford-
+ on-avon (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386S9R8u2@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180521T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Flat) / Leicester (Evening Flat) / Redcar (Afte
+ rnoon Flat) / Towcester (Afternoon Jump) / Windsor (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-23868mhAv7@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180522T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Flat) / Chepstow (Afternoon Flat) / Hexham (Evening 
+ Jump) / Huntingdon (Evening Jump) / Nottingham (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386RXVa1G@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180523T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Flat) / Kempton Park (Evening Flat) / Southwell (Eve
+ ning Jump) / Warwick (Afternoon Jump) / Yarmouth (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386Okrv8P@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180524T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Flat) / Chelmsford City (Evening Flat) 
+ / Goodwood (Afternoon Flat) / Lingfield Park (Afternoon Flat) / Sandown Pa
+ rk (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386GZn5gK@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180525T000000
+DURATION:P1D
+SUMMARY:Bath (Afternoon Flat) / Goodwood (Afternoon Flat) / Haydock Park (A
+ fternoon Flat) / Pontefract (Evening Flat) / Worcester (Evening Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386BevL69@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180526T000000
+DURATION:P1D
+SUMMARY:Cartmel (Afternoon Jump) / Chester (Afternoon Flat) / Ffos Las (Eve
+ ning Jump) / Goodwood (Afternoon Flat) / Haydock Park (Afternoon Flat) / S
+ alisbury (Evening Flat) / York (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-238654bbx4@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180527T000000
+DURATION:P1D
+SUMMARY:Fontwell Park (Afternoon Jump) / Kelso (Afternoon Jump) / Uttoxeter
+  (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386Fj3nG4@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180528T000000
+DURATION:P1D
+SUMMARY:Cartmel (Afternoon Jump) / Chelmsford City (Afternoon Flat) / Hunti
+ ngdon (Afternoon Jump) / Leicester (Afternoon Flat) / Redcar (Afternoon Fl
+ at) / Windsor (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386PWMUcb@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180529T000000
+DURATION:P1D
+SUMMARY:Brighton (Evening Flat) / Leicester (Afternoon Flat) / Lingfield Pa
+ rk (Afternoon Flat) / Redcar (Afternoon Flat) / Wolverhampton (Evening Fla
+ t)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386vvur3G@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180530T000000
+DURATION:P1D
+SUMMARY:Beverley (Afternoon Flat) / Cartmel (Afternoon Jump) / Nottingham (
+ Afternoon Flat) / Ripon (Evening Flat) / Warwick (Evening Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386IjNNjV@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180531T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Ffos Las (Evening Jump) / Hamilton
+  Park (Afternoon Flat) / Lingfield Park (Afternoon Flat) / Wolverhampton (
+ Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2386XuNEPU@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180601T000000
+DURATION:P1D
+SUMMARY:Bath (Evening Flat) / Catterick Bridge (Afternoon Flat) / Doncaster
+  (Evening Flat) / Epsom Downs (Afternoon Flat) / Goodwood (Evening Flat) /
+  Market Rasen (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-25427hVI9g@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180602T000000
+DURATION:P1D
+SUMMARY:Chepstow (Evening Flat) / Doncaster (Afternoon Flat) / Epsom Downs 
+ (Afternoon Flat) / Hexham (Afternoon Jump) / Lingfield Park (Evening Flat)
+  / Musselburgh (Afternoon Flat) / Worcester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-25420tBFFN@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180603T000000
+DURATION:P1D
+SUMMARY:Fakenham (Afternoon Jump) / Perth (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542ruSwDC@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180604T000000
+DURATION:P1D
+SUMMARY:Ayr (Evening Flat) / Leicester (Afternoon Flat) / Newton Abbot (Aft
+ ernoon Jump) / Windsor (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542bTwhOU@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180605T000000
+DURATION:P1D
+SUMMARY:Bangor-on-dee (Afternoon Jump) / Fontwell Park (Afternoon Jump) / N
+ ewcastle (Evening Flat) / Southwell (Evening Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-25428LCOvm@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180606T000000
+DURATION:P1D
+SUMMARY:Hamilton Park (Afternoon Flat) / Kempton Park (Evening Flat) / Utto
+ xeter (Afternoon Jump) / Wetherby (Evening Flat) / Wolverhampton (Afternoo
+ n Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542mXmnS6@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180607T000000
+DURATION:P1D
+SUMMARY:Carlisle (Evening Flat) / Haydock Park (Afternoon Flat) / Ripon (Af
+ ternoon Flat) / Sandown Park (Evening Flat) / Yarmouth (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542bhKF99@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180608T000000
+DURATION:P1D
+SUMMARY:Brighton (Afternoon Flat) / Carlisle (Afternoon Flat) / Goodwood (E
+ vening Flat) / Haydock Park (Evening Flat) / Stratford-on-avon (Evening Ju
+ mp) / Wolverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-25423W9GFm@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180609T000000
+DURATION:P1D
+SUMMARY:Beverley (Afternoon Flat) / Catterick Bridge (Afternoon Flat) / Hay
+ dock Park (Afternoon Flat) / Lingfield Park (Evening Flat) / Musselburgh (
+ Afternoon Flat) / Newmarket (Afternoon Flat) / Stratford-on-avon (Evening 
+ Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542Kkakgi@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180610T000000
+DURATION:P1D
+SUMMARY:Goodwood (Afternoon Flat) / Nottingham (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-25425e5F6s@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180611T000000
+DURATION:P1D
+SUMMARY:Brighton (Afternoon Flat) / Pontefract (Evening Flat) / Windsor (Ev
+ ening Flat) / Worcester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542epIgxx@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180612T000000
+DURATION:P1D
+SUMMARY:Lingfield Park (Evening Flat) / Salisbury (Afternoon Flat) / Southw
+ ell (Evening Jump) / Thirsk (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542UbV3t4@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180613T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Afternoon Flat) / Hamilton Park (Evening Flat) / H
+ aydock Park (Afternoon Flat) / Kempton Park (Evening Flat) / Yarmouth (Aft
+ ernoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542vkBwDp@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180614T000000
+DURATION:P1D
+SUMMARY:Haydock Park (Evening Flat) / Newbury (Afternoon Flat) / Nottingham
+  (Afternoon Flat) / Uttoxeter (Evening Jump) / Yarmouth (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542EnZFhd@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180615T000000
+DURATION:P1D
+SUMMARY:Aintree (Evening Jump) / Chepstow (Evening Flat) / Goodwood (Evenin
+ g Flat) / Newton Abbot (Afternoon Jump) / Sandown Park (Afternoon Flat) / 
+ York (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542mE5xSZ@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180616T000000
+DURATION:P1D
+SUMMARY:Bath (Afternoon Flat) / Chester (Afternoon Flat) / Fontwell Park (E
+ vening Jump) / Hexham (Afternoon Jump) / Leicester (Evening Flat) / Sandow
+ n Park (Afternoon Flat) / York (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542WZ9IHa@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180617T000000
+DURATION:P1D
+SUMMARY:Doncaster (Afternoon Flat) / Salisbury (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542rIb52p@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180618T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Flat) / Carlisle (Afternoon Flat) / Nottingham (Even
+ ing Flat) / Windsor (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542I1rHCT@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180619T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Beverley (Evening Flat) / Brighton (Evenin
+ g Flat) / Stratford-on-avon (Afternoon Jump) / Thirsk (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542Ni85eS@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180620T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Chelmsford City (Evening Flat) / Hamilton 
+ Park (Afternoon Flat) / Ripon (Evening Flat) / Uttoxeter (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542O9SwOb@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180621T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Chelmsford City (Afternoon Flat) / Ffos La
+ s (Evening Jump) / Lingfield Park (Evening Flat) / Ripon (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542GOMpum@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180622T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Ayr (Evening Flat) / Market Rasen (Afterno
+ on Jump) / Newmarket (Evening Flat) / Redcar (Afternoon Flat) / Wetherby (
+ Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542a1zVP9@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180623T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Ayr (Afternoon Flat) / Haydock Park (Eveni
+ ng Flat) / Lingfield Park (Evening Flat) / Newmarket (Afternoon Flat) / Pe
+ rth (Afternoon Jump) / Redcar (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542LkF2VO@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180624T000000
+DURATION:P1D
+SUMMARY:Hexham (Afternoon Jump) / Pontefract (Afternoon Flat) / Worcester (
+ Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-25428B5uiR@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180625T000000
+DURATION:P1D
+SUMMARY:Chepstow (Afternoon Flat) / Southwell (Afternoon Jump) / Windsor (E
+ vening Flat) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-25422xzExk@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180626T000000
+DURATION:P1D
+SUMMARY:Beverley (Afternoon Flat) / Brighton (Afternoon Flat) / Newbury (Ev
+ ening Flat) / Newton Abbot (Evening Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-254250svGg@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180627T000000
+DURATION:P1D
+SUMMARY:Bath (Evening Flat) / Carlisle (Afternoon Flat) / Kempton Park (Eve
+ ning Flat) / Salisbury (Afternoon Flat) / Worcester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542xdJOaf@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180628T000000
+DURATION:P1D
+SUMMARY:Hamilton Park (Evening Flat) / Leicester (Evening Flat) / Newcastle
+  (Afternoon Flat) / Newmarket (Afternoon Flat) / Nottingham (Afternoon Fla
+ t)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542ZGNjA8@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180629T000000
+DURATION:P1D
+SUMMARY:Cartmel (Afternoon Jump) / Chester (Evening Flat) / Doncaster (Afte
+ rnoon Flat) / Newcastle (Evening Flat) / Newmarket (Evening Flat) / Yarmou
+ th (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542jzwAng@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180630T000000
+DURATION:P1D
+SUMMARY:Chester (Afternoon Flat) / Doncaster (Evening Flat) / Lingfield Par
+ k (Evening Flat) / Newcastle (Afternoon Flat) / Newmarket (Afternoon Flat)
+  / Windsor (Afternoon Flat) / York (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542AW6aee@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180701T000000
+DURATION:P1D
+SUMMARY:Cartmel (Afternoon Jump) / Uttoxeter (Afternoon Jump) / Windsor (Af
+ ternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542demjkF@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180702T000000
+DURATION:P1D
+SUMMARY:Hamilton Park (Evening Flat) / Pontefract (Afternoon Flat) / Windso
+ r (Evening Flat) / Wolverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542RRpCvo@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180703T000000
+DURATION:P1D
+SUMMARY:Brighton (Afternoon Flat) / Chepstow (Evening Flat) / Hamilton Park
+  (Afternoon Flat) / Stratford-on-avon (Evening Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542uI0pPT@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180704T000000
+DURATION:P1D
+SUMMARY:Bath (Evening Flat) / Kempton Park (Evening Flat) / Musselburgh (Af
+ ternoon Flat) / Thirsk (Afternoon Flat) / Worcester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542KsNHKK@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180705T000000
+DURATION:P1D
+SUMMARY:Epsom Downs (Evening Flat) / Haydock Park (Afternoon Flat) / Newbur
+ y (Evening Flat) / Perth (Afternoon Jump) / Yarmouth (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542ZkULvL@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180706T000000
+DURATION:P1D
+SUMMARY:Beverley (Evening Flat) / Chelmsford City (Evening Flat) / Doncaste
+ r (Afternoon Flat) / Haydock Park (Evening Flat) / Newton Abbot (Afternoon
+  Jump) / Sandown Park (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542VLgl6O@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180707T000000
+DURATION:P1D
+SUMMARY:Beverley (Afternoon Flat) / Carlisle (Evening Flat) / Chelmsford Ci
+ ty (Afternoon Flat) / Haydock Park (Afternoon Flat) / Leicester (Afternoon
+  Flat) / Nottingham (Evening Flat) / Sandown Park (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542K1btsV@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180708T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Flat) / Market Rasen (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542f9uLKF@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180709T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Flat) / Ripon (Evening Flat) / Windsor (Evening Flat
+ ) / Worcester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542f1ndO8@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180710T000000
+DURATION:P1D
+SUMMARY:Brighton (Evening Flat) / Pontefract (Afternoon Flat) / Uttoxeter (
+ Evening Jump) / Wolverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542ljcVV1@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180711T000000
+DURATION:P1D
+SUMMARY:Bath (Evening Flat) / Catterick Bridge (Afternoon Flat) / Kempton P
+ ark (Evening Flat) / Lingfield Park (Afternoon Flat) / Yarmouth (Afternoon
+  Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-25422Iz5uI@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180712T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Flat) / Doncaster (Afternoon Flat) / Epsom Down
+ s (Evening Flat) / Newbury (Evening Flat) / Newmarket (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542cNaWrS@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180713T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Chepstow (Evening Flat) / Chester (Evening
+  Flat) / Ffos Las (Evening Jump) / Newmarket (Afternoon Flat) / York (Afte
+ rnoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2542IVXuU2@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180714T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Chester (Afternoon Flat) / Hamilton Park (
+ Evening Flat) / Newmarket (Afternoon Flat) / Newton Abbot (Afternoon Jump)
+  / Salisbury (Evening Flat) / York (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698HIhfrU@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180715T000000
+DURATION:P1D
+SUMMARY:Perth (Afternoon Jump) / Southwell (Afternoon Jump) / Stratford-on-
+ avon (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698zlI2F2@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180716T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Flat) / Ripon (Afternoon Flat) / Windsor (Evening Fl
+ at) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698V47vsc@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180717T000000
+DURATION:P1D
+SUMMARY:Bath (Afternoon Flat) / Beverley (Afternoon Flat) / Thirsk (Evening
+  Flat) / Worcester (Evening Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698fVL3J9@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180718T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Flat) / Lingfield Park (Afternoon Flat)
+  / Uttoxeter (Afternoon Jump) / Wolverhampton (Evening Flat) / Yarmouth (E
+ vening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698BvBurZ@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180719T000000
+DURATION:P1D
+SUMMARY:Chepstow (Afternoon Flat) / Doncaster (Evening Flat) / Epsom Downs 
+ (Evening Flat) / Hamilton Park (Afternoon Flat) / Leicester (Afternoon Fla
+ t)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698jMv25a@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180720T000000
+DURATION:P1D
+SUMMARY:Hamilton Park (Evening Flat) / Haydock Park (Afternoon Flat) / Newb
+ ury (Afternoon Flat) / Newmarket (Evening Flat) / Nottingham (Afternoon Fl
+ at) / Pontefract (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-26981EmUVk@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180721T000000
+DURATION:P1D
+SUMMARY:Cartmel (Afternoon Jump) / Haydock Park (Evening Flat) / Lingfield 
+ Park (Evening Flat) / Market Rasen (Afternoon Jump) / Newbury (Afternoon F
+ lat) / Newmarket (Afternoon Flat) / Ripon (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698BwIUju@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180722T000000
+DURATION:P1D
+SUMMARY:Newton Abbot (Afternoon Jump) / Redcar (Afternoon Flat) / Stratford
+ -on-avon (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-26983JWvv8@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180723T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Flat) / Beverley (Evening Flat) / Cartmel (Afternoon
+  Jump) / Windsor (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698ZDUkp3@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180724T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Ffos Las (Afternoon Flat) / Mussel
+ burgh (Afternoon Flat) / Nottingham (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698i29Ard@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180725T000000
+DURATION:P1D
+SUMMARY:Bath (Afternoon Flat) / Catterick Bridge (Afternoon Flat) / Leicest
+ er (Evening Flat) / Lingfield Park (Afternoon Flat) / Sandown Park (Evenin
+ g Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698voVGpD@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180726T000000
+DURATION:P1D
+SUMMARY:Doncaster (Evening Flat) / Newbury (Evening Flat) / Sandown Park (A
+ fternoon Flat) / Worcester (Afternoon Jump) / Yarmouth (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698X8TILi@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180727T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Chepstow (Evening Flat) / Newmarket (Eveni
+ ng Flat) / Thirsk (Afternoon Flat) / Uttoxeter (Afternoon Jump) / York (Ev
+ ening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698pFNIPt@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180728T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Chester (Afternoon Flat) / Lingfield Park 
+ (Evening Flat) / Newcastle (Afternoon Flat) / Newmarket (Afternoon Flat) /
+  Salisbury (Evening Flat) / York (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698pCAWso@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180729T000000
+DURATION:P1D
+SUMMARY:Pontefract (Afternoon Flat) / Uttoxeter (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698OHmOgu@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180730T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Flat) / Newton Abbot (Afternoon Jump) / Windsor (Eve
+ ning Flat) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698cW4VB3@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180731T000000
+DURATION:P1D
+SUMMARY:Beverley (Afternoon Flat) / Goodwood (Afternoon Flat) / Perth (Even
+ ing Jump) / Worcester (Evening Jump) / Yarmouth (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698WLVVUV@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180801T000000
+DURATION:P1D
+SUMMARY:Goodwood (Afternoon Flat) / Leicester (Evening Flat) / Perth (After
+ noon Jump) / Redcar (Afternoon Flat) / Sandown Park (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-26988vSMCV@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180802T000000
+DURATION:P1D
+SUMMARY:Epsom Downs (Evening Flat) / Ffos Las (Evening Flat) / Goodwood (Af
+ ternoon Flat) / Nottingham (Afternoon Flat) / Stratford-on-avon (Afternoon
+  Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698WMxvDd@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180803T000000
+DURATION:P1D
+SUMMARY:Bangor-on-dee (Afternoon Jump) / Bath (Evening Flat) / Goodwood (Af
+ ternoon Flat) / Musselburgh (Evening Flat) / Newmarket (Evening Flat) / Th
+ irsk (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698A8MZva@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180804T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Afternoon Flat) / Doncaster (Afternoon Flat) / Goo
+ dwood (Afternoon Flat) / Hamilton Park (Evening Flat) / Lingfield Park (Ev
+ ening Flat) / Newmarket (Afternoon Flat) / Thirsk (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698gh16P5@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180805T000000
+DURATION:P1D
+SUMMARY:Chester (Afternoon Flat) / Market Rasen (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698nAzZ90@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180806T000000
+DURATION:P1D
+SUMMARY:Carlisle (Evening Flat) / Newton Abbot (Afternoon Jump) / Ripon (Af
+ ternoon Flat) / Windsor (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698SFrrF7@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180807T000000
+DURATION:P1D
+SUMMARY:Ayr (Evening Flat) / Catterick Bridge (Afternoon Flat) / Newbury (A
+ fternoon Flat) / Nottingham (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698LUNaNS@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180808T000000
+DURATION:P1D
+SUMMARY:Bath (Afternoon Flat) / Brighton (Afternoon Flat) / Kempton Park (E
+ vening Flat) / Pontefract (Afternoon Flat) / Yarmouth (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698ARC6rV@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180809T000000
+DURATION:P1D
+SUMMARY:Brighton (Afternoon Flat) / Haydock Park (Afternoon Flat) / Newcast
+ le (Evening Flat) / Sandown Park (Evening Flat) / Yarmouth (Afternoon Flat
+ )
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698cUPVF7@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180810T000000
+DURATION:P1D
+SUMMARY:Brighton (Afternoon Flat) / Chelmsford City (Evening Flat) / Haydoc
+ k Park (Evening Flat) / Musselburgh (Afternoon Flat) / Newmarket (Evening 
+ Flat) / Wolverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698subr3v@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180811T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Ayr (Evening Flat) / Chelmsford City (Afte
+ rnoon Flat) / Haydock Park (Afternoon Flat) / Lingfield Park (Evening Flat
+ ) / Newmarket (Afternoon Flat) / Redcar (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698JgXUwU@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180812T000000
+DURATION:P1D
+SUMMARY:Leicester (Afternoon Flat) / Windsor (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698We8h7l@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180813T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Flat) / Ripon (Afternoon Flat) / Windsor (Evening Fl
+ at) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-26980GEu79@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180814T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Afternoon Flat) / Ffos Las (Afternoon Flat) / Nott
+ ingham (Evening Flat) / Thirsk (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698IGZRsA@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180815T000000
+DURATION:P1D
+SUMMARY:Beverley (Afternoon Flat) / Kempton Park (Evening Flat) / Newton Ab
+ bot (Afternoon Jump) / Salisbury (Afternoon Flat) / Worcester (Evening Jum
+ p)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698DPbuUS@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180816T000000
+DURATION:P1D
+SUMMARY:Beverley (Afternoon Flat) / Chepstow (Evening Flat) / Salisbury (Af
+ ternoon Flat) / Wolverhampton (Afternoon Flat) / Yarmouth (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-26985XUNmJ@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180817T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Evening Flat) / Chelmsford City (Evening Flat) / 
+ Newbury (Afternoon Flat) / Newmarket (Evening Flat) / Nottingham (Afternoo
+ n Flat) / Wolverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698Rc6fnH@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180818T000000
+DURATION:P1D
+SUMMARY:Bath (Evening Flat) / Doncaster (Afternoon Flat) / Market Rasen (Ev
+ ening Jump) / Newbury (Afternoon Flat) / Newmarket (Afternoon Flat) / Pert
+ h (Afternoon Jump) / Ripon (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-26988X3ZHH@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180819T000000
+DURATION:P1D
+SUMMARY:Pontefract (Afternoon Flat) / Southwell (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698GkEKP9@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180820T000000
+DURATION:P1D
+SUMMARY:Bangor-on-dee (Evening Jump) / Leicester (Afternoon Flat) / Thirsk 
+ (Afternoon Flat) / Windsor (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698SUBeaA@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180821T000000
+DURATION:P1D
+SUMMARY:Brighton (Afternoon Flat) / Hamilton Park (Afternoon Flat) / Kempto
+ n Park (Afternoon Flat) / Newton Abbot (Evening Jump) / Yarmouth (Evening 
+ Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698l2ucUf@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180822T000000
+DURATION:P1D
+SUMMARY:Bath (Afternoon Flat) / Carlisle (Afternoon Flat) / Kempton Park (E
+ vening Flat) / Worcester (Evening Jump) / York (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698eB8Dbm@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180823T000000
+DURATION:P1D
+SUMMARY:Chepstow (Afternoon Flat) / Fontwell Park (Evening Jump) / Stratfor
+ d-on-avon (Afternoon Jump) / Wolverhampton (Evening Flat) / York (Afternoo
+ n Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698PHupjS@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180824T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Ffos Las (Afternoon Flat) / Goodwo
+ od (Evening Flat) / Newmarket (Afternoon Flat) / Salisbury (Evening Flat) 
+ / York (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2698nP5j5W@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180825T000000
+DURATION:P1D
+SUMMARY:Cartmel (Afternoon Jump) / Chelmsford City (Afternoon Flat) / Goodw
+ ood (Afternoon Flat) / Newmarket (Afternoon Flat) / Redcar (Evening Flat) 
+ / Windsor (Evening Flat) / York (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855kvocKA@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180826T000000
+DURATION:P1D
+SUMMARY:Beverley (Afternoon Flat) / Goodwood (Afternoon Flat) / Yarmouth (A
+ fternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855OvLXux@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180827T000000
+DURATION:P1D
+SUMMARY:Cartmel (Afternoon Jump) / Chepstow (Afternoon Flat) / Epsom Downs 
+ (Afternoon Flat) / Ripon (Afternoon Flat) / Southwell (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-28557oe6DP@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180828T000000
+DURATION:P1D
+SUMMARY:Bath (Evening Flat) / Epsom Downs (Afternoon Flat) / Ripon (Afterno
+ on Flat) / Stratford-on-avon (Evening Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-285552gkxV@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180829T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Flat) / Kempton Park (Evening Flat) / L
+ ingfield Park (Afternoon Flat) / Musselburgh (Afternoon Flat) / Worcester 
+ (Evening Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855PPagkZ@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180830T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Flat) / Chelmsford City (Afternoon Flat) / Font
+ well Park (Evening Jump) / Musselburgh (Afternoon Flat) / Sedgefield (Even
+ ing Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855bEjtrt@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180831T000000
+DURATION:P1D
+SUMMARY:Bangor-on-dee (Afternoon Jump) / Hamilton Park (Evening Flat) / New
+ castle (Evening Flat) / Sandown Park (Afternoon Flat) / Thirsk (Afternoon 
+ Flat) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855aGVURw@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180901T000000
+DURATION:P1D
+SUMMARY:Beverley (Afternoon Flat) / Chelmsford City (Evening Flat) / Cheste
+ r (Afternoon Flat) / Lingfield Park (Evening Flat) / Newton Abbot (Afterno
+ on Jump) / Sandown Park (Afternoon Flat) / Wolverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-28559UTBAO@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180902T000000
+DURATION:P1D
+SUMMARY:Brighton (Afternoon Flat) / Worcester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855I5wBPn@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180903T000000
+DURATION:P1D
+SUMMARY:Brighton (Afternoon Flat) / Chepstow (Afternoon Flat) / Newcastle (
+ Evening Flat) / Windsor (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855Rc9Krv@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180904T000000
+DURATION:P1D
+SUMMARY:Goodwood (Afternoon Flat) / Kempton Park (Evening Flat) / Leicester
+  (Evening Flat) / Stratford-on-avon (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855Wh0CbR@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180905T000000
+DURATION:P1D
+SUMMARY:Bath (Afternoon Flat) / Ffos Las (Evening Flat) / Lingfield Park (A
+ fternoon Flat) / Southwell (Afternoon Jump) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855DKiixa@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180906T000000
+DURATION:P1D
+SUMMARY:Carlisle (Evening Flat) / Chelmsford City (Evening Flat) / Haydock 
+ Park (Afternoon Flat) / Salisbury (Afternoon Flat) / Sedgefield (Afternoon
+  Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-28558JDxSj@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180907T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Haydock Park (Afternoon Flat) / Kempton Pa
+ rk (Evening Flat) / Musselburgh (Evening Flat) / Newcastle (Afternoon Flat
+ )
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855Eblvoa@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180908T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Haydock Park (Afternoon Flat) / Kempton Pa
+ rk (Afternoon Flat) / Stratford-on-avon (Afternoon Jump) / Thirsk (Afterno
+ on Flat) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855KMw02A@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180909T000000
+DURATION:P1D
+SUMMARY:Fontwell Park (Afternoon Jump) / York (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855U6594R@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180910T000000
+DURATION:P1D
+SUMMARY:Brighton (Afternoon Flat) / Chelmsford City (Twilight Flat) / Newto
+ n Abbot (Afternoon Jump) / Perth (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855rV9ou1@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180911T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Flat) / Leicester (Afternoon Flat) / Sa
+ lisbury (Twilight Flat) / Worcester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855Ux7O3U@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180912T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Flat) / Doncaster (Afternoon Flat) / Kempton Pa
+ rk (Twilight Flat) / Uttoxeter (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855AE1Rdm@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180913T000000
+DURATION:P1D
+SUMMARY:Chepstow (Afternoon Flat) / Doncaster (Afternoon Flat) / Epsom Down
+ s (Afternoon Flat) / Hamilton Park (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855VvABlK@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180914T000000
+DURATION:P1D
+SUMMARY:Chester (Afternoon Flat) / Doncaster (Afternoon Flat) / Salisbury (
+ Twilight Flat) / Sandown Park (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855vE8HKF@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180915T000000
+DURATION:P1D
+SUMMARY:Bath (Afternoon Flat) / Chelmsford City (Afternoon Flat) / Chester 
+ (Afternoon Flat) / Doncaster (Afternoon Flat) / Lingfield Park (Afternoon 
+ Flat) / Musselburgh (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855bR0sXu@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180916T000000
+DURATION:P1D
+SUMMARY:Bath (Afternoon Flat) / Ffos Las (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855R1CSvF@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180917T000000
+DURATION:P1D
+SUMMARY:Brighton (Afternoon Flat) / Hexham (Afternoon Jump) / Kempton Park 
+ (Twilight Flat) / Worcester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-28559g08N5@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180918T000000
+DURATION:P1D
+SUMMARY:Chepstow (Afternoon Flat) / Kempton Park (Twilight Flat) / Redcar (
+ Afternoon Flat) / Yarmouth (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855C9vejl@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180919T000000
+DURATION:P1D
+SUMMARY:Beverley (Afternoon Flat) / Kelso (Twilight Jump) / Sandown Park (A
+ fternoon Flat) / Yarmouth (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855L6W509@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180920T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Flat) / Chelmsford City (Evening Flat) / Pontefract 
+ (Afternoon Flat) / Yarmouth (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-285553IerL@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180921T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Flat) / Newbury (Afternoon Flat) / Newcastle (Evenin
+ g Flat) / Newton Abbot (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855Nz93pi@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180922T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Flat) / Catterick Bridge (Afternoon Flat) / Chelmsfo
+ rd City (Afternoon Flat) / Newbury (Afternoon Flat) / Newmarket (Afternoon
+  Flat) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855KCmmbF@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180923T000000
+DURATION:P1D
+SUMMARY:Hamilton Park (Afternoon Flat) / Plumpton (Afternoon Jump) / Uttoxe
+ ter (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-28554vTgan@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180924T000000
+DURATION:P1D
+SUMMARY:Hamilton Park (Afternoon Flat) / Kempton Park (Afternoon Flat) / Le
+ icester (Afternoon Flat) / Newcastle (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-28558VVU6N@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180925T000000
+DURATION:P1D
+SUMMARY:Beverley (Afternoon Flat) / Chelmsford City (Twilight Flat) / Lingf
+ ield Park (Afternoon Flat) / Warwick (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855wzSDOx@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180926T000000
+DURATION:P1D
+SUMMARY:Goodwood (Afternoon Flat) / Perth (Afternoon Jump) / Redcar (Aftern
+ oon Flat) / Wolverhampton (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855COiTjS@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180927T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Evening Flat) / Newmarket (Afternoon Flat) / Perth (A
+ fternoon Jump) / Pontefract (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855IWaCij@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180928T000000
+DURATION:P1D
+SUMMARY:Haydock Park (Afternoon Flat) / Newcastle (Evening Flat) / Newmarke
+ t (Afternoon Flat) / Worcester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855MW4h2x@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180929T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Twilight Flat) / Chester (Afternoon Flat) / Haydoc
+ k Park (Afternoon Flat) / Market Rasen (Afternoon Jump) / Newmarket (After
+ noon Flat) / Ripon (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855GmC5Uj@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20180930T000000
+DURATION:P1D
+SUMMARY:Epsom Downs (Afternoon Flat) / Musselburgh (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855LK83N6@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181001T000000
+DURATION:P1D
+SUMMARY:Bath (Afternoon Flat) / Catterick Bridge (Afternoon Flat) / Kempton
+  Park (Twilight Flat) / Newton Abbot (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855MDltxB@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181002T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Flat) / Kempton Park (Twilight Flat) / Sedgefield (A
+ fternoon Jump) / Southwell (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855zh8Gk2@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181003T000000
+DURATION:P1D
+SUMMARY:Bangor-on-dee (Afternoon Jump) / Newcastle (Twilight Flat) / Nottin
+ gham (Afternoon Flat) / Salisbury (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855mcU2bU@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181004T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Huntingdon (Afternoon Jump) / Ling
+ field Park (Afternoon Flat) / Warwick (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855AwDxb3@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181005T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Fontwell Park (Afternoon Jump) / Hexham (A
+ fternoon Jump) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855el7CHF@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181006T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Fontwell Park (Afternoon Jump) / Newmarket
+  (Afternoon Flat) / Redcar (Afternoon Flat) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-2855gg62XI@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181007T000000
+DURATION:P1D
+SUMMARY:Kelso (Afternoon Jump) / Uttoxeter (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011NUsmHM@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181008T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Twilight Flat) / Pontefract (Afternoon Flat) / Stratf
+ ord-on-avon (Afternoon Jump) / Windsor (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011phbUkw@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181009T000000
+DURATION:P1D
+SUMMARY:Brighton (Afternoon Flat) / Catterick Bridge (Afternoon Flat) / Lei
+ cester (Afternoon Flat) / Newcastle (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011o1rbpK@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181010T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Twilight Flat) / Ludlow (Afternoon Jump) / Nottingham
+  (Afternoon Flat) / Towcester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011HzX1tM@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181011T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Flat) / Chelmsford City (Evening Flat) / Exeter (Aft
+ ernoon Jump) / Worcester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011wVI5N7@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181012T000000
+DURATION:P1D
+SUMMARY:Newmarket (Afternoon Flat) / Newton Abbot (Afternoon Jump) / Wolver
+ hampton (Evening Flat) / York (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011rW8J3s@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181013T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Twilight Flat) / Chepstow (Afternoon Jump) / Hexha
+ m (Afternoon Jump) / Newmarket (Afternoon Flat) / York (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011TaGFtt@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181014T000000
+DURATION:P1D
+SUMMARY:Chepstow (Afternoon Jump) / Goodwood (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011F9GTtl@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181015T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Twilight Flat) / Musselburgh (Afternoon Flat) / Winds
+ or (Afternoon Flat) / Yarmouth (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011bW4wdH@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181016T000000
+DURATION:P1D
+SUMMARY:Hereford (Afternoon Jump) / Huntingdon (Afternoon Jump) / Kempton P
+ ark (Twilight Flat) / Leicester (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011N3ceDH@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181017T000000
+DURATION:P1D
+SUMMARY:Bath (Afternoon Flat) / Newcastle (Twilight Flat) / Nottingham (Aft
+ ernoon Flat) / Wetherby (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-30116lXUxI@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181018T000000
+DURATION:P1D
+SUMMARY:Brighton (Afternoon Flat) / Carlisle (Afternoon Jump) / Chelmsford 
+ City (Evening Flat) / Uttoxeter (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011MLPfsV@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181019T000000
+DURATION:P1D
+SUMMARY:Fakenham (Afternoon Jump) / Haydock Park (Afternoon Flat) / Newcast
+ le (Evening Flat) / Redcar (Afternoon Flat) / Wincanton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011lBFlZU@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181020T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Flat) / Catterick Bridge (Afternoon Flat) / Ffos L
+ as (Afternoon Jump) / Market Rasen (Afternoon Jump) / Stratford-on-avon (A
+ fternoon Jump) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-30114auEiU@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181021T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Afternoon Jump) / Sedgefield (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-30113T5Nga@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181022T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Twilight Flat) / Plumpton (Afternoon Jump) / Pontefra
+ ct (Afternoon Flat) / Windsor (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011dP4suO@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181023T000000
+DURATION:P1D
+SUMMARY:Exeter (Afternoon Jump) / Kempton Park (Twilight Flat) / Newcastle 
+ (Afternoon Flat) / Yarmouth (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011bgZLbh@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181024T000000
+DURATION:P1D
+SUMMARY:Fontwell Park (Afternoon Jump) / Newcastle (Twilight Flat) / Newmar
+ ket (Afternoon Flat) / Worcester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-301162KKV1@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181025T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Jump) / Chelmsford City (Evening Flat) / Ludlow
+  (Afternoon Jump) / Southwell (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011wV56Ue@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181026T000000
+DURATION:P1D
+SUMMARY:Cheltenham (Afternoon Jump) / Doncaster (Afternoon Flat) / Kempton 
+ Park (Evening Flat) / Newbury (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011bPUsKB@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181027T000000
+DURATION:P1D
+SUMMARY:Cheltenham (Afternoon Jump) / Doncaster (Afternoon Flat) / Kelso (A
+ fternoon Jump) / Kempton Park (Twilight Flat) / Newbury (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011tF5dg1@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181028T000000
+DURATION:P1D
+SUMMARY:Aintree (Afternoon Jump) / Wincanton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011DU7e3z@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181029T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Jump) / Chelmsford City (Twilight Flat) / Leicester 
+ (Afternoon Flat) / Redcar (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-30119tjr8J@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181030T000000
+DURATION:P1D
+SUMMARY:Bangor-on-dee (Afternoon Jump) / Catterick Bridge (Afternoon Flat) 
+ / Chepstow (Afternoon Jump) / Wolverhampton (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011uhIclL@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181031T000000
+DURATION:P1D
+SUMMARY:Fakenham (Afternoon Jump) / Kempton Park (Twilight Flat) / Nottingh
+ am (Afternoon Flat) / Taunton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011udSVju@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181101T000000
+DURATION:P1D
+SUMMARY:Lingfield Park (Afternoon Flat) / Sedgefield (Afternoon Jump) / Str
+ atford-on-avon (Afternoon Jump) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-30117Mshvl@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181102T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Evening Flat) / Newmarket (Afternoon Flat) / Uttoxete
+ r (Afternoon Jump) / Wetherby (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011At2plH@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181103T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Jump) / Ayr (Afternoon Jump) / Newcastle (Twilight
+  Flat) / Newmarket (Afternoon Flat) / Wetherby (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011OVH1mu@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181104T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Jump) / Huntingdon (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011vwFbUv@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181105T000000
+DURATION:P1D
+SUMMARY:Hereford (Afternoon Jump) / Kempton Park (Twilight Flat) / Plumpton
+  (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011SHxoS1@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181106T000000
+DURATION:P1D
+SUMMARY:Exeter (Afternoon Jump) / Kempton Park (Twilight Flat) / Redcar (Af
+ ternoon Flat) / Wolverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-30114DUTGB@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181107T000000
+DURATION:P1D
+SUMMARY:Chepstow (Afternoon Jump) / Musselburgh (Afternoon Jump) / Newcastl
+ e (Twilight Flat) / Nottingham (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011VvIeoo@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181108T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Market Rasen (Afternoon Jump) / Ne
+ wbury (Afternoon Jump) / Sedgefield (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-301125KGX0@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181109T000000
+DURATION:P1D
+SUMMARY:Fontwell Park (Afternoon Jump) / Hexham (Afternoon Jump) / Newcastl
+ e (Evening Flat) / Warwick (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-30117g5v47@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181110T000000
+DURATION:P1D
+SUMMARY:Aintree (Afternoon Jump) / Chelmsford City (Twilight Flat) / Doncas
+ ter (Afternoon Flat) / Kelso (Afternoon Jump) / Wincanton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-30113vNhr4@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181111T000000
+DURATION:P1D
+SUMMARY:Ffos Las (Afternoon Jump) / Sandown Park (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-30118VaJvp@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181112T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Jump) / Kempton Park (Afternoon Jump) / Southwe
+ ll (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011CLouwF@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181113T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Twilight Flat) / Hereford (Afternoon Jump) / Hunti
+ ngdon (Afternoon Jump) / Lingfield Park (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011Zt9bLn@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181114T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Jump) / Bangor-on-dee (Afternoon Jump) / Exeter (Aft
+ ernoon Jump) / Kempton Park (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011VNtjGc@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181115T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Ludlow (Afternoon Jump) / Southwel
+ l (Afternoon Flat) / Taunton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011vuZvcm@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181116T000000
+DURATION:P1D
+SUMMARY:Cheltenham (Afternoon Jump) / Lingfield Park (Afternoon Flat) / New
+ castle (Afternoon Jump) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011egdjhh@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181117T000000
+DURATION:P1D
+SUMMARY:Cheltenham (Afternoon Jump) / Lingfield Park (Afternoon Flat) / Utt
+ oxeter (Afternoon Jump) / Wetherby (Afternoon Jump) / Wolverhampton (Eveni
+ ng Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011rS3aKU@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181118T000000
+DURATION:P1D
+SUMMARY:Cheltenham (Afternoon Jump) / Fontwell Park (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011gvHxmx@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181119T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Twilight Flat) / Leicester (Afternoon Jump) / Plumpto
+ n (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3011vnjcNU@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181120T000000
+DURATION:P1D
+SUMMARY:Fakenham (Afternoon Jump) / Lingfield Park (Afternoon Flat) / South
+ well (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167NCBLVK@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181121T000000
+DURATION:P1D
+SUMMARY:Chepstow (Afternoon Jump) / Hexham (Afternoon Jump) / Kempton Park 
+ (Twilight Flat) / Warwick (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167PW3H2J@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181122T000000
+DURATION:P1D
+SUMMARY:Market Rasen (Afternoon Jump) / Newcastle (Afternoon Flat) / Wincan
+ ton (Afternoon Jump) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-31671Stzu7@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181123T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Jump) / Catterick Bridge (Afternoon Jump) / Ffos L
+ as (Afternoon Jump) / Kempton Park (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167xVb9du@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181124T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Jump) / Haydock Park (Afternoon Jump) / Huntingdon
+  (Afternoon Jump) / Lingfield Park (Afternoon Flat) / Wolverhampton (Eveni
+ ng Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-31679BbV1I@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181125T000000
+DURATION:P1D
+SUMMARY:Exeter (Afternoon Jump) / Uttoxeter (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167ZREvcw@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181126T000000
+DURATION:P1D
+SUMMARY:Kempton Park (Afternoon Jump) / Ludlow (Afternoon Jump) / Musselbur
+ gh (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167zzVIcG@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181127T000000
+DURATION:P1D
+SUMMARY:Lingfield Park (Afternoon Jump) / Sedgefield (Afternoon Jump) / Sou
+ thwell (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167OC71kl@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181128T000000
+DURATION:P1D
+SUMMARY:Hereford (Afternoon Jump) / Newcastle (Twilight Flat) / Wetherby (A
+ fternoon Jump) / Wolverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167AkfhVv@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181129T000000
+DURATION:P1D
+SUMMARY:Ayr (Afternoon Jump) / Chelmsford City (Evening Flat) / Taunton (Af
+ ternoon Jump) / Towcester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167PWaTAr@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181130T000000
+DURATION:P1D
+SUMMARY:Doncaster (Afternoon Jump) / Newbury (Afternoon Jump) / Newcastle (
+ Evening Flat) / Southwell (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167EgwMrt@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181201T000000
+DURATION:P1D
+SUMMARY:Bangor-on-dee (Afternoon Jump) / Doncaster (Afternoon Jump) / Newbu
+ ry (Afternoon Jump) / Newcastle (Afternoon Jump) / Wolverhampton (Evening 
+ Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167ovBeDv@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181202T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Jump) / Leicester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167SZIiBh@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181203T000000
+DURATION:P1D
+SUMMARY:Musselburgh (Afternoon Jump) / Plumpton (Afternoon Jump) / Wolverha
+ mpton (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167bFr1v6@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181204T000000
+DURATION:P1D
+SUMMARY:Fakenham (Afternoon Jump) / Lingfield Park (Afternoon Flat) / South
+ well (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167mZ2M5l@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181205T000000
+DURATION:P1D
+SUMMARY:Haydock Park (Afternoon Jump) / Kempton Park (Twilight Flat) / Ling
+ field Park (Afternoon Flat) / Ludlow (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167LHCjAv@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181206T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Leicester (Afternoon Jump) / Marke
+ t Rasen (Afternoon Jump) / Wincanton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167wvpTC0@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181207T000000
+DURATION:P1D
+SUMMARY:Exeter (Afternoon Jump) / Kempton Park (Evening Flat) / Sandown Par
+ k (Afternoon Jump) / Sedgefield (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-31677oZcGj@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181208T000000
+DURATION:P1D
+SUMMARY:Aintree (Afternoon Jump) / Chepstow (Afternoon Jump) / Sandown Park
+  (Afternoon Jump) / Wetherby (Afternoon Jump) / Wolverhampton (Evening Fla
+ t)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167lZzBS0@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181209T000000
+DURATION:P1D
+SUMMARY:Huntingdon (Afternoon Jump) / Kelso (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167vVeukH@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181210T000000
+DURATION:P1D
+SUMMARY:Lingfield Park (Afternoon Jump) / Musselburgh (Afternoon Jump) / Wo
+ lverhampton (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167l7XHLv@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181211T000000
+DURATION:P1D
+SUMMARY:Fontwell Park (Afternoon Jump) / Southwell (Afternoon Flat) / Uttox
+ eter (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167H2JBXX@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181212T000000
+DURATION:P1D
+SUMMARY:Hexham (Afternoon Jump) / Kempton Park (Twilight Flat) / Leicester 
+ (Afternoon Jump) / Lingfield Park (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167uG3aWf@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181213T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Newcastle (Afternoon Jump) / Taunt
+ on (Afternoon Jump) / Warwick (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167Sk7Z46@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181214T000000
+DURATION:P1D
+SUMMARY:Bangor-on-dee (Afternoon Jump) / Cheltenham (Afternoon Jump) / Donc
+ aster (Afternoon Jump) / Kempton Park (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-316785mVVH@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181215T000000
+DURATION:P1D
+SUMMARY:Cheltenham (Afternoon Jump) / Doncaster (Afternoon Jump) / Hereford
+  (Afternoon Jump) / Newcastle (Afternoon Flat) / Wolverhampton (Evening Fl
+ at)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167fnNH8c@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181216T000000
+DURATION:P1D
+SUMMARY:Carlisle (Afternoon Jump) / Southwell (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167nuP11C@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181217T000000
+DURATION:P1D
+SUMMARY:Ffos Las (Afternoon Jump) / Plumpton (Afternoon Jump) / Wolverhampt
+ on (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-31675UWhvv@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181218T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Jump) / Fakenham (Afternoon Jump) / Sou
+ thwell (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167x4btVt@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181219T000000
+DURATION:P1D
+SUMMARY:Lingfield Park (Afternoon Flat) / Ludlow (Afternoon Jump) / Newbury
+  (Afternoon Jump) / Newcastle (Twilight Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-316743xGWd@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181220T000000
+DURATION:P1D
+SUMMARY:Chelmsford City (Evening Flat) / Exeter (Afternoon Jump) / Southwel
+ l (Afternoon Flat) / Towcester (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167XHXUmK@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181221T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Jump) / Southwell (Afternoon Flat) / Uttoxeter (Af
+ ternoon Jump) / Wolverhampton (Evening Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167ZH6TU3@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181222T000000
+DURATION:P1D
+SUMMARY:Ascot (Afternoon Jump) / Haydock Park (Afternoon Jump) / Lingfield 
+ Park (Afternoon Flat) / Newcastle (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-31673VPdXj@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181226T000000
+DURATION:P1D
+SUMMARY:Fontwell Park (Afternoon Jump) / Huntingdon (Afternoon Jump) / Kemp
+ ton Park (Afternoon Jump) / Market Rasen (Afternoon Jump) / Sedgefield (Af
+ ternoon Jump) / Wetherby (Afternoon Jump) / Wincanton (Afternoon Jump) / W
+ olverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167c01MVm@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181227T000000
+DURATION:P1D
+SUMMARY:Chepstow (Afternoon Jump) / Kempton Park (Afternoon Jump) / Wetherb
+ y (Afternoon Jump) / Wolverhampton (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167UgVFUx@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181228T000000
+DURATION:P1D
+SUMMARY:Catterick Bridge (Afternoon Jump) / Leicester (Afternoon Jump) / Li
+ ngfield Park (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167UMx6HB@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181229T000000
+DURATION:P1D
+SUMMARY:Doncaster (Afternoon Jump) / Kelso (Afternoon Jump) / Newbury (Afte
+ rnoon Jump) / Southwell (Afternoon Flat)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-31677zjVjh@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181230T000000
+DURATION:P1D
+SUMMARY:Haydock Park (Afternoon Jump) / Lingfield Park (Afternoon Flat) / T
+ aunton (Afternoon Jump)
+END:VEVENT
+BEGIN:VEVENT
+UID:20171009T164951CEST-3167vzlJ7r@britishhorseracing.com_2018
+DTSTAMP:20171009T144951Z
+DTSTART:20181231T000000
+DURATION:P1D
+SUMMARY:Lingfield Park (Afternoon Flat) / Uttoxeter (Afternoon Jump) / Warw
+ ick (Afternoon Jump)
+END:VEVENT
+END:VCALENDAR

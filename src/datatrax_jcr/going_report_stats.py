@@ -14,6 +14,8 @@ import pandas as pd
 import pymysql
 from dotenv import load_dotenv
 
+from datatrax_jcr.report_selection import select_primary_reports
+
 
 OUT = Path("data/config")
 JCR_COURSES = [
@@ -38,7 +40,7 @@ COLOURS = {
 VALUE_PATTERN = re.compile(r"(?<!\d)\d{1,2}\.\d+(?!\d)")
 
 
-def fetch_reports(year: int) -> pd.DataFrame:
+def fetch_reports(start_year: int = 2021, end_year: int = 2026) -> pd.DataFrame:
     load_dotenv(".env")
     connection = pymysql.connect(
         host=os.environ["TURFTRAX_DB_HOST"],
@@ -59,6 +61,12 @@ def fetch_reports(year: int) -> pd.DataFrame:
             g.id AS report_id,
             g.updated_at,
             g.created_at,
+            CASE
+                WHEN g.deleted_at IS NOT NULL THEN 'deleted'
+                WHEN COALESCE(g.archived, 0) = 1 THEN 'archived'
+                WHEN COALESCE(g.status, 0) = 1 THEN 'published'
+                ELSE 'unpublished'
+            END AS report_state,
             COALESCE(g.abandoned, 0) AS abandoned,
             g.status,
             g.official_going,
@@ -68,25 +76,26 @@ def fetch_reports(year: int) -> pd.DataFrame:
         JOIN maps AS m ON m.id = g.map_id
         JOIN courses AS c ON c.id = m.course_id
         LEFT JOIN stick_readings AS s ON s.going_report_id = g.id
-        WHERE YEAR(g.race_date) = %s
+        WHERE g.race_date >= %s
+          AND g.race_date < DATE_ADD(%s, INTERVAL 1 YEAR)
           AND LOWER(TRIM(c.name)) IN ({placeholders})
         GROUP BY c.id, c.name, DATE(g.race_date), g.id, g.updated_at,
-                 g.created_at, g.abandoned, g.status, g.official_going,
+                 g.created_at, g.deleted_at, g.archived, g.abandoned, g.status, g.official_going,
                  g.stick_comments
         ORDER BY c.name, race_date, g.updated_at, g.id
     """
     try:
         with connection.cursor() as cursor:
-            cursor.execute(sql, [year, *[course.lower() for course in JCR_COURSES]])
+            cursor.execute(sql, [f"{start_year}-01-01", f"{end_year}-01-01", *[course.lower() for course in JCR_COURSES]])
             rows = cursor.fetchall()
     finally:
         connection.close()
     return pd.DataFrame(rows)
 
 
-def classify(reports: pd.DataFrame, year: int) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
+def classify(reports: pd.DataFrame, period_label: str) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     if reports.empty:
-        raise RuntimeError(f"The {year} JCR Going Report query returned no rows")
+        raise RuntimeError(f"The {period_label} JCR Going Report query returned no rows")
     reports["course_name"] = reports["course_name"].str.title()
     reports["race_date"] = pd.to_datetime(reports["race_date"]).dt.date
     reports["updated_at"] = pd.to_datetime(reports["updated_at"], errors="coerce")
@@ -96,8 +105,7 @@ def classify(reports: pd.DataFrame, year: int) -> tuple[pd.DataFrame, pd.DataFra
     reports["readings_uploaded"] = reports["stick_reading_count"].fillna(0).gt(0)
 
     latest = (
-        reports.sort_values(["course_id", "race_date", "updated_at", "report_id"])
-        .drop_duplicates(["course_id", "race_date"], keep="last")
+        select_primary_reports(reports, ["course_id", "race_date"])
         [["course_id", "race_date", "abandoned", "report_id"]]
         .rename(columns={"abandoned": "latest_abandoned", "report_id": "latest_report_id"})
     )
@@ -137,7 +145,7 @@ def classify(reports: pd.DataFrame, year: int) -> tuple[pd.DataFrame, pd.DataFra
     summary["total_meetings"] = summary[["Green", "Orange", "Blue", "Red"]].sum(axis=1)
     report = {
         "extracted_at_utc": datetime.now(timezone.utc).isoformat(),
-        "year": year,
+        "analysis_period": period_label,
         "course_count": len(JCR_COURSES),
         "course_names": JCR_COURSES,
         "meeting_count": int(len(meetings)),
@@ -152,7 +160,7 @@ def classify(reports: pd.DataFrame, year: int) -> tuple[pd.DataFrame, pd.DataFra
             "Red": "Abandoned meeting.",
         },
         "source": "TT Hub going_reports, stick_readings and courses/maps tables",
-        "outputs": [f"jcr_going_report_stats_{year}.parquet", f"jcr_going_report_stats_{year}_summary.parquet", f"jcr_going_report_stats_{year}_report.json"],
+        "outputs": [f"jcr_going_report_stats_{period_label.replace('-', '_')}.parquet", f"jcr_going_report_stats_{period_label.replace('-', '_')}_summary.parquet", f"jcr_going_report_stats_{period_label.replace('-', '_')}_report.json"],
     }
     return meetings, summary, report
 
@@ -226,24 +234,22 @@ def summarise(meetings: pd.DataFrame) -> pd.DataFrame:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--year", type=int, default=2026)
+    parser.add_argument("--start-year", type=int, default=2021)
+    parser.add_argument("--end-year", type=int, default=2026)
     args = parser.parse_args()
-    year = args.year
+    if args.end_year < args.start_year:
+        raise SystemExit("--end-year must be greater than or equal to --start-year")
+    period_label = f"{args.start_year}-{args.end_year}"
     OUT.mkdir(parents=True, exist_ok=True)
-    reports = fetch_reports(year)
-    meetings, summary, report = classify(reports, year)
-    stem = f"jcr_going_report_stats_{year}"
+    reports = fetch_reports(args.start_year, args.end_year)
+    meetings, summary, report = classify(reports, period_label)
+    stem = f"jcr_going_report_stats_{args.start_year}_{args.end_year}"
     meetings.to_parquet(OUT / f"{stem}.parquet", index=False)
     summary.to_parquet(OUT / f"{stem}_summary.parquet", index=False)
     summary.to_csv(OUT / f"{stem}_summary.csv", index=False)
     write_chart(summary, OUT / f"{stem}.svg")
-    turf_meetings = exclude_kempton_awt(meetings, year)
-    turf_summary = summarise(turf_meetings)
-    turf_stem = f"jcr_going_report_stats_{year}_kempton_awt_excluded"
-    turf_meetings.to_parquet(OUT / f"{turf_stem}.parquet", index=False)
-    turf_summary.to_parquet(OUT / f"{turf_stem}_summary.parquet", index=False)
-    turf_summary.to_csv(OUT / f"{turf_stem}_summary.csv", index=False)
-    write_chart(turf_summary, OUT / f"{turf_stem}.svg")
+    # A complete historical surface classification is supplied by the Phase 1
+    # BHA/TT Maps pipeline; do not apply the 2026-only fallback date list here.
     (OUT / f"{stem}_report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2))
     print(summary.to_string(index=False))

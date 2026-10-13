@@ -6,18 +6,19 @@ from pathlib import Path
 import pandas as pd
 
 from datatrax_jcr.going_report_stats import JCR_COURSES, summarise, write_chart
+from datatrax_jcr.report_selection import select_primary_reports
 
 OUT = Path("data/config")
 VALUE_PATTERN = r"(?<!\d)\d{1,2}\.\d+(?!\d)"
 
-def build(year: int = 2024) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
+def build(start_year: int = 2021, end_year: int = 2026) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     reports = pd.read_parquet(OUT / "jcr_going_reports.parquet").copy()
     reports["created_at"] = pd.to_datetime(reports["created_at"], errors="coerce")
     reports["updated_at"] = pd.to_datetime(reports["updated_at"], errors="coerce")
     reports["race_date"] = pd.to_datetime(reports["race_date"], errors="coerce").dt.date
     reports["created_date"] = reports["created_at"].dt.date
     reports["course_name"] = reports["course_name"].astype(str).str.strip().str.title()
-    reports = reports[reports["created_at"].dt.year.eq(year)].copy()
+    reports = reports[reports["created_at"].dt.year.between(start_year, end_year)].copy()
 
     cal = pd.read_parquet(OUT / "jcr_bha_fixture_calendar.parquet").copy()
     cal["race_date"] = pd.to_datetime(cal["meeting_date"], errors="coerce").dt.date
@@ -45,7 +46,7 @@ def build(year: int = 2024) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     )
 
     eligible = reports[reports["qualifying_day"]].copy()
-    latest = reports.sort_values(["course_id", "race_date", "updated_at", "report_id"]).drop_duplicates(["course_id", "race_date"], keep="last")
+    latest = select_primary_reports(reports, ["course_id", "race_date"])
     meetings = eligible.groupby(["course_id", "course_name", "race_date"], as_index=False).agg(
         report_count=("report_id", "nunique"),
         official_going_present=("official_going", lambda s: s.fillna("").astype(str).str.strip().ne("").any()),
@@ -64,17 +65,17 @@ def build(year: int = 2024) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     meetings.loc[meetings.abandoned_meeting, "status"] = "Red"
     summary = summarise(meetings)
     report = {
-        "year": year, "logic": "Reference date matching with meeting-level aggregation",
+        "analysis_period": [f"{start_year}-01-01", f"{end_year}-12-31"], "logic": "Reference date matching with meeting-level aggregation",
         "filter": "report created_at year; race-day or two- or three-day declaration-day evidence; readings matched by creation date/course, then any qualifying report counts for the meeting",
         "kempton_awt_excluded": True, "meeting_count": int(len(meetings)),
         "status_counts": {k: int(meetings["status"].eq(k).sum()) for k in ["Green", "Orange", "Blue", "Red"]},
-        "outputs": [f"jcr_going_report_stats_meeting_level_{year}.parquet", f"jcr_going_report_stats_meeting_level_{year}_summary.csv"]
+        "outputs": [f"jcr_going_report_stats_meeting_level_{start_year}_{end_year}.parquet", f"jcr_going_report_stats_meeting_level_{start_year}_{end_year}_summary.csv"]
     }
     return meetings, summary, report
 
 def main():
     reports, summary, report = build()
-    stem = "jcr_going_report_stats_meeting_level_2024"
+    stem = "jcr_going_report_stats_meeting_level_2021_2026"
     reports.to_parquet(OUT / f"{stem}.parquet", index=False)
     summary.to_parquet(OUT / f"{stem}_summary.parquet", index=False)
     summary.to_csv(OUT / f"{stem}_summary.csv", index=False)

@@ -52,8 +52,10 @@ def main() -> None:
     for exception_type, frame in (("Calendar date without Going Report", calendar_only), ("Going Report date absent from calendar", report_only)):
         for row in frame.sort_values(["course_id", "race_date"]).to_dict("records"):
             applicable = exception_type == "Calendar date without Going Report"
+            race_date = pd.to_datetime(row["race_date"], errors="coerce")
+            date_key = race_date.strftime("%Y%m%d") if pd.notna(race_date) else f"UNDATED-{int(row['latest_report_id'])}"
             rows.append({
-                "Review ID": f"{('CAL' if applicable else 'RPT')}-{int(row['course_id']):03d}-{pd.Timestamp(row['race_date']).strftime('%Y%m%d')}",
+                "Review ID": f"{('CAL' if applicable else 'RPT')}-{int(row['course_id']):03d}-{date_key}",
                 "Exception type": exception_type,
                 "Course ID": int(row["course_id"]),
                 "Course": row["canonical_name"],

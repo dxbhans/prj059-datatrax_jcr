@@ -11,8 +11,8 @@ import pandas as pd
 
 
 OUT = Path("data/config")
-CALENDAR_ROOT = Path("/home/linadmin/Projects/prj057-datatrax_arc/resources/2009 - 2024 BHA  Racing Calendars")
-YEARS = range(2021, 2026)
+CALENDAR_ROOT = Path("resources/004-bha_calendar")
+YEARS = range(2021, 2027)
 JCR_ALIASES = {
     "aintree": "Aintree", "carlisle": "Carlisle", "cheltenham": "Cheltenham",
     "epsom downs": "Epsom Downs", "exeter": "Exeter", "haydock park": "Haydock Park",
@@ -80,9 +80,9 @@ def main() -> None:
 
     report = {
         "extracted_at_utc": datetime.now(timezone.utc).isoformat(),
-        "source_project": "/home/linadmin/Projects/prj057-datatrax_arc",
+        "source_project": "resources/004-bha_calendar",
         "parser_convention": "BHA MASTER {year}_Fixture_List.xlsx, sheet List; Date/Course normalized as ARC loader does",
-        "analysis_period": ["2021-01-01", "2025-12-31"],
+        "analysis_period": ["2021-01-01", "2026-12-31"],
         "source_manifest": source_manifest,
         "bha_source_rows_all_courses": int(sum(len(frame) for frame in frames)),
         "bha_jcr_fixture_rows": int(len(bha)),

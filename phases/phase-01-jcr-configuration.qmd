@@ -1,7 +1,7 @@
 ---
 title: "JCR GoingStick Analysis"
 subtitle: "Phase 1 — Course, Map and Spatial Configuration"
-author: "TurfTrax"
+author: "Hans Meijer"
 date: last-modified
 format:
   html:
@@ -26,9 +26,16 @@ Build and validate the JCR configuration needed by every later phase. The config
 - the waypoints on each map;
 - the sections and zones associated with those waypoints;
 - available KML geometry and its quality;
-- the identifiers needed to join Hub data, GoingStick data, weather stations and reports.
+- the identifiers needed to join Hub data, GoingStick data, weather stations and reports;
+- all race meetings in the 2021–2026 analysis period, including their planned and observed status;
+- the Going Reports and GoingStick readings associated with each race meeting;
+- the distinction between TT Auto-updater reports and actual clerk/measurement reports;
+- the distinction between Flat, Jumps and All-Weather (AWT) meetings and maps; and
+- the extent to which each applicable race meeting satisfies the available BHA/BHAGI data requirements.
 
-This phase is complete only when later analysis can use configuration identifiers rather than course-name or map-name guesses.
+The race-meeting layer is the bridge between the spatial configuration and later analysis. Each meeting must be represented by a stable course/date key, with its calendar evidence, Going Report evidence, GoingStick coverage, surface and discipline classification, unresolved exceptions and compliance measures retained with provenance. TT Auto-updater reports and actual measurement reports must remain distinguishable and must not be counted as separate meetings or independent evidence without review. The last published report may be either a TT Auto-updater report or a user-generated report; its publication status identifies the report selected for meeting-level report history, not whether a stick measurement was taken. Evaluation is performed at the race-meeting level using the timing of the stick measurements on race day and the preceding declaration day, not by treating individual reports as independent meeting outcomes. GoingStick analysis applies only to Turf racing, for both Flat and Jumps. Where a meeting is mixed, it remains in scope when it contains any Turf races; AWT-only meetings are excluded from GoingStick analysis. Compliance results describe the availability and consistency of evidence in the imported data; they are not legal findings of regulatory breach.
+
+The configuration and outputs must support the same level of analysis for all 14 Jockey Club racecourses. The primary output must be usable for all-course analysis or for a detailed individual-track analysis of any JCR course. This phase is complete only when later analysis can use configuration identifiers rather than course-name or map-name guesses.
 
 ## Working status
 
@@ -36,9 +43,9 @@ This phase is complete only when later analysis can use configuration identifier
 |---|---|
 | Phase | Phase 1 |
 | Overall status | Preliminary validation complete; Phase 1 approved with documented exceptions |
-| Scope | Jockey Club racecourses; Cheltenham is the first detailed course |
-| Analysis period | 2021–2025 initially; 2026 may be added as a partial year |
-| Primary output | Versioned JCR configuration and validation report |
+| Scope | All 14 Jockey Club racecourses, with equal analytical detail available for any individual course |
+| Analysis period | 2021–2026 |
+| Primary output | Versioned, analysis-ready JCR meeting/configuration data and validation report |
 
 ## Principles
 
@@ -47,50 +54,33 @@ This phase is complete only when later analysis can use configuration identifier
 3. A waypoint belongs to a map and is not assumed to be globally unique.
 4. Sections and zones are separate entities.
 5. Zone membership is many-to-many: zones may overlap and a waypoint may belong to multiple zones.
-6. Flat and jumps are map disciplines, not assumptions derived only from the racecourse name.
-7. KML is supporting spatial evidence; its absence must not prevent non-spatial analysis.
-8. Every imported identifier and every manually resolved mapping must retain provenance.
+6. Flat, jumps and All-Weather (AWT) are distinct surface/discipline classifications and are not assumptions derived only from the racecourse name.
+7. GoingStick analysis applies only to Turf Flat and Turf Jumps; a mixed meeting is eligible when any Turf racing is present, while AWT-only meetings are excluded.
+8. KML is supporting spatial evidence; its absence must not prevent non-spatial analysis.
+9. Every imported identifier and every manually resolved mapping must retain provenance.
 
 # Phase steps
 
-The formal configuration steps below remain the controlling Phase 1 sequence. Going Report extraction and meeting-status work are supporting data workstreams: they run in parallel and provide evidence for later SVG and validation tasks without changing the formal step numbering.
+The formal configuration steps below are ordered as data inventory first, then QA and validation. Courses, maps, waypoints, KML, sections/tracks/zones, race meeting sources, Going Reports and GoingStick readings establish the analysis-ready inputs; the GoingStick and later validation sections then assess their quality and compliance.
 
 ## 1. Define the JCR course scope
 
 Create the controlled course register from the current Jockey Club scope:
 
-| Course | Hub ID | Canonical name | Alias | Maps | Waypoints | Included |
-|---|---:|---|---|---:|---:|---|
-| Aintree | 1 | Aintree | — | 3 | 324 | yes |
-| Carlisle | 9 | Carlisle | — | 3 | 105 | yes |
-| Cheltenham | 12 | Cheltenham | — | 20 | 1,113 | yes |
-| Exeter | 17 | Exeter | — | 1 | 60 | yes |
-| Epsom Downs | 16 | Epsom Downs | — | 8 | 487 | yes |
-| Haydock Park | 23 | Haydock Park | — | 7 | 349 | yes |
-| Huntingdon | 26 | Huntingdon | — | 2 | 72 | yes |
-| Kempton Park | 28 | Kempton Park | — | 2 | 140 | yes |
-| Market Rasen | 32 | Market Rasen | Mkt Rasen* | 1 | 32 | yes |
-| Newmarket | 36 | Newmarket | — | 18 | 1,612 | yes |
-| Nottingham | 38 | Nottingham | — | 1 | 32 | yes |
-| Sandown Park | 45 | Sandown Park | — | 7 | 589 | yes |
-| Warwick | 53 | Warwick | — | 2 | 66 | yes |
-| Wincanton | 55 | Wincanton | — | 1 | 30 | yes |
+{{< include ../data/config/phase1_tables/course_scope.md >}}
 
 Tasks:
 
 - retrieve Hub course IDs and canonical names;
 - record alternative names and historical names;
 - record country and race discipline where available;
-- flag courses with no maps or ambiguous identity;
-- nominate Cheltenham as the first detailed-course test case.
+- flag courses with no maps or ambiguous identity.
 
 Deliverable: `data/config/jcr_courses.parquet` and a source/provenance table.
 
 ### Step 1 result
 
-Step 1 was run on 8 October 2026 against the read-only TT Hub connection. The [Jockey Club racecourse register](https://www.thejockeyclub.co.uk/about-us/our-present/racecourses/) and TT Hub matched all 14 courses by canonical name. The extract contains 14 courses, 76 maps and 5,011 configured waypoints. All courses are recorded as England in TT Hub. Market Rasen has the Hub alias `Mkt Rasen*`.
-
-The Hub `no_maps` flag is set for nine courses even though map records are present. This is retained as a configuration warning for Step 2 rather than being interpreted as evidence that the courses have no maps.
+{{< include ../data/config/phase1_tables/step1_result.md >}}
 
 Generated outputs:
 
@@ -127,19 +117,18 @@ Deliverable: `data/config/jcr_maps.parquet`.
 
 ### Step 2 preliminary result
 
-**Status: complete as a Hub inventory; operational assignment applied for 70 of 76 maps.** Step 2 was run on 9 October 2026 against the read-only TT Hub connection. All 14 JCR courses have identified maps: 76 maps in total, of which 37 are active and 39 are archived. Fifty-six maps have child track records, 20 have no child track record, and two maps retain multiple child tracks. No duplicate map IDs were found.
+**Status: complete as a Hub inventory; operational assignments are reported dynamically below.** The current Hub inventory, lifecycle, track linkage and duplicate checks are reported in the generated table below.
 
-| Measure | Result | Interpretation |
-|---|---:|---|
-| Course coverage | 14 / 14 courses | No JCR course was missing from the map inventory. |
-| Map inventory | 76 maps | Stable Hub `map_id` values are retained. |
-| Lifecycle | 37 active; 39 archived | `deleted_at` is retained as `valid_to`; archived maps are not silently removed. |
-| Track linkage | 56 with tracks; 20 without | Maps without child tracks are recorded as exceptions for review. |
-| Operational discipline | 33 flat; 37 jumps; 6 unreviewed | 60 assignments confirmed and 10 changed in the returned workbook; 6 map rows remain unreviewed. |
+{{< include ../data/config/phase1_tables/map_result.md >}}
 
-Map discipline was initially assigned from Hub metadata and then updated from the returned operational workbook. The workbook records 60 `Confirmed` assignments and 10 `Changed` assignments: 33 maps are Flat and 37 are Jumps. Six rows remain `Not reviewed` (map IDs 158, 755, 641, 171, 637 and 640), so those maps remain unknown. The dedicated Cheltenham Review sheet remains unreviewed and is retained as a separate detailed-layout exception.
+Map discipline was initially assigned from Hub metadata and then updated from the returned operational workbook. The generated table and review outputs below are authoritative for assignment counts and unresolved rows.
 
-Cheltenham has 20 maps: 11 active and 9 archived. The general Map Review assignments now classify all 20 as Jumps, but the Old/New, X Country, combined and numbered layout hierarchy still requires detailed operational confirmation before cross-map comparison.
+Open map-identity cases are retained explicitly:
+
+- **Unreviewed operational discipline:** see the current map-review output for the unresolved map IDs.
+- **No child track record:** see the current map inventory for archived maps without child track records; no inferred track assignment is made without supporting evidence.
+- **Multiple child tracks:** the current map inventory identifies maps with multiple child tracks; the applicable track/layout relationship must be retained or resolved before cross-map comparison.
+- **Cheltenham KML/layout ambiguity:** the `All Maps` KML and layout hierarchy remain operational review items; current candidate map identities are retained in the KML and map-review outputs.
 
 Generated review outputs include `data/config/jcr_map_review_import_report.json`. The workbook assignments are now applied to `data/config/jcr_maps.parquet`; stable Hub `map_id` values continue to support the Going Report and SVG joins.
 
@@ -175,123 +164,15 @@ Tasks:
 
 Deliverable: `data/config/jcr_waypoints.parquet` and a waypoint-compliance check table.
 
-### GoingStick reading QA rules
+### Step 3 result: waypoint inventory
 
-After importing `stick_readings`, apply the following checks before calculating compliance or map summaries:
+The generated waypoint inventory table reports configured rows, numeric waypoint coverage, missing maps and duplicate checks from the current extract.
 
-- `index`, `penetrate` and `shear` are expected to be within the inclusive range 0–15; values below 0 or above 15 are out-of-range failures;
-- values exactly equal to 0 or 15 are valid boundary values but receive a separate review flag because they may indicate an instrument, transcription or data-quality issue;
-- missing, non-numeric and invalid readings are retained and flagged rather than dropped;
-- the number of distinct observed waypoint readings for a report/map must not exceed the number of configured waypoints for that map;
-- total reading rows and distinct waypoint counts are both reported, with duplicate report/waypoint keys checked explicitly;
-- all checks remain map-specific through `going_report_id` and `map_id`.
+{{< include ../data/config/phase1_tables/waypoint_result.md >}}
 
-A count excess is a QA failure, not evidence that extra waypoints belong to another map. Unexpected waypoint numbers must be retained in the exception table for investigation.
+The missing numeric waypoint numbers are retained as source-data exceptions; they are not assigned by sequence or nearest-neighbour inference. Observed-reading exceptions, including missing configured waypoints and unexpected waypoint numbers, are reported in Section 9 after the GoingStick import.
 
-### Step 3 preliminary result: GoingStick readings and waypoint compliance
-
-The initial read-only extract imported 5,011 configured waypoint rows across 73 maps and 57,141 stick-reading rows linked to 1,102 Going Reports. The three maps with no configured waypoint rows are retained as configuration exceptions. Of the 21,829 reports in the report cache, 20,727 had no linked stick readings in this extract.
-
-| QA check | Result |
-|---|---:|
-| Index outside 0–15 | 0 readings |
-| Penetration outside 0–15 | 0 readings |
-| Shear outside 0–15 | 0 readings |
-| Index/penetration/shear boundary values at 0 or 15 | 7,943 / 7,943 / 7,958 readings |
-| Missing or non-numeric index, penetration or shear | 0 readings |
-| Duplicate report/waypoint keys | 0 rows |
-| Unexpected waypoint numbers | 5,985 rows |
-| Reports exceeding configured waypoint count | 307 reports |
-| Report-level QA reviews | 318 reports |
-
-The numeric readings are within the expected range, but waypoint compliance is not yet accepted. The largest exceptions occur on maps where the current configured waypoint rows are fewer than the observed reading sequence, including Kempton map 29, Warwick map 54, Nottingham map 39, Wincanton map 56 and several Cheltenham maps. This may reflect historical map/track variants or incomplete current waypoint configuration; it must be resolved using map identity, Going Reports and SVG evidence before readings are silently excluded.
-
-Generated outputs:
-
-- `data/config/jcr_waypoints.parquet`
-- `data/config/jcr_stick_readings.parquet`
-- `data/config/jcr_waypoint_compliance.parquet`
-- `data/config/jcr_waypoint_map_qa.parquet`
-- `data/config/jcr_stick_reading_qa_report.json`
-
-## 4. Model sections and overlapping zones
-
-Sections and zones must be represented independently.
-
-Recommended relationships:
-
-```text
-course 1 ───< map 1 ───< waypoint
-                         ├──< waypoint_section >── section
-                         └──< waypoint_zone >───── zone
-```
-
-The `waypoint_zone` table must allow multiple rows for the same waypoint and multiple zones to overlap. A zone should never be represented as a single exclusive category.
-
-Required tables:
-
-```text
-sections(
-  section_id, map_id, label, sequence, description, source
-)
-
-zones(
-  zone_id, map_id, label, zone_type, description, source
-)
-
-waypoint_sections(
-  map_id, waypoint_id, section_id, membership_source, confidence
-)
-
-waypoint_zones(
-  map_id, waypoint_id, zone_id, membership_source, confidence
-)
-```
-
-Tasks:
-
-- extract Hub section and zone records;
-- identify whether membership is explicit or inferred;
-- preserve overlapping memberships;
-- check for zones with no waypoints;
-- check for waypoints with no section or zone;
-- distinguish spatial zones from operational or reporting groups;
-- record confidence and review notes for manual assignments.
-
-Deliverable: four versioned configuration tables plus an overlap report.
-
-### Step 4 result: sections, zones and overlapping memberships
-
-The live Hub extract covers all 14 JCR courses and 56 maps with section or zone records. Memberships were parsed from the explicit Hub `way_points` fields and retained as map-specific many-to-many tables.
-
-| QA measure | Result |
-|---|---:|
-| Sections | 208 |
-| Zones | 703 |
-| Section memberships | 7,943 |
-| Zone memberships | 3,760 |
-| Waypoints in multiple zones | 7 |
-| Maximum zones on one waypoint | 2 |
-| Maximum sections on one waypoint | 5 |
-| Section references to unconfigured waypoints | 51 |
-| Zone references to unconfigured waypoints | 7 |
-| Configured waypoints with no section | 759 |
-| Configured waypoints with no zone | 748 |
-
-The seven overlapping zone memberships are preserved as separate rows; zones have not been reduced to an exclusive category. One section contains the range-formatted token `1-36`, which is retained as a parsing exception rather than expanded without confirmation. No zone had an empty waypoint list and no invalid zone tokens were found.
-
-References to unconfigured waypoint numbers and waypoints without memberships are retained for review. They may reflect historical map variants, incomplete current configuration or different operational uses of sections and zones. SVG and map-review evidence should be used before making manual assignments.
-
-Generated outputs:
-
-- `data/config/jcr_sections.parquet`
-- `data/config/jcr_zones.parquet`
-- `data/config/jcr_waypoint_sections.parquet`
-- `data/config/jcr_waypoint_zones.parquet`
-- `data/config/jcr_section_zone_map_qa.parquet`
-- `data/config/jcr_section_zone_qa_report.json`
-
-## 5. Inventory and validate KML files
+## 4. Inventory and validate KML files
 
 KML files provide spatial evidence for waypoint location, but availability and quality may vary by course and map.
 
@@ -321,23 +202,17 @@ Do not spatially place a waypoint using nearest-neighbour matching without recor
 
 Deliverable: `data/config/jcr_kml_inventory.parquet`, extracted KML waypoint tables and a KML validation report.
 
-### Step 5 result: KML inventory and validation
+### Step 4 result: KML inventory and validation
 
-The `resources/002-kml` directory contains 24 standalone KML files and an archive containing 23 of those files. All 24 standalone files parsed successfully. Nine files claim JCR courses; the remaining 15 are retained in the inventory as outside the JCR scope rather than discarded.
+The generated KML table reports the current standalone inventory, parsing results, JCR scope and validation counts.
 
-| QA measure | Result |
-|---|---:|
-| Standalone KML files | 24 |
-| JCR KML files | 9 |
-| JCR files matched to one active Hub map | 8 |
-| JCR files requiring map review | 1 |
-| JCR numeric waypoint placemarks | 709 |
-| JCR invalid or implausible coordinates | 0 |
-| Duplicate placemark IDs | 0 |
-| Duplicate numeric waypoint labels | 0 |
-| XML parse errors | 0 |
+JCR KML availability by course is reported from the current inventory in the generated KML outputs.
 
-Eight JCR files match their candidate active Hub map exactly by numeric waypoint set and count. The Cheltenham `All Maps` file matches both active maps 256 and 741, each with 96 configured waypoints, so its status remains `available_but_ambiguous`. The Aintree Hydrosight/WTX file contains additional non-waypoint placemarks, which are retained in the extracted KML table and do not affect the 90-waypoint match.
+The other eight JCR courses—Carlisle, Exeter, Kempton Park, Market Rasen, Nottingham, Sandown Park, Warwick and Wincanton—have no available in-scope KML file in this inventory.
+
+{{< include ../data/config/phase1_tables/kml_result.md >}}
+
+Map-match counts and ambiguity status are reported from the current KML validation output in the generated table.
 
 Every JCR KML file has a SHA256 checksum, source path, document name, coordinate count and match status. No nearest-neighbour or unrecorded spatial inference was used.
 
@@ -349,7 +224,77 @@ Generated outputs:
 - `data/config/jcr_kml_validation_report.json`
 
 
-## Data workstreams supporting Phase 1
+
+## 5. Model sections, tracks and overlapping zones
+
+Sections and zones must be represented independently.
+
+The model treats a course as the parent of one or more maps or track layouts, with each map defining its own waypoint sequence. Sections and zones describe different kinds of grouping on that map: sections are ordered or named course parts, while zones are spatial or operational groupings. A zone is not an exclusive category.
+
+A section is an ordered or named part of a specific map, used to describe a logical sequence of waypoints. A zone is a spatial or operational grouping associated with that map; it is not necessarily an ordered part of the course and must not be treated as a single exclusive classification. Tracks and layouts remain attached to their parent map, so the same course can have separate track or map variants without making waypoint numbers globally interchangeable.
+
+The relationships are map-specific: a course has maps, each map has configured waypoints, and sections and zones refer back to the map on which they are defined. A waypoint may belong to several sections or several overlapping zones, while a section or zone may contain many waypoints. Membership records retain whether the relationship came directly from the Hub or was inferred, together with confidence and review notes. This preserves the distinction between the entity itself and the many-to-many relationship connecting it to waypoints.
+
+Tasks:
+
+- extract Hub section and zone records;
+- identify whether membership is explicit or inferred;
+- preserve overlapping memberships;
+- check for zones with no waypoints;
+- check for waypoints with no section or zone;
+- distinguish spatial zones from operational or reporting groups;
+- record confidence and review notes for manual assignments.
+
+Deliverable: four versioned configuration tables plus an overlap report.
+
+### Step 5 result: sections, zones and overlapping memberships
+
+The live Hub extract and its section/zone coverage are reported dynamically in the generated table below.
+
+{{< include ../data/config/phase1_tables/section_zone_result.md >}}
+
+Overlapping memberships and parsing exceptions are retained as source-data evidence; current counts are reported dynamically below.
+
+References to unconfigured waypoint numbers and waypoints without memberships are retained for review. They may reflect historical map variants, incomplete current configuration or different operational uses of sections and zones. SVG and map-review evidence should be used before making manual assignments.
+
+Generated outputs:
+
+- `data/config/jcr_sections.parquet`
+- `data/config/jcr_zones.parquet`
+- `data/config/jcr_waypoint_sections.parquet`
+- `data/config/jcr_waypoint_zones.parquet`
+- `data/config/jcr_section_zone_map_qa.parquet`
+- `data/config/jcr_section_zone_qa_report.json`
+
+
+## 6. Import, compare and merge race meeting data
+
+Race meeting data is assembled for the full 2021–2026 analysis period before Going Reports are analysed. The source layers are imported separately and retained with provenance:
+
+- the TT Maps fixture/calendar table supplies planned course/date meetings, race-type information and operational notes;
+- the six BHA Excel fixture workbooks supply the BHA fixture date, course, surface and related fixture fields; and
+- course names from the Excel files are normalised to the already-validated TT Hub course IDs.
+
+The BHA and TT Maps records are compared on the normalized course/date key and merged into a meeting-level comparison table. Source-specific fields are retained rather than overwritten, including BHA surface and TT Maps race type. This makes it possible to distinguish a shared meeting, a BHA-only fixture, a TT Maps-only fixture and a TT Maps date with multiple rows. A missing row in one source is retained as an exception, not silently filled from the other source.
+
+### Race meeting import and comparison result
+
+The supplied BHA workbooks and TT Maps cache are compared for the full analysis period. Current source coverage and comparison results are reported dynamically below; any unavailable TT Maps period remains explicitly identified as an exception.
+
+{{< include ../data/config/phase1_tables/meeting_data_result.md >}}
+
+TT Maps fixture rows currently cached counts the raw calendar records. TT Maps course/date groups currently cached deduplicates those records to one normalized `(course_id, race_date)` meeting key. The counts differ when TT Maps contains multiple calendar rows for the same course and date; the generated table reports those multiple-row keys separately.
+
+BHA-only, TT Maps-only and duplicate-key exceptions are retained for review and reported dynamically below.
+
+Generated outputs:
+
+- `data/config/jcr_bha_fixture_calendar.parquet`
+- `data/config/jcr_tt_maps_calendar.parquet`
+- `data/config/jcr_bha_calendar_comparison.parquet`
+- `data/config/jcr_bha_calendar_comparison_report.json`
+
+## 7. Import and summarise Going Reports and meeting data
 
 The map SVGs required for waypoint and zone matching are associated with Going Reports. SVG handling must therefore follow a complete Going Report import rather than relying on the planned fixture calendar alone.
 
@@ -367,24 +312,15 @@ Deliverable: imported Going Report cache and an import-status report, including 
 
 ### Going Report extraction result
 
-**Status: extracted; representative SVG retrieval and parsing complete, full asset backfill outstanding.** On 9 October 2026, the read-only TT Hub extract returned 21,829 Going Report records for the 14 JCR courses with race dates from 2021 through 2025. The cache retains the report ID, course ID, map ID, race date, report status, archive/delete flags, going and operational comments, abandoned flag, map references and PDF references.
+**Status: extracted; representative SVG retrieval and parsing complete, full asset backfill outstanding.** The current Going Report extraction status, date coverage and report counts are reported dynamically below.
 
-| Measure | Result |
-|---|---:|
-| Courses represented | 14 / 14 |
-| Reports retained | 21,829 |
-| Maps represented in reports | 33 |
-| Published reports | 13,648 |
-| Unpublished reports | 8,181 |
-| Archived reports | 9 |
-| Deleted reports | 25 |
-| Abandoned reports | 139 |
-| Waypoint-map references | 19,950 |
-| Zone-map references | 19,950 |
-| PDF references | 6,420 |
-| Uploaded-map references | 0 |
+{{< include ../data/config/phase1_tables/going_report_result.md >}}
 
-Multiple reports for the same map and race date are retained. There are 1,673 map/date groups containing 21,707 records; these may represent revisions or repeated operational reports and are not labelled as duplicates without stronger report-version evidence. No records were silently removed. The extract is metadata-only at this stage: referenced PDFs, waypoint SVGs, zone SVGs and uploaded maps still need to be retrieved, checksummed and parsed.
+The current extract is reported by course and race year below. The table is generated during the refresh pipeline from the six-year report-statistics output, falling back to the cached Going Report rows when the database refresh is unavailable. The 2026 column therefore reflects the latest successful source refresh.
+
+{{< include ../data/config/jcr_going_report_course_year_table.md >}}
+
+Multiple reports for the same map and race date are retained. Grouping and asset-reference counts are reported from the current extract; records are not silently removed or labelled as duplicates without stronger version evidence.
 
 Generated outputs:
 
@@ -394,7 +330,7 @@ Generated outputs:
 
 ### Going Report authorship and Hub-user validation
 
-The report records were joined to the Hub `users` table using `going_reports.user_id = users.id`. All 21,829 extracted reports matched a Hub user ID; no report user IDs were unmatched. The extract contains 27 distinct Hub users.
+The report records were joined to the Hub `users` table. Current match and authorship counts are reported dynamically below.
 
 Authorship was separated using two fields:
 
@@ -402,15 +338,11 @@ Authorship was separated using two fields:
 - all other non-empty `clerk_name` values are treated as clerk entries;
 - the relational `user_id` and Hub user record remain the authoritative account link.
 
-| Report classification | Reports |
-|---|---:|
-| TT Auto-updater | 15,762 |
-| Named clerk entry | 1,010 |
-| No clerk name | 5,057 |
+{{< include ../data/config/phase1_tables/authorship_result.md >}}
 
-The principal auto-updater account is Hub user ID 203, `apiuser.bhagoing@turftrax.co.uk`, displayed as `TT Going-Update`, with the Hub role `Clerk`; it accounts for 15,753 auto-updater-labelled reports. Nine further auto-updater-labelled reports were saved under other Hub accounts.
+The principal auto-updater account and clerk-name matching results are reported from the current authorship output below.
 
-`clerk_name` is free text rather than a foreign key. Among named clerk entries, 454 exactly matched the linked Hub user name and 556 did not. Those non-exact values are retained for review rather than being force-matched.
+`clerk_name` is free text rather than a foreign key. Exact and non-exact matches to linked Hub users are counted in the generated authorship output and retained for review rather than being force-matched.
 
 Generated outputs:
 
@@ -419,33 +351,28 @@ Generated outputs:
 
 ### Preliminary meeting-status workstream
 
-TT Maps provides a planned fixture calendar, and its course IDs can be checked directly against TT Hub. For all 14 JCR courses, TT Maps and TT Hub IDs and names match exactly. The calendar contains 1,652 rows representing 1,649 course/date groups in 2021–2025. Its `note` field includes explicit operational markers such as `Cancelled`, `Cancelled - Abandoned` and `Replaced`.
+TT Maps provides a planned fixture calendar. Current course-ID matching, calendar coverage and date-group counts are reported dynamically below.
 
 The reconciliation combines the planned calendar with Going Report evidence; race results are not required for this step.
 
-| Reconciled status | Course/date rows |
-|---|---:|
-| Reported as run | 1,577 |
-| Reported mixed | 83 |
-| Reported as abandoned | 1 |
-| Cancelled or abandoned from calendar note | 2 |
-| Replaced or rescheduled from calendar note | 1 |
-| Planned but no Going Report | 56 |
-| **Reconciled course/date rows** | **1,720** |
+{{< include ../data/config/phase1_tables/meeting_status_result.md >}}
 
-A calendar row establishes that a meeting was planned. Explicit calendar notes provide cancellation/replacement evidence. A non-abandoned Going Report supports that operational activity occurred, but is not independent proof that racing took place. Planned dates with no report remain `planned_no_going_report`; they are not incorrectly classified as held. Mixed report dates remain exceptions because they contain both abandoned and non-abandoned reports.
+A calendar row establishes that a meeting was planned. Explicit calendar notes provide cancellation/replacement evidence. A non-abandoned Going Report supports that operational activity occurred, but is not independent proof that racing took place. Planned dates with no report remain `planned_no_going_report`; they are not incorrectly classified as held.
 
-For the 83 mixed meetings, the latest report was selected by `updated_at`, with `report_id` as the tie-breaker:
+A `reported_mixed` meeting is identified from the meeting's report history, not from the last published report alone: at least one retained report has `abandoned = 1` and at least one has `abandoned = 0`. Mixed meetings therefore remain mixed even when their selected last published report is abandoned or non-abandoned. Publication selection is a separate provenance rule. The authoritative publication field is `report_state`; the numeric `status` field must not be treated as a publication flag.
 
-| Latest report | Meetings |
-|---|---:|
-| Abandoned, published/status 1 | 77 |
-| Abandoned, unpublished/status 0 | 4 |
-| Non-abandoned, published/status 1 | 2 |
+For meeting-level report history, the last published report is the primary report when one exists, whether it is auto-updated or user-generated. It is selected as the latest `report_state = published` record by `updated_at`, with `report_id` as the tie-breaker. If no published report exists, the latest available report is selected by `updated_at`, with `report_id` as the tie-breaker. This report-selection rule does not determine whether GoingStick measurements were taken; that decision uses the joined stick-reading timestamps and declaration/race-day timepoint evidence. The following table records the primary selection under this priority rule:
 
-The two latest non-abandoned reports are Exeter on 8 December 2023 and Nottingham on 19 June 2023. The latest report was classified as `tt_auto_updater` for 60 meetings and `no_clerk_name` for 23 meetings. The latter is not evidence of clerk authorship; it means no free-text clerk name was recorded.
+{{< include ../data/config/phase1_tables/primary_selection.md >}}
 
-The inverse comparison found 71 Going Report course/date pairs that do not appear in the TT Maps calendar: 68 reported as run, 2 reported mixed and 1 reported as abandoned. These are retained as `report_only` exceptions rather than being discarded. They may represent calendar omissions, date/course mismatches or operational reports outside the calendar extract and require review before using the calendar as the sole denominator.
+Mixed-meeting publication and primary-selection counts are reported dynamically below under the last-published selection rule.
+
+TT Auto-updater does not mean published. Publication is determined from `report_state`, and the current author/publication cross-tab is generated from the report cache.
+
+{{< include ../data/config/phase1_tables/mixed_report.md >}}
+
+
+The inverse comparison retains Going Report dates absent from the TT Maps calendar as `report_only` exceptions; current counts are reported by the reconciliation output.
 
 Meeting status is not part of the immutable course/map configuration itself. It is a configuration-supporting reconciliation table: it supplies the denominator and date-level eligibility for later analysis while retaining stable Hub course and map identifiers.
 
@@ -458,19 +385,11 @@ Generated outputs:
 - `data/config/jcr_meeting_date_review.xlsx` — Turf-focused operational review workbook; confirmed AWT rows are excluded, remaining calendar/report date exceptions retain BHA/TT Maps surface and racing type where available, and unresolved Kempton report-only rows expose surface-review fields
 - `data/config/jcr_meeting_date_review_report.json`
 
-The ARC BHA parser was applied to the five `BHA MASTER` workbooks for 2021–2025. The Excel files contain no stable course IDs, so course names were normalized to the already-validated TT Hub course IDs. The comparison found 1,640 shared course/date keys, 28 BHA-only dates, 9 TT Maps-only dates and 3 shared keys with multiple TT Maps rows. The 28 BHA-only dates are concentrated in 2021, including 22 Kempton AWT fixtures; the BHA `Surface` field confirms AWT for those fixtures. These discrepancies are retained for review rather than resolved by assumption.
-
-Generated BHA comparison outputs:
-
-- `data/config/jcr_bha_fixture_calendar.parquet`
-- `data/config/jcr_bha_calendar_comparison.parquet`
-- `data/config/jcr_bha_calendar_comparison_report.json`
-
 ### Kempton surface classification
 
-Kempton map `29` is a shared venue/layout map and must not be treated as a universal Jumps map. A derived report-level classification was therefore applied with this priority: BHA fixture surface, TT Maps `race_type_code` fallback, then explicit operational review. The BHA match classified 765 reports as Turf/Jump and 555 as AWT/Flat. Eight reports on four dates remain unresolved because those dates are absent from both the BHA fixture extract and the TT Maps calendar: 12 March 2022, 19 December 2022, 10 April 2023 and 18 September 2025.
+Kempton map `29` is a shared venue/layout map and must not be treated as a universal Jumps map. Current classification totals and unresolved dates are reported dynamically below.
 
-The Kempton stick-reading extract contains 15,830 readings across 189 reports and 51 dates. All are associated with the classified Turf/Jump set; no AWT report has a stick reading. AWT reports are therefore excluded from Going Stick analysis, while unresolved reports remain quarantined until operational evidence is supplied.
+The Kempton stick-reading extract is joined to the classified surface output. Current eligible, excluded and unresolved totals are reported dynamically below.
 
 Generated outputs:
 
@@ -479,37 +398,133 @@ Generated outputs:
 
 This is a report/meeting-level surface classification and does not change the shared map identity.
 
-### Preliminary BHAGI compliance measures
+## 8. Import and summarise GoingStick readings
 
-The BHAGI 3.2 requirements were applied to actual Turf meetings only. GoingStick “downloaded” means that one or more imported stick-reading rows were linked to a Going Report recorded on the relevant day; it is an evidence-of-download criterion, not a claim that the source system’s download event log was available. Actual means `resolved_status = reported_as_run`; 205 actual AWT meetings and 66 actual meetings without a resolved surface were excluded from the Turf denominator. The source requires the official going to be recorded and accompanied by GoingStick readings by the declarations point and on the day of racing, with Going App updates retained at the specified times. See the [BHAGI Section 3 source](https://media.britishhorseracing.com/bha/Rules/BHAGI/Section3_The_Racecourse.pdf), paragraphs 21–24.
+GoingStick readings are imported as report-linked measurement rows. Each row retains the stable `going_report_id`, `map_id`, course, race date, waypoint number, measurement values and source timestamps. Current reading-row and report coverage is reported dynamically in the QA outputs.
 
-The extract has no declaration-closing date. For this preliminary measure, declaration evidence is accepted when `make_date` is two or three calendar days before the report's `race_date`. The report's `race_date` remains the target meeting date; this is important during festivals, where a report made during one meeting can be the declaration report for the following meeting. This is an explicit proxy, not a claim that it is the actual declarations deadline.
+The raw reading extract is retained separately from the enriched output. The enriched output joins each reading to its Going Report through `going_report_id`, adding the report `make_date`, `created_at`, `updated_at`, `race_date`, publication state and author type. This preserves the distinction between a record timestamp and the physical time at which the clerk may have taken a measurement.
 
-| Measure | Meetings |
-|---|---:|
-| Actual Turf meetings scored | 1,306 |
-| Declaration-day Going Report present | 1,305 |
-| Race-day Going Report present | 1,305 |
-| Declaration-day GoingStick present | 313 |
-| Race-day GoingStick present | 446 |
-| Declaration-day GoingStick downloaded | 313 |
-| Race-day GoingStick downloaded | 446 |
-| Official going reported on declaration day | 1,305 |
-| Official going reported on race day | 1,305 |
-| Abandonment correctly recorded | 1,306 |
-| Watering information available | 719 |
-| Rails information available | 1,208 |
-| Stalls information available | 521 |
+The import does not silently discard repeated downloads, readings outside the configured waypoint sequence or readings linked to an AWT-only meeting. Those records remain available for the later uniqueness, waypoint, surface and compliance checks. The BHAGI step evaluates meeting-level evidence; the following QA step evaluates reading-level and dataset-level validity.
 
-Compliance is reported using mutually exclusive analysis levels: `Full`, `watering, rails and stalls information missing`, `no readings downloaded`, `dec official going missing` and `race meeting official going missing`. Detailed flags retain overlapping deficiencies. These are data-availability measures, not legal findings of BHAGI breach.
+### GoingStick import result
+
+{{< include ../data/config/phase1_tables/stick_overall_result.md >}}
+
+The following table reports imported GoingStick reading rows by racecourse and year. It uses the linked report `race_date`; when that field is missing, it uses the report `make_date` and retains the missing race date in the source data. The separate fallback column shows how many readings per course rely on `make_date` for year attribution.
+
+{{< include ../data/config/phase1_tables/stick_course_year.md >}}
+
+Generated outputs:
+
+- `data/config/jcr_stick_readings.parquet`
+- `data/config/jcr_stick_readings_enriched.parquet`
+- `data/config/jcr_stick_report_timestamp_qa.parquet`
+- `data/config/jcr_stick_timestamp_qa_report.json`
+
+## 9. Preliminary BHAGI compliance
+
+### BHAGI compliance result
+
+The BHAGI 3.2 evidence assessment covers actual meetings in 2021–2026. Turf meetings are scored; mixed meetings remain in scope when the BHA fixture data identifies Turf, while AWT-only and unresolved-surface meetings are reported separately as exclusions. “GoingStick evidence” means at least one unique dataset of readings has a linked report `make_date` at the relevant timepoint. It is an evidence proxy, not proof of a system download event or a legal finding of breach.
+
+The extract has no declaration-closing date. Declaration-day evidence is therefore proxied by a report whose `make_date` is two or three calendar days before its target `race_date`. The target `race_date` is retained because, during festivals, a report made during one meeting can relate to the following meeting. This is an explicit proxy, not a claim that it is the actual declarations deadline. For each meeting and timepoint, report fields come from the latest published report by `updated_at` and `report_id`; when none is published, the latest available report is selected. GoingStick evidence is evaluated independently using measurement dates and unique reading datasets, not inferred from the selected report.
+
+{{< include ../data/config/phase1_tables/bhagi_result.md >}}
+
+### Course and year coverage, including exclusions
+
+This table makes the denominator visible by course and year, including Turf meetings scored, AWT-only meetings excluded and meetings whose surface could not be resolved.
+
+{{< include ../data/config/phase1_tables/bhagi_scope_by_course_year.md >}}
+
+### Course-by-year evidence summary
+
+Each row is a course/year pair. Deficiency columns can overlap; `Full %` is the share of Turf meetings with all assessed evidence available.
+
+{{< include ../data/config/phase1_tables/bhagi_course_year.md >}}
+
+### Meeting-level evidence and selected reports
+
+The complete dynamic meeting table is the primary analysis output. It exposes the selected declaration- and race-day report IDs, publication state, author type and relevant fields alongside independently counted GoingStick datasets.
+
+{{< include ../data/config/phase1_tables/bhagi_meeting_detail.md >}}
+
+### Meetings requiring evidence review
+
+This table includes each Turf meeting with one or more missing-evidence flags. Flags are non-exclusive and describe data availability, not legal findings of BHAGI breach.
+
+{{< include ../data/config/phase1_tables/bhagi_exceptions.md >}}
 
 Generated outputs:
 
 - `data/config/jcr_bhagi_compliance.parquet`
+- `data/config/jcr_bhagi_scope.parquet`
 - `data/config/jcr_bhagi_compliance_report.json`
 - `src/datatrax_jcr/bhagi_compliance.py`
 
-## 6. Import and validate SVG map assets
+## 10. GoingStick QA and compliance
+
+### GoingStick reading QA rules
+
+After importing `stick_readings`, apply the following checks before calculating compliance or map summaries:
+
+- `index`, `penetrate` and `shear` are expected to be within the inclusive range 0–15; values below 0 or above 15 are out-of-range failures;
+- values exactly equal to 0 or 15 are valid boundary values but receive a separate review flag because they may indicate an instrument, transcription or data-quality issue;
+- missing, non-numeric and invalid readings are retained and flagged rather than dropped;
+- the number of distinct observed waypoint readings for a report/map must not exceed the number of configured waypoints for that map;
+- readings after the highest configured waypoint number must be flagged and compared with earlier and later datasets for the same map and meeting;
+- total reading rows and distinct waypoint counts are both reported, with duplicate report/waypoint keys checked explicitly;
+- each non-empty reading dataset must receive a deterministic fingerprint based on map, waypoint sequence and measurement values;
+- identical fingerprints must be grouped across report IDs and compared by stick-reading `created_at`/`updated_at`, the joined Going Report `make_date` and `race_date`, publication state and author type;
+- the final stick-reading output must include the joined Going Report `make_date`, report `created_at`/`updated_at`, report `race_date`, and the derived calendar-day difference between `make_date` and stick-reading `created_at`; the join is through `going_report_id`, and these timestamps must not be assumed to equal the physical measurement time;
+- compare Going Report `created_at` with stick-reading `created_at`; verify that stick-reading `created_at` and `updated_at` are identical; report both row-level and report-level results because a report can contain multiple reading rows;
+- analysis must use one unique dataset per applicable meeting/declaration-day evaluation, retaining superseded copies only as provenance; and
+- all checks remain map-specific through `going_report_id` and `map_id`.
+
+The reading-level `unexpected_waypoint` field is an explicit flag for an observed waypoint number that is not configured for the report's map. The report-level `unexpected_waypoint_count` and `qa_status` fields preserve the aggregated flag. A dedicated `missing_configured_waypoint` field is not yet stored in the current Parquet outputs; missing observations are derived by comparing the map-specific configured waypoint-number set with the observed set for each report. This derived missing count must not be confused with a report having no readings at all.
+
+A count excess is a QA failure, not evidence that extra waypoints belong to another map. Unexpected waypoint numbers and derived missing configured waypoint numbers must be retained in the exception table for investigation. A reading after the last configured waypoint is not automatically a new valid measurement: it may be a new measurement, a retained row from an earlier dataset, or a map-configuration exception. The dataset fingerprint and report history must be reviewed before accepting it.
+
+Repeated downloads must not be treated as independent measurements. Exact repeated fingerprints on the same day and on later days are duplicate candidates; the last published report, whether auto-updated or user-generated, is preferred for report selection, while stick-reading eligibility is determined from the measurement timepoint evidence rather than from that report choice. The source data does not contain a definitive download-event, physical measurement-time or deletion audit trail, so stale-versus-new status must be recorded as `confirmed_new`, `confirmed_stale`, or `review_required` rather than inferred silently.
+
+### GoingStick QA preliminary result: GoingStick readings and waypoint compliance
+
+The initial read-only extract is compared with the configured waypoint inventory and report cache. Current coverage, missing-reading and waypoint exception counts are reported dynamically below.
+
+{{< include ../data/config/phase1_tables/stick_qa_result.md >}}
+
+#### Make-date and stick-reading timestamp QA
+
+The enriched output joins each stick reading to its Going Report using `going_report_id`. Current timestamp-join and equality results are reported dynamically below; these comparisons describe record timestamps and do not prove when the clerk physically took the readings.
+
+The frequency table uses calendar days: `stick-reading created_at` minus joined report `make_date`. A positive value means the stick row was created after the report's make date. Non-zero differences require provenance review and must not be interpreted as new measurements without checking report history and duplicate fingerprints.
+
+{{< include ../data/config/phase1_tables/stick_timestamp_course.md >}}
+
+The numeric readings are checked against the expected range, while waypoint compliance remains subject to the dynamic exception tables and map-variant review.
+
+#### Course-level waypoint statistics
+
+The table reports Turf-eligible reports with readings and their derived missing/unexpected waypoint exceptions. Pure AWT meetings are excluded; mixed meetings remain included when Turf racing is present. “Missing records” means configured waypoint observations absent from a report that has at least one reading; it does not count reports with no linked readings. Unexpected records count distinct unexpected waypoint numbers per report; the reading-level total is reported in the generated QA output.
+
+{{< include ../data/config/phase1_tables/course_waypoint_result.md >}}
+
+The course table shows how exceptions are distributed; current course totals are generated from the report-level compliance output.
+
+The repeated-dataset check identifies duplicate candidates by fingerprint and timestamp history. Current repeated-group counts and course coverage are generated from the QA output.
+
+Generated outputs:
+
+- `data/config/jcr_waypoints.parquet`
+- `data/config/jcr_stick_readings.parquet`
+- `data/config/jcr_stick_readings_enriched.parquet` (includes joined `make_date` and timestamp QA fields)
+- `data/config/jcr_stick_report_timestamp_qa.parquet`
+- `data/config/jcr_stick_timestamp_qa_report.json`
+- `data/config/jcr_waypoint_compliance.parquet`
+- `data/config/jcr_waypoint_map_qa.parquet`
+- `data/config/jcr_stick_reading_qa_report.json`
+
+## 11. Import and validate SVG map assets
 
 SVG assets are discovered using the GRV-compatible Python rule derived from the report ID, not from the filename-only `waypoint_map` and `zone_map` fields:
 
@@ -518,9 +533,9 @@ maps/going-reports/{report_id}_waypoints.svg
 maps/going-reports/{report_id}_zones.svg
 ```
 
-The Python importer resolves these paths against `https://hub.turftrax.co.uk`, stores local copies under `data/config/svg`, records SHA256 checksums and HTTP status, parses XML elements with IDs, and links numeric SVG labels to configured Hub waypoint numbers where possible. Repeated revisions were reduced to one representative report per `map_id` and `race_date` for this Phase 1 configuration validation; the complete 21,829-report inventory remains in `jcr_going_reports.parquet` for a later full asset backfill.
+The Python importer resolves these paths against the Hub, stores local copies, records checksums and HTTP status, parses XML elements, and links numeric SVG labels to configured waypoint numbers where possible. Current retrieval, parsing and matching totals are reported dynamically below.
 
-The representative import covered 897 reports and 3,590 SVG candidates: 3,300 were retrieved and parsed successfully, 290 returned HTTP 404 (not available), and none had transport or XML parse failures. The retrieved files contained 232,474 identified SVG elements; 35,416 matched configured waypoint numbers and 197,058 remain unmatched pending zone/section feature mapping. No duplicate element IDs were found within a source document.
+Representative SVG retrieval and matching totals are reported from the current SVG validation output below; the full all-report asset backfill remains a separate work item.
 
 Generated outputs:
 
@@ -531,24 +546,15 @@ Generated outputs:
 
 The result is suitable for representative map-configuration validation. A complete all-report SVG retention run remains a separate storage-intensive backfill.
 
-## 7. Resolve map discipline and layout
+## 12. Resolve map discipline and layout
 
 Map discipline and layout were resolved as far as the current Hub, KML and representative SVG evidence allows. The Python resolution retains the existing Hub map classification, adds explicit layout and comparison-group fields, and isolates unresolved maps so they cannot be compared silently.
 
-| Result | Maps |
-|---|---:|
-| Flat | 33 |
-| Jumps | 37 |
-| Unknown discipline | 6 |
-| Resolved non-generic layouts | 51 |
-| Ambiguous/generic layouts | 24 |
-| Discipline unresolved | 1 |
-| Active/primary maps | 37 |
-| Archived/historical maps | 39 |
+{{< include ../data/config/phase1_tables/discipline_result.md >}}
 
-Evidence coverage includes 7 exact in-scope KML map matches and representative SVG evidence for 33 maps. The remaining maps rely on Hub metadata only or have no retrieved representative SVG.
+Evidence coverage from KML and representative SVG assets is reported dynamically from the current validation outputs.
 
-Cheltenham remains the principal layout-review area. The returned general workbook assigns all 20 Cheltenham maps to Jumps, but the dedicated Cheltenham Review sheet is still unreviewed. Old/New, X Country, All Maps and numbered layouts therefore remain operationally unresolved, and the Cheltenham KML remains ambiguous between active maps 256 and 741.
+The returned general workbook assigns the Cheltenham maps to Jumps, but generic and compound layouts remain operationally unresolved. The KML ambiguity remains an explicit map-identity exception.
 
 Generated output:
 
@@ -557,19 +563,19 @@ Generated output:
 
 Acceptance rule: no cross-map comparison is allowed until maps share a resolved discipline and non-generic layout comparison group. Unknown or generic maps are isolated by map ID and remain explicit exceptions.
 
-## 8. Create the configuration package
+## 13. Create the configuration package
 
-A versioned package was created as far as the current evidence allows. Package version is `phase-1-2026-10-09`; it contains 40 configuration/provenance members, SHA256 metadata, generated map aliases, an unresolved-issues register and a ZIP archive. The retained SVG binaries remain in `data/config/svg` and are referenced by the SVG tables rather than duplicated in the archive.
+A versioned package was created as far as the current evidence allows. The package manifest, version, member count, checksums and unresolved-issues register are generated by the package-building step.
 
 Package outputs:
 
 - `data/config/jcr_configuration_package/`
-- `data/config/jcr_configuration_package_phase-1-2026-10-09.zip`
+- `data/config/jcr_configuration_package_phase-1-<generated-version>.zip`
 - `data/config/jcr_configuration_package/jcr_map_aliases.yml`
 - `data/config/jcr_configuration_package/jcr_config_metadata.yml`
 - `data/config/jcr_configuration_package/manifest.json`
 
-The package is not yet marked final because discipline/layout exceptions, Cheltenham review, unresolved calendar/report dates and full all-report SVG retention remain open.
+The package is not yet marked final because discipline/layout exceptions, unresolved calendar/report dates and full all-report SVG retention remain open.
 
 Create a versioned configuration package containing:
 
@@ -600,9 +606,9 @@ config/
 - unresolved issues;
 - reviewer and review date.
 
-## 9. Run Phase 1 validation
+## 14. Run Phase 1 validation
 
-A preliminary rules-based validation was executed against the acceptance table below. The result is `preliminary_with_documented_exceptions`: 9 checks pass and 8 remain documented exceptions. The exceptions are known configuration or source-coverage limitations, not silent failures.
+A preliminary rules-based validation was executed against the acceptance table below. The current validation status and pass/exception counts are generated from `jcr_phase1_validation_report.json`.
 
 The validation output is `data/config/jcr_phase1_validation_report.json`; the executable check is `src/datatrax_jcr/validate_phase1.py`. The validation now includes TT Maps/TT Hub course-ID matching, BHA calendar comparison, Kempton surface classification and meeting-status reconciliation. Phase 1 is not marked complete until the unresolved map layouts, waypoint exceptions, KML ambiguity, full SVG retention and planned dates without reports are resolved or formally accepted.
 
@@ -622,7 +628,7 @@ The phase validation report must show:
 | Going Reports | All available reports imported or explicitly excepted |
 | SVG | Every discovered asset has a retrieval and parse status |
 | SVG matching | Waypoint, zone and section matches are quantified |
-| Cheltenham | Maps, waypoints, sections, zones and KML status reviewed first |
+| Course-level review | Maps, waypoints, sections, zones and KML status reviewed consistently for all JCR courses |
 | Provenance | Every manual decision has a source and confidence |
 
 Phase 1 status should be `complete` only when all failed checks are either resolved or documented as accepted exceptions.
@@ -636,7 +642,7 @@ Phase 1 status should be `complete` only when all failed checks are either resol
 - KML inventory and extracted coordinates;
 - retained SVG assets and parsed SVG element tables;
 - map/waypoint/zone/section validation report;
-- Cheltenham configuration review;
+- course-level configuration review across all JCR courses;
 - unresolved-issues register;
 - this Quarto document rendered using the TurfTrax master template.
 
@@ -674,17 +680,17 @@ not_approved
 
 The current exceptions are:
 
-- **Operational review partial:** 70 of 76 general map assignments have been applied; 6 rows remain unreviewed and the dedicated Cheltenham detail sheet is still open.
-- **Spatial configuration pending:** 6 maps remain unknown and 24 layouts retain generic/ambiguous labels; Cheltenham maps 256 and 741 remain ambiguous in the supplied KML evidence.
+- **Operational review partial:** map-assignment totals and unreviewed rows are generated from the current map-review output.
+- **Spatial configuration pending:** unknown-map, generic-layout and KML ambiguity counts are generated from the current map and KML validation outputs.
 - **Waypoint QA pending:** unexpected waypoint rows and report/map count excesses remain under investigation.
 - **Asset coverage partial:** representative SVGs were retrieved and parsed, but full all-report SVG retention and PDF/uploaded-map extraction have not been completed.
-- **Meeting reconciliation partial:** TT Maps and TT Hub course IDs match for all 14 courses; 56 planned dates have no Going Report and 71 Going Report dates are absent from the calendar. The 83 mixed report dates also remain exceptions.
-- **BHA calendar comparison pending:** 28 BHA-only and 9 TT Maps-only course/date keys require operational review; three shared keys contain multiple TT Maps rows.
-- **Kempton surface classification partial:** 765 reports are classified Turf/Jump, 555 are excluded as AWT, and 8 reports on four dates remain unresolved; no AWT stick readings were found.
+- **Meeting reconciliation partial:** course-ID matching, planned-without-report, report-only and mixed-report totals are generated from the current reconciliation output.
+- **BHA calendar comparison pending:** BHA-only, TT Maps-only and multiple-row key totals are generated from the current calendar comparison output.
+- **Kempton surface classification partial:** classified, excluded, unresolved and AWT-stick-reading totals are generated from the current Kempton classification output.
 
 These exceptions may support continued configuration work, but they block final cross-map spatial comparison and a `complete` Phase 1 decision.
 
-The next phase may begin only after the course and map identifiers are stable, the Cheltenham map hierarchy has been reviewed, and the configuration package has been versioned.
+The next phase may begin only after the course and map identifiers are stable, all open map-identity cases are reviewed or accepted, and the configuration package has been versioned.
 
 <div class="tt-footer">
   <span>DataTrax · JCR GoingStick Analysis</span>
@@ -699,15 +705,15 @@ The next phase may begin only after the course and map identifiers are stable, t
 
 ### Partially complete
 
-- Complete the 6 unreviewed general map rows and the dedicated Cheltenham detail review; the 70 returned assignments are already applied.
+- Complete the currently unreviewed general map rows and resolve or accept the remaining map-identity cases; assignment totals are generated from the review output.
 - Extend SVG retention from one representative report per map/date to the full Going Report inventory if required for later analysis.
 - Extract and checksum PDF and uploaded-map assets; waypoint/zone SVG retrieval and parsing are already complete for the representative set.
 
 ### Blockers to final Phase 1 closure
 
-- Resolve the 6 unknown maps and 24 generic/ambiguous layouts, especially the Cheltenham hierarchy and the ambiguous KML match between maps 256 and 741.
+- Resolve the currently unknown maps and generic/ambiguous layouts, especially the Cheltenham hierarchy and the ambiguous KML match.
 - Investigate unexpected waypoint readings, report/map count excesses and unconfigured section/zone references before accepting spatial comparisons.
-- Resolve the 56 planned dates without Going Reports, the 71 report-only dates, the 28 BHA-only dates, the 9 TT Maps-only dates and the 83 mixed report dates using available operational status evidence; race results are not required for this reconciliation.
+- Resolve planned dates without Going Reports, report-only dates, BHA-only dates, TT Maps-only dates and mixed report dates using available operational status evidence; race results are not required for this reconciliation.
 - Confirm the four unresolved Kempton dates and retain AWT reports outside Going Stick analysis.
 - Re-run the preliminary validation and replace `approved_with_exceptions` with `approved` only after the exceptions are resolved or formally accepted.
 
