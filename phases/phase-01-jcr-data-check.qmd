@@ -872,7 +872,7 @@ show_sql_table(bhagi_exceptions_sql)
 
 ### 8.6 GoingStick values and downloaded reading data by course and year
 
-This table has six rows for every JCR course, including years with zero meetings. A report “showed GoingStick values” when its `stick_comments` contains a numeric GoingStick value; “data downloaded” means linked `stick_readings` rows exist for that same report. This is a report-history presence check: it searches all available reports at each timepoint for at least one qualifying report, rather than considering only the selected primary report. The last-published selection remains the basis for the other BHAGI tables. The four outcome counts are mutually exclusive: both timepoints have a report showing values with downloaded data; both have values but neither has downloaded rows; other non-abandoned meetings with absent or partial evidence; and meetings whose selected primary race-day report marks them abandoned. The last four columns sum to total meetings.
+This table has six rows for every JCR course, including years with zero meetings. Reports are assigned to a race meeting by course and report `make_date` (falling back to report `created_at` only when `make_date` is missing), not by the report's `race_date`. Race day is the meeting date; the declaration window is two or three days before it. TT Auto Updater reports are excluded from measurement evidence. A linked `stick_readings` dataset is the evidence that GoingStick values were downloaded at a timepoint. Where there are no linked readings, numeric GoingStick values in `stick_comments` distinguish “values reported, no data downloaded” from missing/partial evidence. This is a report-history presence check across actual measurement reports; the last-published selection remains the basis for the other BHAGI tables. The four outcome counts are mutually exclusive: downloaded readings at both timepoints; numeric comment values at both but no downloaded readings at either; other non-abandoned meetings with absent or partial evidence; and meetings whose selected primary race-day report marks them abandoned. The last four columns sum to total meetings.
 
 ```{python}
 bhagi_stick_status_course_year_sql = f"""
@@ -913,48 +913,67 @@ eligible_meetings AS (
     SELECT * FROM meetings WHERE has_turf
 ),
 reading_counts AS (
-    SELECT going_report_id, COUNT(DISTINCT reading_id) AS downloaded_reading_rows
+    SELECT going_report_id,
+        COUNT(DISTINCT reading_id) FILTER (
+            WHERE NOT COALESCE(index_missing_or_non_numeric, TRUE)
+              AND NOT COALESCE(penetrate_missing_or_non_numeric, TRUE)
+              AND NOT COALESCE(shear_missing_or_non_numeric, TRUE)
+              AND NOT COALESCE(index_out_of_range, TRUE)
+              AND NOT COALESCE(penetrate_out_of_range, TRUE)
+              AND NOT COALESCE(shear_out_of_range, TRUE)
+        ) AS valid_reading_rows
     FROM read_parquet('{DATA_DIR / 'jcr_stick_readings.parquet'}')
     GROUP BY going_report_id
 ),
-report_roles AS (
-    SELECT e.course_id, e.race_date,
-        CASE
-            WHEN CAST(r.make_date AS DATE) = e.race_date THEN 'race_day'
-            WHEN CAST(r.make_date AS DATE) IN (e.race_date - INTERVAL 2 DAY, e.race_date - INTERVAL 3 DAY) THEN 'declaration_day'
-        END AS timepoint,
-        r.report_id, r.report_state, r.updated_at, r.stick_comments,
-        COALESCE(rc.downloaded_reading_rows, 0) AS downloaded_reading_rows
-    FROM eligible_meetings e
-    JOIN read_parquet('{DATA_DIR / 'jcr_going_reports.parquet'}') r
-      ON r.course_id = e.course_id AND CAST(r.race_date AS DATE) = e.race_date
+calendar_candidates AS (
+    SELECT course_id, race_date, race_date AS observation_date, 'race_day' AS timepoint, 0 AS priority
+    FROM eligible_meetings
+    UNION ALL
+    SELECT course_id, race_date, race_date - INTERVAL 2 DAY, 'declaration_day', 1
+    FROM eligible_meetings
+    UNION ALL
+    SELECT course_id, race_date, race_date - INTERVAL 3 DAY, 'declaration_day', 2
+    FROM eligible_meetings
+),
+report_records AS (
+    SELECT r.course_id, r.report_id, r.report_state, r.updated_at, r.author_type,
+        COALESCE(CAST(r.make_date AS DATE), CAST(r.created_at AS DATE)) AS observation_date,
+        r.stick_comments, COALESCE(rc.valid_reading_rows, 0) AS valid_reading_rows
+    FROM read_parquet('{DATA_DIR / 'jcr_going_reports.parquet'}') r
     LEFT JOIN reading_counts rc ON rc.going_report_id = r.report_id
     WHERE r.created_at >= TIMESTAMP '2021-01-01'
       AND r.created_at < TIMESTAMP '2027-01-01'
-      AND CAST(r.make_date AS DATE) IN (
-          e.race_date, e.race_date - INTERVAL 2 DAY, e.race_date - INTERVAL 3 DAY
-      )
+      AND LOWER(COALESCE(r.author_type, '')) <> 'tt_auto_updater'
 ),
-selected_timepoints AS (
+assigned_reports AS (
+    SELECT r.*, c.race_date, c.timepoint,
+        ROW_NUMBER() OVER (
+            PARTITION BY r.report_id
+            ORDER BY c.priority, c.race_date
+        ) AS meeting_match_rank
+    FROM report_records r
+    JOIN calendar_candidates c
+      ON c.course_id = r.course_id AND c.observation_date = r.observation_date
+),
+timepoint_evidence AS (
     SELECT course_id, race_date, timepoint,
         BOOL_OR(REGEXP_MATCHES(COALESCE(stick_comments, ''), '(^|[^0-9])[0-9][0-9]?[.,][0-9]')) AS showed_stick_values,
-        BOOL_OR(REGEXP_MATCHES(COALESCE(stick_comments, ''), '(^|[^0-9])[0-9][0-9]?[.,][0-9]')
-            AND downloaded_reading_rows > 0) AS report_showed_values_and_data,
-        BOOL_OR(downloaded_reading_rows > 0) AS any_report_data_downloaded
-    FROM report_roles
-    WHERE timepoint IS NOT NULL
+        BOOL_OR(valid_reading_rows > 0) AS report_has_downloaded_values,
+        BOOL_OR(valid_reading_rows > 0) AS any_report_data_downloaded
+    FROM assigned_reports
+    WHERE meeting_match_rank = 1
     GROUP BY course_id, race_date, timepoint
 ),
 meeting_evidence AS (
     SELECT e.course_id, e.course, e.year, e.race_date, e.is_abandoned,
         COALESCE(MAX(s.showed_stick_values) FILTER (WHERE s.timepoint = 'race_day'), FALSE) AS race_day_showed_values,
         COALESCE(MAX(s.showed_stick_values) FILTER (WHERE s.timepoint = 'declaration_day'), FALSE) AS declaration_day_showed_values,
-        COALESCE(MAX(s.report_showed_values_and_data) FILTER (WHERE s.timepoint = 'race_day'), FALSE) AS race_day_values_and_data,
-        COALESCE(MAX(s.report_showed_values_and_data) FILTER (WHERE s.timepoint = 'declaration_day'), FALSE) AS declaration_day_values_and_data,
+        COALESCE(MAX(s.report_has_downloaded_values) FILTER (WHERE s.timepoint = 'race_day'), FALSE) AS race_day_values_and_data,
+        COALESCE(MAX(s.report_has_downloaded_values) FILTER (WHERE s.timepoint = 'declaration_day'), FALSE) AS declaration_day_values_and_data,
         COALESCE(MAX(s.any_report_data_downloaded) FILTER (WHERE s.timepoint = 'race_day'), FALSE) AS race_day_data_downloaded,
         COALESCE(MAX(s.any_report_data_downloaded) FILTER (WHERE s.timepoint = 'declaration_day'), FALSE) AS declaration_day_data_downloaded
     FROM eligible_meetings e
-    LEFT JOIN selected_timepoints s USING (course_id, race_date)
+    LEFT JOIN timepoint_evidence s USING (course_id, race_date)
     GROUP BY e.course_id, e.course, e.year, e.race_date, e.is_abandoned
 ),
 course_year_counts AS (
